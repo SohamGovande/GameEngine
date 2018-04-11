@@ -1,0 +1,7 @@
+.vs/
+game/Debug/
+game/Game/Debug/
+*.opendb
+*.opensdf
+*.exe
+*.pdb
