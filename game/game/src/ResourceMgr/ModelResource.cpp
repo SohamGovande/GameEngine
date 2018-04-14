@@ -16,7 +16,7 @@ void ModelResource::generate()
 
 	value = new MaterialModel(
 		new TextureResource(texFile, false),
-		Loader::loadModel(Loader::loadObjMeshData(objFile)),
+		Loader::loadModel(Loader::loadBinaryMeshData(objFile)),
 		objFile
 	);
 	

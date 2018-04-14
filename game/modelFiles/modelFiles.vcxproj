@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{787255AF-9BBC-4954-A40D-463779C7800C}</ProjectGuid>
-    <RootNamespace>game</RootNamespace>
+    <ProjectGuid>{c158f20c-10c7-41a7-87cd-0d9ee3e7a117}</ProjectGuid>
+    <RootNamespace>modelFiles</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -91,13 +91,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>PROGRAM_DEBUG_MODE;SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(ProjectDir)src;$(SolutionDir)dependencies\glm\include\;</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\sfml\lib\;$(SolutionDir)dependencies\glew\;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew.lib;sfml-window-s-d.lib;freetype.lib;jpeg.lib;sfml-graphics-s-d.lib;sfml-system-s-d.lib;winmm.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -105,7 +100,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(ProjectDir)src;$(SolutionDir)dependencies\glm\include\;</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -116,14 +111,11 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(ProjectDir)src;$(SolutionDir)dependencies\glm\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\sfml\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window-s-d.lib;sfml-system-s-d.lib;winmm.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -134,7 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(ProjectDir)src;$(SolutionDir)dependencies\glm\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -143,78 +135,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\Entity\Components\Component.cpp" />
-    <ClCompile Include="src\Entity\Components\MotionComponent.cpp" />
-    <ClCompile Include="src\Entity\Entity.cpp" />
-    <ClCompile Include="src\GlfwUtils.cpp" />
-    <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
-    <ClCompile Include="src\Physics\CollisionCommons.cpp" />
-    <ClCompile Include="src\Physics\CollisionTriTri.cpp" />
-    <ClCompile Include="src\Renderer\Camera.cpp" />
-    <ClCompile Include="src\Renderer\GlMacros.cpp" />
-    <ClCompile Include="src\Renderer\IndexBuffer.cpp" />
-    <ClCompile Include="src\Renderer\Light.cpp" />
-    <ClCompile Include="src\Renderer\MaterialModel.cpp" />
-    <ClCompile Include="src\Renderer\Renderers\EntityRenderer.cpp" />
-    <ClCompile Include="src\Renderer\Renderers\GeometryRenderer.cpp" />
-    <ClCompile Include="src\Renderer\Renderers\MasterRenderer.cpp" />
-    <ClCompile Include="src\Renderer\Renderers\TerrainRenderer.cpp" />
-    <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
-    <ClCompile Include="src\Renderer\Texture.cpp" />
-    <ClCompile Include="src\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Renderer\VertexBuffer.cpp" />
-    <ClCompile Include="src\ResourceMgr\MeshResource.cpp" />
-    <ClCompile Include="src\ResourceMgr\ModelResource.cpp" />
-    <ClCompile Include="src\ResourceMgr\Resource.cpp" />
-    <ClCompile Include="src\ResourceMgr\ResourceMgr.cpp" />
-    <ClCompile Include="src\ResourceMgr\TextureResource.cpp" />
-    <ClCompile Include="src\Terrain\HeightGen.cpp" />
-    <ClCompile Include="src\Terrain\Terrain.cpp" />
-    <ClCompile Include="src\Terrain\TerrainGen.cpp" />
-    <ClCompile Include="src\Terrain\World.cpp" />
-    <ClCompile Include="src\Vendor\PerlinNoise.cpp" />
-    <ClCompile Include="src\TimedScope.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Entity\Components\Component.h" />
-    <ClInclude Include="src\Entity\Components\ComponentIDs.h" />
-    <ClInclude Include="src\Entity\Components\MotionComponent.h" />
-    <ClInclude Include="src\Entity\Entity.h" />
-    <ClInclude Include="src\GlfwUtils.h" />
-    <ClInclude Include="src\MathUtils.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\ModelLoader.h" />
-    <ClInclude Include="src\Physics\CollisionCommons.h" />
-    <ClInclude Include="src\Physics\CollisionMath.h" />
-    <ClInclude Include="src\Physics\CollisionResult.h" />
-    <ClInclude Include="src\Renderer\Camera.h" />
-    <ClInclude Include="src\Renderer\GlMacros.h" />
-    <ClInclude Include="src\Renderer\IndexBuffer.h" />
-    <ClInclude Include="src\Renderer\Light.h" />
-    <ClInclude Include="src\Renderer\MaterialModel.h" />
-    <ClInclude Include="src\Renderer\Renderers\EntityRenderer.h" />
-    <ClInclude Include="src\Renderer\Renderers\GeometryRenderer.h" />
-    <ClInclude Include="src\Renderer\Renderers\MasterRenderer.h" />
-    <ClInclude Include="src\Renderer\Renderers\TerrainRenderer.h" />
-    <ClInclude Include="src\Renderer\Shader\Shader.h" />
-    <ClInclude Include="src\Renderer\Texture.h" />
-    <ClInclude Include="src\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Renderer\VertexBuffer.h" />
-    <ClInclude Include="src\Renderer\VertexBufferLayout.h" />
-    <ClInclude Include="src\ResourceMgr\MeshResource.h" />
-    <ClInclude Include="src\ResourceMgr\ModelResource.h" />
-    <ClInclude Include="src\ResourceMgr\Resource.h" />
-    <ClInclude Include="src\ResourceMgr\Resource.t.h" />
-    <ClInclude Include="src\ResourceMgr\ResourceMgr.h" />
-    <ClInclude Include="src\ResourceMgr\TextureResource.h" />
-    <ClInclude Include="src\Terrain\HeightGen.h" />
-    <ClInclude Include="src\Terrain\Terrain.h" />
-    <ClInclude Include="src\Terrain\TerrainConstants.h" />
-    <ClInclude Include="src\Terrain\TerrainGen.h" />
-    <ClInclude Include="src\Terrain\World.h" />
-    <ClInclude Include="src\TimedScope.h" />
-    <ClInclude Include="src\Vendor\PerlinNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\binaryIO\binaryIO.vcxproj">

@@ -24,6 +24,7 @@ namespace Loader
 	}
 
 	Mesh loadObjMeshData(const std::string& filename);
+	Mesh loadBinaryMeshData(const std::string& filename);
 
 	GlModel loadObjModel(const std::string& filename);
 }

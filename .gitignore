@@ -1,3 +1,7 @@
 .vs/
 game/bin/
 game/dependencies/
+modelFiles/bin/
+modelFiles/dependencies/
+binaryIO/bin/
+binaryIO/dependencies/
