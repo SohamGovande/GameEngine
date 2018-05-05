@@ -32,9 +32,9 @@ void Camera::tick(World& world)
 		constexpr float speed = 2;
 
 		float forwardFactor = 0;
-		if (Glfw::isKeyPressed(Keys::W))
+		if (Toolkit::isKeyPressed(Keys::W))
 			forwardFactor += speed;
-		if (Glfw::isKeyPressed(Keys::S))
+		if (Toolkit::isKeyPressed(Keys::S))
 			forwardFactor -= speed;
 
 		glm::vec2 direction(
@@ -66,10 +66,10 @@ void Camera::tick(World& world)
 		int turnFactor = 0;
 		constexpr int turnSpeed = 5;
 
-		if (Glfw::isKeyPressed(Keys::A))
+		if (Toolkit::isKeyPressed(Keys::A))
 			turnFactor += turnSpeed;
 
-		if (Glfw::isKeyPressed(Keys::D))
+		if (Toolkit::isKeyPressed(Keys::D))
 			turnFactor -= turnSpeed;
 
 		if (turnFactor != 0)
@@ -82,12 +82,15 @@ void Camera::tick(World& world)
 
 void Camera::performRotations(float partialTicks)
 {
-	glm::ivec2 center = Glfw::getPosition() + glm::ivec2(Glfw::getSize() / 2u);
+	if (!Toolkit::isCursorGrabbed())
+		return;
+
+	glm::ivec2 center = Toolkit::getPosition() + glm::ivec2(Toolkit::getSize() / 2u);
 	Entity& target = *controlledEntity;
-	glm::ivec2 cursorPos = Glfw::getCursorPos();
+	glm::ivec2 cursorPos = Toolkit::getCursorPos();
 	glm::ivec2 distance = cursorPos - center;
 	
-	Glfw::setCursorPos(center);
+	Toolkit::setCursorPos(center);
 
 	float sensitivity = .3f;
 

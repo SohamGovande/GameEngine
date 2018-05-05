@@ -25,7 +25,7 @@ void Terrain::setTerrainHeight(float x, float z, float y)
 }
 
 
-float Terrain::getTerrainHeight(float x, float z)
+float Terrain::getTerrainHeight(float x, float z) const
 {
 	auto it = heightmap.find(HeightmapKey(x, z));
 	if (it != heightmap.end())

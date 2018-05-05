@@ -12,4 +12,12 @@ struct Mesh
 	{
 
 	}
+
+	inline void free()
+	{
+		delete[] vertices;
+		delete[] textures;
+		delete[] normals;
+		delete[] indices;
+	}
 };

@@ -13,8 +13,11 @@ public:
 
 	void write(const char* data, unsigned int size);
 
-	template<typename T>
-	inline void write(T value) { write(reinterpret_cast<const char*>(&value), sizeof(T)); }
+	template<typename T> //Primitive / fundamental type
+	inline void write(T value) //T is a primitive, so don't pass it by const reference
+	{
+		write(reinterpret_cast<const char*>(&value), sizeof(T)); 
+	}
 	
 	//Optimization for 1-byte types
 	template<>

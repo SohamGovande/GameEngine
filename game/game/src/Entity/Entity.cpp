@@ -9,6 +9,7 @@ Entity::Entity(MaterialModel* object)
 	components(),
 	position(), rotation(), scale(1)
 {
+	
 }
 
 Entity::~Entity()

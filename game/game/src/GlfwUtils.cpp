@@ -3,8 +3,9 @@
 #include "GlfwUtils.h"
 
 static sf::Window* window;
+static bool cursorGrabbed = false;
 
-namespace Glfw
+namespace Toolkit
 {
 	sf::Window& getWindow() 
 	{
@@ -43,12 +44,14 @@ namespace Glfw
 	{
 		window->setMouseCursorVisible(false);
 		window->setMouseCursorGrabbed(true);
+		cursorGrabbed = true;
 	}
 
 	void showCursor()
 	{
 		window->setMouseCursorVisible(true);
 		window->setMouseCursorGrabbed(false);
+		cursorGrabbed = false;
 	}
 
 	bool isKeyPressed(sf::Keyboard::Key key)
@@ -66,5 +69,10 @@ namespace Glfw
 	void setCursorPos(const glm::ivec2& pos)
 	{
 		sf::Mouse::setPosition(reinterpret_cast<const sf::Vector2i&>(pos));
+	}
+
+	bool isCursorGrabbed()
+	{
+		return cursorGrabbed;
 	}
 }

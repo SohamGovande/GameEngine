@@ -221,6 +221,10 @@
       <Project>{f93548f4-15e9-483f-8961-740e95f8dbb1}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\fbo\fragment.glsl" />
+    <None Include="res\shaders\fbo\vertex.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

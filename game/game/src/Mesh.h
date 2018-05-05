@@ -14,7 +14,6 @@ struct Mesh
 		: vertices(nullptr), textures(nullptr), normals(nullptr), indices(nullptr),
 		vCount(0), iCount(0)
 	{
-
 	}
 };
 

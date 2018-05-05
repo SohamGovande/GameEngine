@@ -7,9 +7,9 @@
 #include "ResourceMgr/ResourceMgr.h"
 #include "Physics/CollisionMath.h"
 #include "Physics/CollisionCommons.h"
-
+#if 0
 #define AddPoint(x, y, z) {\
-Entity ent(*resourceMgr.icosphere);\
+Entity ent(*resourceMgr.icosphereModel);\
 ent.scale = 2;\
 ent.moveTo(glm::vec3(x, y, z));\
 entities.push_back(ent);\
@@ -25,6 +25,10 @@ AddLine(tri[2], (tri[0]-tri[2])/(float)LineSegmentCount)
 {\
 tri[i] = mat * tri[i];\
 }
+#else
+#define AddTri(...)
+#define AddPoint(...)
+#endif
 
 using namespace CollisionMath;
 
@@ -49,8 +53,8 @@ GeometryRenderer::GeometryRenderer(Light& light, Shader& shader, ResourceMgr& re
 		triangle1, triangle2
 	);
 
-	resourceMgr.icosphere->ensuredFetch()
-		.getTexture().load();
+//	resourceMgr.icosphereModel->ensuredFetch()
+	//	.getTexture().load();
 
 	AddTri(triangle1);
 	AddTri(triangle2);

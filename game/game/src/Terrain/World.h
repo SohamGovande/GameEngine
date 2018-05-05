@@ -11,7 +11,7 @@ class World
 {
 private:
 	std::list<Entity> entities;
-	std::vector<Terrain*> terrains;
+	std::list<Terrain> terrains;
 	Entity* person;
 
 public:
@@ -26,9 +26,11 @@ public:
 
 	float getTerrainHeight(float x, float z) const;
 
-	Entity& addEntity(const Entity& object);
+	template<typename... VaArgs>
+	Entity& addEntity(VaArgs&... args);
+	Entity& copyEntityIntoWorld(const Entity& object);
 
-	inline void addTerrain(Terrain* terrain) { terrains.push_back(terrain); }
+	inline Terrain& addTerrain(const Terrain& terrain) { terrains.push_back(terrain); return terrains.back(); }
 
 	inline Entity& getPerson() { return *person; }
 

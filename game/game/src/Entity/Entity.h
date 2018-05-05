@@ -7,7 +7,7 @@
 
 enum EntityID
 {
-	PLAYER = 0, TREE = 1, FERN = 2
+	PLAYER = 0, TREE = 1, FERN = 2, LANTERN = 3, AXE = 4
 };
 
 class Entity

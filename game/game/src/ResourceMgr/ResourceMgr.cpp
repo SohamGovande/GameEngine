@@ -1,13 +1,6 @@
 #include "ResourceMgr.h"
 #include "TimedScope.h"
 
-#define Load(storeIn, container, ...) \
-container.emplace_back(__VA_ARGS__);\
-storeIn = &container.back()
-
-#define LoadTex(storeIn, ...) Load(storeIn, textures, __VA_ARGS__)
-#define LoadMesh(storeIn, ...) Load(storeIn, models, __VA_ARGS__)
-
 ResourceMgr::ResourceMgr()
 {
 	
@@ -17,24 +10,38 @@ ResourceMgr::~ResourceMgr()
 {
 }
 
+ResourceMgr::TexRes ResourceMgr::loadTex(const std::string& texture)
+{
+	textures.emplace_back(texture, false);
+	return &textures.back();
+}
+
+ResourceMgr::MdlRes ResourceMgr::loadMdl(const std::string& mesh, const std::string& texture)
+{
+	models.emplace_back(mesh, texture);
+	return &models.back();
+}
+
 void ResourceMgr::loadResources()
 {
 	TimedScope timer("load resources");
 
-	LoadTex(grass, "grassblock", false);
-	LoadTex(axeSpecularMap, "axeSpecular", true);
+	grass = loadTex("grassblock");
+	axeSpecularMap = loadTex("axeSpecular");
 
-	LoadMesh(playerModel, "realisticPerson", "realisticPerson");
-	LoadMesh(fernModel, "fern", "fern");
-	LoadMesh(treeModel, "EvergreenTree", "EvergreenTree");
-	LoadMesh(axeModel, "axe", "axe");
+	playerModel = loadMdl("realisticPerson", "realisticPerson");
+	fernModel = loadMdl("fern", "fern");
+	evergreenTree = loadMdl("EvergreenTree", "EvergreenTree");
+	birchTree = loadMdl("DeciduousTree", "Birchtexture");
+	bt1 = loadMdl("DeciduousTree_0", "Birchtexture");
+	bt2 = loadMdl("DeciduousTree_1", "Birchtexture");
+	axeModel = loadMdl("axe", "axe");
+	lanternModel = loadMdl("lantern", "lantern");
+
+	dragonModel = loadMdl("dragon", "green");
 
 	MaterialModel& axe = axeModel->ensuredFetch();
 	axe.useSpecularMap(axeSpecularMap);
-	axe.fullyRender = false;
 	axe.reflectivity = 1;
 	axe.shineDistanceDamper = 8;
-
-	LoadMesh(icosphere, "icosphere", "icosphere");
-
 }

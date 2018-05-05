@@ -4,7 +4,7 @@ namespace Math
 {
 	glm::mat4 createProjectionMatrix(float nearPlane, float farPlane, float fov)
 	{
-		glm::vec2 size = Glfw::getSize();
+		glm::vec2 size = Toolkit::getSize();
 
 		float aspectRatio = (float)size.x / (float)size.y;
 		float yScale = (float)(1.0f / tan(DEG2RAD * fov / 2.0f));

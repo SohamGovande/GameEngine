@@ -231,4 +231,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\fbo\vertex.glsl" />
+    <None Include="res\shaders\fbo\fragment.glsl" />
+  </ItemGroup>
 </Project>

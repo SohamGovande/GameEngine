@@ -3,7 +3,7 @@
 #include "TerrainConstants.h"
 #include "Vendor/PerlinNoise.h"
 
-#define TERRAIN_HEIGHT_AMPLITUDE 150.0f
+#define TERRAIN_HEIGHT_AMPLITUDE 50.0f
 #define TERRAIN_OCTAVE_COUNT 2
 
 class HeightGen

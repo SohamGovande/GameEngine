@@ -5,17 +5,22 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	: projectionMatrix(Math::createProjectionMatrix(nearPlane, farPlane, fov)),
 	light(0, 100, 0, 1, 1, 1),
 	shader("entity/vertex.glsl", "entity/fragment.glsl"),
+	tShader("terrain/vertex.glsl", "terrain/fragment.glsl"),
 	
 	entityRenderer(light, shader),
-	terrainRenderer(light, shader),
+	terrainRenderer(*this, light, tShader),
 	geometryRenderer(light, shader, mgr),
 
 	entities(),
-	terrains()
+	terrains(),
+	wireframe(false),
+	needsToUpdateWireframe(false)
 {
 	shader.bind();
-
 	pushProjMatIntoShader(shader);
+
+	tShader.bind();
+	pushProjMatIntoShader(tShader);
 }
 
 MasterRenderer::~MasterRenderer()
@@ -35,7 +40,10 @@ void MasterRenderer::prepare() const
 	GlCall(glEnable(GL_BLEND));
 	GlCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-//	GlCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+	if (needsToUpdateWireframe)
+	{
+		GlCall(glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL));
+	}
 }
 
 
@@ -58,17 +66,18 @@ void MasterRenderer::markEntityForRendering(Entity& entity)
 	}
 }
 
-void MasterRenderer::processTerrain(Terrain* terrain)
+void MasterRenderer::processTerrain(Terrain& terrain)
 {
-	terrain->getTerrainModel()
+	terrain.getTerrainModel()
 		.getTexture()
 		.load();
-	terrains.push_back(terrain);
+	terrains.push_back(&terrain);
 }
 
 void MasterRenderer::render(float partialTicks, const Camera& camera)
 {
-	entityRenderer.draw(partialTicks, camera, entities);
 	terrainRenderer.draw(partialTicks, camera, terrains);
+	entityRenderer.draw(partialTicks, camera, entities);
+	
 //	geometryRenderer.draw(partialTicks, camera);
 }

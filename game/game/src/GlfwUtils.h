@@ -4,7 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <glm/vec2.hpp>
 
-namespace Glfw
+namespace Toolkit
 {
 	sf::Window& getWindow();
 	void setWindow(sf::Window& window);
@@ -22,4 +22,6 @@ namespace Glfw
 
 	void hideCursor();
 	void showCursor();
+	
+	bool isCursorGrabbed();
 }

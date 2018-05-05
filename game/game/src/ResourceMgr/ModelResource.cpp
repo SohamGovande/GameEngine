@@ -1,8 +1,8 @@
 #include "ModelLoader.h"
 #include "ModelResource.h"
 
-ModelResource::ModelResource(const std::string& objFile, const std::string& texFile)
-	: objFile(objFile), texFile(texFile)
+ModelResource::ModelResource(const std::string& modelFile, const std::string& texFile)
+	: modelFile(modelFile), texFile(texFile)
 {
 	freeFunc = &ModelResource::free;
 }
@@ -16,8 +16,10 @@ void ModelResource::generate()
 
 	value = new MaterialModel(
 		new TextureResource(texFile, false),
-		Loader::loadModel(Loader::loadBinaryMeshData(objFile)),
-		objFile
+		Loader::loadModel((0) ?
+			Loader::loadObjMeshData(modelFile)
+			: Loader::loadBinaryMeshData(modelFile)),
+		modelFile
 	);
 	
 }
