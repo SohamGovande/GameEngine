@@ -9,7 +9,7 @@
 #include "GeometryRenderer.h"
 
 #include "MathUtils.h"
-#include "GlfwUtils.h"
+#include "Toolkit.h"
 
 class ResourceMgr;
 
@@ -42,5 +42,9 @@ public:
 
 	void toggleWireframeView() { wireframe = !wireframe; needsToUpdateWireframe = true; }
 	
+	inline void drawEntities(float partialTicks, const Camera& camera)
+	{
+		entityRenderer.draw(partialTicks, camera, entities);
+	}
 	inline void pushProjMatIntoShader(Shader& shader) const { shader.setMatrix4("u_ProjectionMatrix", projectionMatrix); }
 };

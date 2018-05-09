@@ -16,20 +16,24 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	wireframe(false),
 	needsToUpdateWireframe(false)
 {
+	shader.create();
 	shader.bind();
 	pushProjMatIntoShader(shader);
 
+	tShader.create();
 	tShader.bind();
 	pushProjMatIntoShader(tShader);
 }
 
 MasterRenderer::~MasterRenderer()
 {
+	shader.cleanUp();
+	tShader.cleanUp();
 }
 
 void MasterRenderer::prepare() const
 {
-	GlCall(glClearColor(176/255.f, 231/255.f, 232/255.f, 255.f));
+	GlCall(glClearColor(176/255.f, 231/255.f, 232/255.f, 1));
 
 	GlCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 

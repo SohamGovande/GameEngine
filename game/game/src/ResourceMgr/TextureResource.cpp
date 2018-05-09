@@ -1,8 +1,8 @@
 #include <iostream>
 #include "TextureResource.h"
 
-TextureResource::TextureResource(const std::string& filepath, bool clamp)
-	: filepath(filepath), clamp(clamp)
+TextureResource::TextureResource(const std::string& filepath)
+	: filepath(filepath)
 {
 }
 
@@ -12,5 +12,5 @@ TextureResource::~TextureResource()
 
 void TextureResource::generate()
 {
-	value = new Texture(filepath, clamp);
+	value = new Texture(filepath);
 }

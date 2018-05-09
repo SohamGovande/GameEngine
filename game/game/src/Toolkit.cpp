@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SFML/Window/Mouse.hpp>
-#include "GlfwUtils.h"
+#include "Toolkit.h"
 
 static sf::Window* window;
 static bool cursorGrabbed = false;

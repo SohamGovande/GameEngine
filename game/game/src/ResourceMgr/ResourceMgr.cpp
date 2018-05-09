@@ -12,7 +12,7 @@ ResourceMgr::~ResourceMgr()
 
 ResourceMgr::TexRes ResourceMgr::loadTex(const std::string& texture)
 {
-	textures.emplace_back(texture, false);
+	textures.emplace_back(texture);
 	return &textures.back();
 }
 

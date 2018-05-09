@@ -9,13 +9,12 @@ class TextureResource
 {
 private:
 	std::string filepath;
-	bool clamp;
 	
 protected:
 	void generate() override;
 
 public:
-	TextureResource(const std::string& filepath, bool clamp);
+	TextureResource(const std::string& filepath);
 	~TextureResource();
 
 	inline const std::string& getFilepath() const { return filepath; }

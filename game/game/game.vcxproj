@@ -142,16 +142,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Entity\Components\Component.cpp" />
     <ClCompile Include="src\Entity\Components\MotionComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
-    <ClCompile Include="src\GlfwUtils.cpp" />
+    <ClCompile Include="src\Renderer\PPE\TestEffect.cpp" />
+    <ClCompile Include="src\Toolkit.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
     <ClCompile Include="src\Physics\CollisionCommons.cpp" />
     <ClCompile Include="src\Physics\CollisionTriTri.cpp" />
     <ClCompile Include="src\Renderer\Camera.cpp" />
+    <ClCompile Include="src\Renderer\PPE\Framebuffer.cpp" />
     <ClCompile Include="src\Renderer\GlMacros.cpp" />
     <ClCompile Include="src\Renderer\IndexBuffer.cpp" />
     <ClCompile Include="src\Renderer\Light.cpp" />
@@ -177,11 +180,16 @@
     <ClCompile Include="src\TimedScope.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.h" />
+    <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.t.h" />
+    <ClInclude Include="src\Renderer\PPE\Renderbuffer.h" />
     <ClInclude Include="src\Entity\Components\Component.h" />
     <ClInclude Include="src\Entity\Components\ComponentIDs.h" />
     <ClInclude Include="src\Entity\Components\MotionComponent.h" />
     <ClInclude Include="src\Entity\Entity.h" />
-    <ClInclude Include="src\GlfwUtils.h" />
+    <ClInclude Include="src\Renderer\PPE\TestEffect.h" />
+    <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h" />
+    <ClInclude Include="src\Toolkit.h" />
     <ClInclude Include="src\MathUtils.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\ModelLoader.h" />
@@ -189,6 +197,7 @@
     <ClInclude Include="src\Physics\CollisionMath.h" />
     <ClInclude Include="src\Physics\CollisionResult.h" />
     <ClInclude Include="src\Renderer\Camera.h" />
+    <ClInclude Include="src\Renderer\PPE\Framebuffer.h" />
     <ClInclude Include="src\Renderer\GlMacros.h" />
     <ClInclude Include="src\Renderer\IndexBuffer.h" />
     <ClInclude Include="src\Renderer\Light.h" />
@@ -222,8 +231,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\fbo\fragment.glsl" />
-    <None Include="res\shaders\fbo\vertex.glsl" />
+    <None Include="res\shaders\entity\fragment.glsl" />
+    <None Include="res\shaders\entity\vertex.glsl" />
+    <None Include="res\shaders\gaussianBlur\fragment.glsl" />
+    <None Include="res\shaders\gaussianBlur\vertex.glsl" />
+    <None Include="res\shaders\terrain\fragment.glsl" />
+    <None Include="res\shaders\terrain\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

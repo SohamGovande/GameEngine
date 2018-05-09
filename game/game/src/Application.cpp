@@ -4,6 +4,9 @@
 #include "ResourceMgr/ResourceMgr.h"
 #include "Renderer/Renderers/MasterRenderer.h"
 #include "Renderer/GlMacros.h"
+#include "Renderer/VertexBufferLayout.h"
+#include "Renderer/PPE/GaussianSinglePassBlur.t.h"
+#include "Renderer/PPE/TestEffect.h"
 #include "Terrain/World.h"
 #include "Terrain/TerrainGen.h"
 #include "TimedScope.h"
@@ -32,7 +35,7 @@ static void runGame(sf::Window& window)
 
 	{
 		TimedScope timer("generate terrain");
-		constexpr int size = 2;
+		constexpr int size = 1;
 		for (int x = -size; x < size; x++)
 			for (int y = -size; y < size; y++)
 				terrainGen.generate(world, resourceMgr, x, y);
@@ -41,8 +44,9 @@ static void runGame(sf::Window& window)
 	world.sendEntities(renderer);
 	world.sendTerrain(renderer);
 
-	float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-		 // positions   // texCoords
+	TestEffect effect(933, 700);
+
+	float quadVertices[] = {
 		-1.0f,  1.0f,  0.0f, 1.0f,
 		-1.0f, -1.0f,  0.0f, 0.0f,
 		1.0f, -1.0f,  1.0f, 0.0f,
@@ -51,18 +55,12 @@ static void runGame(sf::Window& window)
 		1.0f, -1.0f,  1.0f, 0.0f,
 		1.0f,  1.0f,  1.0f, 1.0f
 	};
-
-	// screen quad VAO
-	unsigned int quadVAO, quadVBO;
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	VertexBuffer vbo(quadVertices, sizeof(quadVertices));
+	VertexArray vao;
+	VertexBufferLayout layout;
+	layout.push<float>(2);
+	layout.push<float>(2);
+	vao.addBuffer(vbo, layout);
 
 	bool running = true;
 	while (running)
@@ -82,10 +80,7 @@ static void runGame(sf::Window& window)
 				if (event.key.code == sf::Keyboard::Key::T)
 					renderer.toggleWireframeView();
 		}
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// draw...
+		
 		long long int now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 
 		delta += (now - lastTime) / 1000000000.0 * ticksPerSecond;
@@ -101,18 +96,17 @@ static void runGame(sf::Window& window)
 		const float partialTicks = (float)delta;
 		lastTime = now;
 
-
 		world.getPerson().position.y = world.getTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
 
 		renderer.prepare();
-
 		camera.performRotations(partialTicks);
-
 		renderer.render(partialTicks, camera);
 
-		// end the current frame (internally swaps the front and back buffers)
+		GlCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+
 		window.display();
 	}
+	
 }
 
 int main()

@@ -45,7 +45,7 @@ vec3 calculateDiffuse(vec3 unitSurfaceNorm, vec3 unitLightVec)
 	//Find the difference between the vector to the light source and the surface nromal
 	float diffuseDot = dot(unitSurfaceNorm, unitLightVec);
 
-	diffuseDot = max(diffuseDot, 0.3); //Ambient lighting
+	diffuseDot = max(diffuseDot * 0.5 + .5, 0); //Ambient lighting
 
 	return diffuseDot * u_LightColor;
 }

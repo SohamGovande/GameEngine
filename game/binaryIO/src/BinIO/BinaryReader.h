@@ -21,7 +21,7 @@ public:
 		return *reinterpret_cast<T*>(data);
 	}
 
-	inline unsigned int getReadPos() { return reader.tellg(); }
+	inline std::streamoff getReadPos() { return reader.tellg(); }
 	inline void close() { reader.close(); }
 	inline std::ifstream& getReader() { return reader; }
 };

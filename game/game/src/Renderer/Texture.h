@@ -8,10 +8,11 @@ private:
 
 	std::string filepath;
 	unsigned char* localBuf;
-	int width, height, bitsPerPixel;
+	int width, height;
 
 public:
-	Texture(std::string filepath, bool clamp);
+	Texture(const std::string& filepath);
+	Texture(unsigned int width, unsigned int height);
 	
 	void cleanUp() const;
 	void bind(unsigned int slot = 0U) const;
@@ -21,4 +22,5 @@ public:
 	inline std::string getFilepath() const { return filepath; }
 	inline int getWidth() const { return width; }
 	inline int getHeight() const { return height; }
+	inline unsigned int getTextureID() const { return rendererID; }
 };

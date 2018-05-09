@@ -4,9 +4,9 @@
 #include "GlMacros.h"
 #include "Texture.h"
 
-Texture::Texture(std::string filepath, bool clamp)
+Texture::Texture(const std::string& filepath)
 	: rendererID(0), filepath("res/textures/" + filepath + ".png"), localBuf(nullptr),
-	width(0), height(0), bitsPerPixel(0)
+	width(0), height(0)
 {
 	sf::Image imgData;
 	if (!imgData.loadFromFile(this->filepath))
@@ -26,10 +26,8 @@ Texture::Texture(std::string filepath, bool clamp)
 	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-	int wrapFunc = clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
-	
-	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapFunc));
-	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapFunc));
+	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
 
 	GlCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -1.0f));
 
@@ -38,6 +36,17 @@ Texture::Texture(std::string filepath, bool clamp)
 	GlCall(glGenerateMipmap(GL_TEXTURE_2D));
 
 	GlCall(glBindTexture(GL_TEXTURE_2D, 0));
+}
+
+Texture::Texture(unsigned int width, unsigned int height)
+{
+	GlCall(glGenTextures(1, &rendererID));
+	GlCall(glBindTexture(GL_TEXTURE_2D, rendererID));
+
+	GlCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
+
+	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 }
 
 void Texture::cleanUp() const

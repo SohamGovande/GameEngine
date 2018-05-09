@@ -8,25 +8,18 @@
 #include "../GlMacros.h"
 #include "Shader.h"
 
-Shader::Shader(const std::string& filename)
-	: rendererID(0), uniformLocationCache()
+Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile)
+	: rendererID(0), vs(0), fs(0),
+	vertexFile(vertexFile), fragmentFile(fragmentFile)
 {
-	ShaderProgramSrc src = readSingleFile("res/shaders/" + filename);
-	rendererID = createShader(src.vertexSrc, src.fragSrc);
-	
 }
 
-Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile)
+void Shader::create()
 {
 	rendererID = createShader(
-		readFile("res/shaders/" + vertexFile),
-		readFile("res/shaders/" + fragmentFile)
+		readFile("res/shaders/" + vertexFile, vPreprocessorElements),
+		readFile("res/shaders/" + fragmentFile, fPreprocessorElements)
 	);
-}
-
-Shader::~Shader()
-{
-	GlCall(glDeleteProgram(rendererID));
 }
 
 int Shader::getUniformLocation(const std::string& name)
@@ -75,17 +68,14 @@ void Shader::setMatrix4(const std::string& name, const glm::mat4& matrix)
 unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader)
 {
 	GlCall(GLuint program = glCreateProgram());
-	GLuint vs = compileShader(vertexShader, GL_VERTEX_SHADER);
-	GLuint fs = compileShader(fragmentShader, GL_FRAGMENT_SHADER);
+	vs = compileShader(vertexShader, GL_VERTEX_SHADER);
+	fs = compileShader(fragmentShader, GL_FRAGMENT_SHADER);
 
 	GlCall(glAttachShader(program, vs));
 	GlCall(glAttachShader(program, fs));
 
 	GlCall(glLinkProgram(program));
 	GlCall(glValidateProgram(program));
-
-	GlCall(glDeleteShader(vs));
-	GlCall(glDeleteShader(fs));
 
 	return program;
 }
@@ -117,8 +107,7 @@ unsigned int Shader::compileShader(const std::string& source, unsigned int type)
 	return shaderId;
 }
 
-
-std::string Shader::readFile(const std::string& filename)
+std::string Shader::readFile(const std::string& filename, const std::vector<ShaderPreprocessorElement>& preprocessor)
 {
 	std::stringstream ss;
 	std::ifstream stream(filename);
@@ -129,41 +118,27 @@ std::string Shader::readFile(const std::string& filename)
 	}
 
 	std::string line;
-
+	
 	while (getline(stream, line))
+	{
 		ss << line << '\n';
+		if (line.find("#version") == 0)
+		{
+			for (const ShaderPreprocessorElement& preproc : preprocessor)
+				ss << "#define " << preproc.name << " " << preproc.value << '\n';
+		}
+	}
 	
 	return ss.str();
 }
 
-ShaderProgramSrc Shader::readSingleFile(const std::string& filePath)
+void Shader::cleanUp() const
 {
-	std::ifstream stream(filePath);
-	std::string line;
-	std::stringstream vsh, fsh;
-	std::stringstream* current = &vsh;;
-
-	while (getline(stream, line))
-	{
-		if (line.find("//Shader=") != std::string::npos)
-		{
-			if (line.find("VERTEX") != std::string::npos)
-				current = &vsh;
-			else if (line.find("FRAGMENT") != std::string::npos)
-				current = &fsh;
-			else
-				std::cout << "Invalid shader line specified: " << line << std::endl;
-		}
-		else
-		{
-			(*current) << line << '\n';
-		}
-	}
-
-	ShaderProgramSrc src;
-	src.fragSrc = fsh.str();
-	src.vertexSrc = vsh.str();
-	return src;
+	GlCall(glDetachShader(rendererID, vs));
+	GlCall(glDetachShader(rendererID, fs));
+	GlCall(glDeleteShader(vs));
+	GlCall(glDeleteShader(fs));
+	GlCall(glDeleteProgram(rendererID));
 }
 
 void Shader::bind() const
