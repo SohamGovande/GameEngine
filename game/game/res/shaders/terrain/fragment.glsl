@@ -4,7 +4,7 @@ layout(location = 0) out vec4 color;
 
 in vec2 v_TexCoord;
 in vec3 v_SurfaceNormal;
-in vec3 v_ToLightSource;
+in vec3 v_ToLightSource[MAX_LIGHTS];
 in vec3 v_ToCamera;
 in float v_Visibility;
 
@@ -15,39 +15,31 @@ uniform bool u_HasSpecularMap;
 
 uniform float u_ShineDistanceDamper;
 uniform float u_Reflectivity;
-uniform vec3 u_LightColor;
 
 uniform vec3 u_SkyColor;
 
-vec3 calculateSpecular(vec3 unitSurfaceNorm, vec3 unitLightVec)
+uniform vec3 u_LightColor[MAX_LIGHTS];
+uniform float u_LightAttenuation[MAX_LIGHTS];
+uniform float u_LightBrightness[MAX_LIGHTS];
+uniform int u_LightsUsed;
+
+
+float calculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec)
 {
-	vec3 specular = vec3(0, 0, 0);
-	if (u_Reflectivity != 0)
-	{
-		vec3 unitVecToCamera = normalize(v_ToCamera);
-		vec3 lightToVertex = -unitLightVec;
-		vec3 reflectedDirection = reflect(lightToVertex, unitSurfaceNorm);
-
-		float specularDot = dot(reflectedDirection, unitVecToCamera);
-		specularDot = max(specularDot, 0.5);
-
-		specular = pow(specularDot, u_ShineDistanceDamper) * u_Reflectivity * u_LightColor;
-
-		//If there is specular map data, multiply the specular value by the map's red component (amount of shinyness to the material)
-		if (u_HasSpecularMap)
-			specular *= texture(u_SpecularMap, v_TexCoord).r;
-	}
-	return specular;
+	return max(dot(unitSurfaceNorm, unitLightVec), 0);
 }
 
-vec3 calculateDiffuse(vec3 unitSurfaceNorm, vec3 unitLightVec)
+float calculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 unitVecToCamera)
 {
-	//Find the difference between the vector to the light source and the surface nromal
-	float diffuseDot = dot(unitSurfaceNorm, unitLightVec);
 
-	diffuseDot = max(diffuseDot * 0.5 + .5, 0); //Ambient lighting
+	float specularDot = max(dot(reflect(-unitLightVec, unitSurfaceNorm), unitVecToCamera), 0.5);
+	float actualSpecular = pow(specularDot, u_ShineDistanceDamper) * u_Reflectivity;
 
-	return diffuseDot * u_LightColor;
+	//If there is specular map data, multiply the specular value by the map's red component (amount of shinyness to the material)
+	if (u_HasSpecularMap)
+		actualSpecular *= texture(u_SpecularMap, v_TexCoord).r;
+
+	return actualSpecular;
 }
 
 void main(void)
@@ -57,12 +49,26 @@ void main(void)
 	if (texColor.a < 0.7)
 		discard;
 
-	//Change the lengths of the vectors to be 1 and then find the dot product for diffuse lighting
 	vec3 unitSurfaceNorm = normalize(v_SurfaceNormal);
-	vec3 unitLightVec = normalize(v_ToLightSource);
+	vec3 unitVecToCamera = normalize(v_ToCamera);
 
-	vec3 specular = calculateSpecular(unitSurfaceNorm, unitLightVec);
-	vec3 diffuse = calculateDiffuse(unitSurfaceNorm, unitLightVec);
+	vec3 diffuse = vec3(0);
+	vec3 specular = vec3(0);
+	
+	for (int i = 0; i < u_LightsUsed; i++)
+	{
+		vec3 unitLightVec = normalize(v_ToLightSource[i]);
+
+		float lightDistanceSq = v_ToLightSource[i].x*v_ToLightSource[i].x + v_ToLightSource[i].y*v_ToLightSource[i].y + v_ToLightSource[i].z*v_ToLightSource[i].z;
+		//attenuation = brightness/(1.0 + k*d^2)
+		float attenuation = u_LightBrightness[i] / (1.0 + u_LightAttenuation[i] * lightDistanceSq);
+
+		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
+		if (u_Reflectivity != 0)
+			specular += calculateSpecular(unitSurfaceNorm, unitLightVec, unitVecToCamera) * attenuation * u_LightColor[i];
+	}
+	
+	diffuse = max(diffuse, 0.2);
 
 	color =	vec4(diffuse, 1) * texColor + vec4(specular, 1);
 	color = mix(vec4(u_SkyColor.xyz, 1.0), color, v_Visibility);

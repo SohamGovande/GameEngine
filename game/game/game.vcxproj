@@ -160,7 +160,6 @@
     <ClCompile Include="src\Renderer\Light.cpp" />
     <ClCompile Include="src\Renderer\MaterialModel.cpp" />
     <ClCompile Include="src\Renderer\Renderers\EntityRenderer.cpp" />
-    <ClCompile Include="src\Renderer\Renderers\GeometryRenderer.cpp" />
     <ClCompile Include="src\Renderer\Renderers\MasterRenderer.cpp" />
     <ClCompile Include="src\Renderer\Renderers\TerrainRenderer.cpp" />
     <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
@@ -203,7 +202,6 @@
     <ClInclude Include="src\Renderer\Light.h" />
     <ClInclude Include="src\Renderer\MaterialModel.h" />
     <ClInclude Include="src\Renderer\Renderers\EntityRenderer.h" />
-    <ClInclude Include="src\Renderer\Renderers\GeometryRenderer.h" />
     <ClInclude Include="src\Renderer\Renderers\MasterRenderer.h" />
     <ClInclude Include="src\Renderer\Renderers\TerrainRenderer.h" />
     <ClInclude Include="src\Renderer\Shader\Shader.h" />

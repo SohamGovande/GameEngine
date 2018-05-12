@@ -78,14 +78,14 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 		}
 	}
 	
-	int pointer = 0;
-	for (int gz = 0; gz < TERRAIN_VERTEX_COUNT - 1; gz++) {
-		for (int gx = 0; gx < TERRAIN_VERTEX_COUNT - 1; gx++) {
+	unsigned int pointer = 0;
+	for (unsigned int gz = 0; gz < TERRAIN_VERTEX_COUNT - 1; gz++) {
+		for (unsigned int gx = 0; gx < TERRAIN_VERTEX_COUNT - 1; gx++) {
 
-			int topLeft = (gz * (int) TERRAIN_VERTEX_COUNT) + gx;
-			int topRight = topLeft + 1;
-			int bottomLeft = ((gz + 1) * (int) TERRAIN_VERTEX_COUNT) + gx;
-			int bottomRight = bottomLeft + 1;
+			unsigned int topLeft = (gz * (int) TERRAIN_VERTEX_COUNT) + gx;
+			unsigned int topRight = topLeft + 1;
+			unsigned int bottomLeft = ((gz + 1) * (int) TERRAIN_VERTEX_COUNT) + gx;
+			unsigned int bottomRight = bottomLeft + 1;
 
 			indices[pointer++] = topLeft;
 			indices[pointer++] = bottomLeft;

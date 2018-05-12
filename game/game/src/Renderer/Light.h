@@ -1,25 +1,32 @@
 #pragma once
+#include <glm/vec3.hpp>
+#define MAX_LIGHTS 5
+
 class Light
 {
 private:
-	float posX, posY, posZ;
-	float red, green, blue;
+	glm::vec3 pos, color;
+	bool posChanged, colorChanged, attenuationChanged, brightnessChanged;
+	float attenuation, brightness;
 
 public:
-	Light(const float posX, const float posY, const float posZ, const float red, const float green, const float blue);
+	Light(const glm::vec3& pos, const glm::vec3& color, float attenuation, float brightness);
 
-	inline float getPosX() const { return posX; }
-	inline float getPosY() const { return posY; }
-	inline float getPosZ() const { return posZ; }
-	inline void setPosX(float nPos) { posX = nPos; }
-	inline void setPosY(float nPos) { posY = nPos; }
-	inline void setPosZ(float nPos) { posZ = nPos; }
+	inline bool wasAttenuationChanged() const { return attenuationChanged; }
+	inline bool wasColorChanged() const { return colorChanged; }
+	inline bool wasPosChanged() const { return posChanged; }
+	inline bool wasBrightnessChanged() const { return brightnessChanged; }
 
-	inline float getRed() const { return red; }
-	inline float getGreen() const { return green; }
-	inline float getBlue() const { return blue; }
-	inline void setRed(float color) { red = color; }
-	inline void setGreen(float color) { green = color; }
-	inline void setBlue(float color) { blue = color; }
+	inline float getBrightness() const { return brightness; }
+	inline void setBrightness(float brightness) { this->brightness = brightness; brightnessChanged = true; }
+
+	inline float getAttenuation() const { return attenuation; }
+	inline void setAttenuation(float attenuation) { this->attenuation = attenuation; attenuationChanged = true; }
+
+	inline const glm::vec3& getPos() const { return pos; }
+	inline void setPos(const glm::vec3& pos) { this->pos = pos; posChanged = true; }
+
+	inline const glm::vec3& getColor() const { return color; }
+	inline void setColor(const glm::vec3& color) { this->color = color; colorChanged = true; }
 };
 

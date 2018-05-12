@@ -7,20 +7,26 @@
 #include "EntityRenderer.h"
 #include "MathUtils.h"
 
-EntityRenderer::EntityRenderer(Light& light, Shader& shader)
-	: light(light),
-	shader(shader),
+EntityRenderer::EntityRenderer(const std::vector<Light>& lights, Shader& shader)
+	: lights(lights), shader(shader),
 	lastCullingState(true)
 {
-	
 }
 
 void EntityRenderer::draw(float partialTicks, const Camera& camera, const std::unordered_map<MaterialModel, std::list<Entity*>>& entities)
 {
 	shader.bind();
 	shader.setVec3("u_SkyColor", 176/255.f, 231/255.f, 232/255.f);
-	shader.setVec3("u_LightPos", light.getPosX(), light.getPosY(), light.getPosZ());
-	shader.setVec3("u_LightColor", light.getRed(), light.getGreen(), light.getBlue());
+
+	shader.setInt("u_LightsUsed", lights.size());
+	for (unsigned int i = 0; i < lights.size(); i++)
+	{
+		std::string iString = std::to_string(i);
+		shader.setVec3("u_LightPos[" + iString + "]", lights[i].getPos().x, lights[i].getPos().y, lights[i].getPos().z);
+		shader.setVec3("u_LightColor[" + iString + "]", lights[i].getColor().r, lights[i].getColor().g, lights[i].getColor().b);
+		shader.setFloat("u_LightAttenuation[" + iString + "]", lights[i].getAttenuation());
+		shader.setFloat("u_LightBrightness[" + iString + "]", lights[i].getBrightness());
+	}
 
 	for (auto it = entities.begin(); it != entities.end(); it++)
 	{

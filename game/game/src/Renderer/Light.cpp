@@ -1,8 +1,7 @@
 #include "Light.h"
 
-
-Light::Light(const float posX, const float posY, const float posZ, const float red, const float green, const float blue)
-	: posX(posX), posY(posY), posZ(posZ), 
-	red(red), green(green), blue(blue)
+Light::Light(const glm::vec3& pos, const glm::vec3& color, float attenuation, float brightness)
+	: pos(pos), color(color), attenuation(attenuation/1000.0f), brightness(brightness),
+	posChanged(true), colorChanged(true), attenuationChanged(true),  brightnessChanged(true)
 {
 }

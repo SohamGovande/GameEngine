@@ -14,7 +14,7 @@ class TerrainRenderer
 {
 private:
 	MasterRenderer& masterRenderer;
-	Light& light;
+	const std::vector<Light>& lights;
 	Shader& shader;
 	glm::mat4 projectionMatrix;
 
@@ -23,7 +23,7 @@ private:
 	void renderInstance(float partialTicks, const Terrain& object, const Camera& camera);
 
 public:
-	TerrainRenderer(MasterRenderer& masterRenderer, Light& light, Shader& shader);
+	TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, Shader& shader);
 
 	void draw(float partialTicks, const Camera& camera, const std::list<Terrain*>& terrains);
 

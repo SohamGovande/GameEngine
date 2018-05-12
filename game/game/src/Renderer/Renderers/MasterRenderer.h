@@ -6,7 +6,6 @@
 
 #include "EntityRenderer.h"
 #include "TerrainRenderer.h"
-#include "GeometryRenderer.h"
 
 #include "MathUtils.h"
 #include "Toolkit.h"
@@ -17,10 +16,9 @@ class MasterRenderer
 {
 private:
 	glm::mat4 projectionMatrix;
-	Light light;
+	std::vector<Light> lights;
 	EntityRenderer entityRenderer;
 	TerrainRenderer terrainRenderer;
-	GeometryRenderer geometryRenderer;
 
 	Shader shader, tShader;
 	
@@ -28,8 +26,9 @@ private:
 	std::list<Terrain*> terrains;
 
 	bool wireframe, needsToUpdateWireframe;
-private:
 	
+	float timePassed;
+
 public:
 	MasterRenderer(float fov, float nearPlane, float farPlane, ResourceMgr& mgr);
 	~MasterRenderer();
@@ -42,9 +41,6 @@ public:
 
 	void toggleWireframeView() { wireframe = !wireframe; needsToUpdateWireframe = true; }
 	
-	inline void drawEntities(float partialTicks, const Camera& camera)
-	{
-		entityRenderer.draw(partialTicks, camera, entities);
-	}
-	inline void pushProjMatIntoShader(Shader& shader) const { shader.setMatrix4("u_ProjectionMatrix", projectionMatrix); }
+	inline const std::vector<Light>& getLights() const { return lights; }
+	inline std::vector<Light>& getLights() { return lights; }
 };

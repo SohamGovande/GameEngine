@@ -7,6 +7,9 @@ World::World(const ResourceMgr& resourceMgr)
 	: entities(), terrains(), 
 	person(nullptr)
 {
+	Entity& lantern = addEntity(*resourceMgr.lanternModel);
+	lantern.scale = 4;
+
 	person = &addEntity(*resourceMgr.playerModel);
 
 	person->addEID(PLAYER);
@@ -66,7 +69,7 @@ float World::getTerrainHeight(float x, float z) const
 }
 
 template<typename... VaArgs>
-Entity& World::addEntity(VaArgs&... args)
+Entity& World::addEntity(VaArgs&&... args)
 {
 	entities.emplace_back(args...);
 	return entities.back();

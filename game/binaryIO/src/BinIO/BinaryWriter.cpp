@@ -27,3 +27,15 @@ void BinaryWriter::write(const char* data, unsigned int size)
 		writer.write(data, size);
 	}
 }
+
+template<typename T, typename U>
+void BinaryWriter::writeBlock(const T* begin, U count)
+{
+	write<U>(count);
+
+	if (getEndianness() == LITTLE_ENDIAN)
+		for (unsigned int i = 0; i < count; i++)
+			write<T>(begin[i]);
+	else
+		writer.write(reinterpret_cast<const char*>(begin), static_cast<std::streamsize>(count));
+}

@@ -1,15 +1,15 @@
 #pragma once
 #include <glm/mat4x4.hpp>
 
-#include "../Camera.h"
-#include "../Shader/Shader.h"
-#include "../MaterialModel.h"
-#include "../Light.h"
+#include "Renderer/Camera.h"
+#include "Renderer/Shader/Shader.h"
+#include "Renderer/MaterialModel.h"
+#include "Renderer/Light.h"
 
 class EntityRenderer
 {
 private:
-	Light& light;
+	const std::vector<Light>& lights;
 	Shader& shader;
 	glm::mat4 projectionMatrix;
 	bool lastCullingState;
@@ -19,7 +19,7 @@ private:
 	void renderInstance(float partialTicks, const Entity& object, const Camera& camera) const;
 
 public:
-	EntityRenderer(Light& light, Shader& shader);
+	EntityRenderer(const std::vector<Light>& lights, Shader& shader);
 
 	void draw(float partialTicks, const Camera& camera, const std::unordered_map<MaterialModel, std::list<Entity*>>& entities);
 

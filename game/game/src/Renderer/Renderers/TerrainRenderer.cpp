@@ -3,8 +3,8 @@
 #include "MathUtils.h"
 #include "MasterRenderer.h"
 
-TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, Light& light, Shader& shader)
-	: light(light), shader(shader), masterRenderer(masterRenderer)
+TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, Shader& shader)
+	: lights(lights), shader(shader), masterRenderer(masterRenderer)
 {
 	
 }
@@ -14,11 +14,19 @@ void TerrainRenderer::draw(float partialTicks, const Camera& camera, const std::
 
 	shader.setFloat("u_Reflectivity", 0);
 	shader.setVec3("u_SkyColor", 176 / 255.f, 231 / 255.f, 232 / 255.f);
-	shader.setVec3("u_LightPos", light.getPosX(), light.getPosY(), light.getPosZ());
-	shader.setVec3("u_LightColor", light.getRed(), light.getGreen(), light.getBlue());
+
+	shader.setInt("u_LightsUsed", lights.size());
+	for (unsigned int i = 0; i < lights.size(); i++)
+	{
+		std::string iString = std::to_string(i);
+		shader.setVec3("u_LightPos[" + iString + "]", lights[i].getPos().x, lights[i].getPos().y, lights[i].getPos().z);
+		shader.setVec3("u_LightColor[" + iString + "]", lights[i].getColor().r, lights[i].getColor().g, lights[i].getColor().b);
+		shader.setFloat("u_LightAttenuation[" + iString + "]", lights[i].getAttenuation());
+		shader.setFloat("u_LightBrightness[" + iString + "]", lights[i].getBrightness());
+	}
 	shader.setMatrix4("u_TransformationMatrix", glm::mat4(1.0f));
 
-	for (Terrain* terrain : terrains)
+	for (const Terrain* terrain : terrains)
 	{
 		const MaterialModel& model = terrain->getTerrainModel();
 		prepareForRendering(model);

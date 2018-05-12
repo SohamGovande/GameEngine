@@ -63,6 +63,9 @@ static void runGame(sf::Window& window)
 	vao.addBuffer(vbo, layout);
 
 	bool running = true;
+
+	float time = 0;
+
 	while (running)
 	{
 		sf::Event event;
@@ -95,6 +98,13 @@ static void runGame(sf::Window& window)
 
 		const float partialTicks = (float)delta;
 		lastTime = now;
+
+		time += 0.25f;
+		glm::vec3 pos(sin(DEG2RAD * time), 0, cos(DEG2RAD * time));
+		pos *= 100.0f;
+		pos.y = world.getTerrainHeight(pos.x, pos.z) + 50;
+		renderer.getLights().back().setPos(pos);
+		world.getEntities().front().position = glm::vec3(pos.x, pos.y - 50, pos.z);
 
 		world.getPerson().position.y = world.getTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
 

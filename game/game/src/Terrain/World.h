@@ -27,12 +27,14 @@ public:
 	float getTerrainHeight(float x, float z) const;
 
 	template<typename... VaArgs>
-	Entity& addEntity(VaArgs&... args);
+	Entity& addEntity(VaArgs&&... args);
 	Entity& copyEntityIntoWorld(const Entity& object);
 
 	inline Terrain& addTerrain(const Terrain& terrain) { terrains.push_back(terrain); return terrains.back(); }
 
 	inline Entity& getPerson() { return *person; }
+	inline const Entity& getPerson() const { return *person; }
 
 	inline std::list<Entity>& getEntities() { return entities; };
+	inline const std::list<Entity>& getEntities() const { return entities; }
 };

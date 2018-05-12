@@ -3,26 +3,35 @@
 
 MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, ResourceMgr& mgr)
 	: projectionMatrix(Math::createProjectionMatrix(nearPlane, farPlane, fov)),
-	light(0, 100, 0, 1, 1, 1),
+	lights(),
 	shader("entity/vertex.glsl", "entity/fragment.glsl"),
 	tShader("terrain/vertex.glsl", "terrain/fragment.glsl"),
 	
-	entityRenderer(light, shader),
-	terrainRenderer(*this, light, tShader),
-	geometryRenderer(light, shader, mgr),
+	entityRenderer(lights, shader),
+	terrainRenderer(*this, lights, tShader),
 
 	entities(),
 	terrains(),
 	wireframe(false),
-	needsToUpdateWireframe(false)
+	needsToUpdateWireframe(false),
+	timePassed(0)
 {
+	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0, .25f);
+	lights.emplace_back(glm::vec3(0, 50, 0), glm::vec3(.92f, .78f, .18f), 0.05f, 1.f);
+		
+	const std::string MAX_LIGHTS_STR = std::to_string(MAX_LIGHTS);
+
+	shader.addVertexPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
+	shader.addFragmentPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
 	shader.create();
 	shader.bind();
-	pushProjMatIntoShader(shader);
+	shader.setMatrix4("u_ProjectionMatrix", projectionMatrix);
 
+	tShader.addVertexPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
+	tShader.addFragmentPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
 	tShader.create();
 	tShader.bind();
-	pushProjMatIntoShader(tShader);
+	tShader.setMatrix4("u_ProjectionMatrix", projectionMatrix);
 }
 
 MasterRenderer::~MasterRenderer()
@@ -49,7 +58,6 @@ void MasterRenderer::prepare() const
 		GlCall(glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL));
 	}
 }
-
 
 void MasterRenderer::markEntityForRendering(Entity& entity)
 {
@@ -82,6 +90,4 @@ void MasterRenderer::render(float partialTicks, const Camera& camera)
 {
 	terrainRenderer.draw(partialTicks, camera, terrains);
 	entityRenderer.draw(partialTicks, camera, entities);
-	
-//	geometryRenderer.draw(partialTicks, camera);
 }
