@@ -4,7 +4,7 @@
 #include "Vendor/PerlinNoise.h"
 
 #define TERRAIN_HEIGHT_AMPLITUDE 90.0f
-#define TERRAIN_OCTAVE_COUNT 4
+#define TERRAIN_OCTAVE_COUNT 3
 
 class HeightGen
 {

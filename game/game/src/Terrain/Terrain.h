@@ -6,6 +6,7 @@
 #include "ResourceMgr/ResourceMgr.h"
 #include "Mesh.h"
 #include "TerrainGen.h"
+#include "Heightmap.h"
 #include "TerrainConstants.h"
 
 struct HeightmapKey
@@ -49,67 +50,13 @@ struct TerrainTextureInfo {
 	inline bool hasSpecularMap() const { return specularMap != nullptr; }
 };
 
-struct Heightmap 
-{
-public:
-	inline Heightmap(unsigned int size, float interval)
-		:  width(size), height(size), interval(interval)
-	{
-		ptr = new float[width * height];
-	}
-
-	Heightmap(const Heightmap& other) = delete;
-	Heightmap(Heightmap&& other) = delete;
-
-	inline ~Heightmap()
-	{
-		if (ptr != nullptr)
-			delete[] ptr;
-	}
-
-	inline void setHeight(unsigned int index, float h) const
-	{
-		ptr[index] = h;
-	}
-
-	inline void setHeight(unsigned int x, unsigned int z, float h) const
-	{
-		setHeight(width * x + z, h);
-	}
-
-	inline void setHeight(float x, float z, float h) const
-	{
-		setHeight((unsigned int)(x / interval), (unsigned int)(z / interval), h);
-	}
-
-	inline float getHeight(unsigned int index) const
-	{
-		return ptr[index];
-	}
-
-	inline float getHeight(unsigned int x, unsigned int z) const
-	{
-		return getHeight(width * x + z);
-	}
-
-	inline float getHeight(float x, float z) const 
-	{
-		return getHeight((unsigned int)(x / interval), (unsigned int)(z / interval));
-	}
-
-private:
-	float* ptr;
-	const unsigned int width, height;
-	float interval;
-};
-
 //A chunk of terrain units
 class Terrain
 {
 private:
 	TerrainGen& generator;
 
-	std::unordered_map<HeightmapKey, float> heightmap;
+	Heightmap heightmap;
 	int chunkX, chunkZ;
 
 	Mesh mesh;

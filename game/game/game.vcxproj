@@ -148,6 +148,7 @@
     <ClCompile Include="src\Entity\Components\MotionComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Renderer\PPE\TestEffect.cpp" />
+    <ClCompile Include="src\Terrain\Heightmap.cpp" />
     <ClCompile Include="src\Terrain\Region.cpp" />
     <ClCompile Include="src\Toolkit.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Renderer\PPE\TestEffect.h" />
     <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h" />
+    <ClInclude Include="src\Terrain\Heightmap.h" />
     <ClInclude Include="src\Terrain\Region.h" />
     <ClInclude Include="src\Toolkit.h" />
     <ClInclude Include="src\MathUtils.h" />

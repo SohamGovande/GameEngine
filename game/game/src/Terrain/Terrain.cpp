@@ -7,8 +7,11 @@
 #include "Renderer/GlMacros.h"
 
 Terrain::Terrain(const ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ)
-	: generator(generator), chunkX(chunkX), chunkZ(chunkZ), model(nullptr)
+	: generator(generator), chunkX(chunkX), chunkZ(chunkZ), model(nullptr),
+	heightmap(TERRAIN_VERTEX_COUNT, TERRAIN_INTERVAL)
 {
+	Heightmap hmap(5, 3.f);
+
 	textures.emplace_back(resourceMgr.grass);
 	textures.emplace_back(resourceMgr.dirt);
 
@@ -44,17 +47,18 @@ Terrain::~Terrain()
 
 void Terrain::setTerrainHeight(float x, float z, float y)
 {
-	heightmap.emplace(HeightmapKey(x, z), y);
+	float* point = heightmap[{x, z}];
+	if (point != nullptr)
+		*point = y;
 }
 
 
 float Terrain::getTerrainHeight(float x, float z) const
 {
-	auto it = heightmap.find(HeightmapKey(x, z));
-	if (it != heightmap.end())
-		return it->second;
-
-	return generator.getTerrainHeight(x, z);
+	float* height = heightmap[{x, z}];
+	if (height == nullptr)
+		return generator.getTerrainHeight(x + chunkX * TERRAIN_SIZE, z + chunkZ * TERRAIN_SIZE);
+	return *height;
 }
 
 glm::vec3 Terrain::getTerrainNormal(float x, float z)
@@ -63,7 +67,11 @@ glm::vec3 Terrain::getTerrainNormal(float x, float z)
 	float hR = getTerrainHeight(x + TERRAIN_INTERVAL, z);
 	float hD = getTerrainHeight(x, z - TERRAIN_INTERVAL);
 	float hU = getTerrainHeight(x, z + TERRAIN_INTERVAL);
-	return glm::vec3(hL - hR, 2, hD - hU);
+	glm::vec3 normal(hL - hR, 2, hD - hU);
+	
+	if (x == chunkX * TERRAIN_SIZE || z == chunkZ * TERRAIN_SIZE)
+		std::cout << normal.x << " " << normal.y << " " << normal.z << std::endl;
+	return normal;
 }
 
 void Terrain::generateMesh(const ResourceMgr& resourceMgr)
@@ -88,7 +96,7 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 			vertices[vertexPointer * 3 + 1] = getTerrainHeight(relativePosX, relativePosZ);
 			vertices[vertexPointer * 3 + 2] = posZ;
 	
-			glm::vec3 normal = getTerrainNormal(relativePosX, relativePosZ);
+			glm::vec3 normal = glm::normalize(getTerrainNormal(relativePosX, relativePosZ));
 
 			normals[vertexPointer * 3 + 0] = normal.x;
 			normals[vertexPointer * 3 + 1] = normal.y;

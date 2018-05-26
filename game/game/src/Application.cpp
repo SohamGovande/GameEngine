@@ -35,7 +35,7 @@ static void runGame(sf::Window& window)
 
 	{
 		TimedScope timer("generate terrain");
-		constexpr int size = 1;
+		constexpr int size = 2;
 		for (int x = -size; x < size; x++)
 			for (int y = -size; y < size; y++)
 				terrainGen.generate(world, resourceMgr, x, y);

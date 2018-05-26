@@ -55,6 +55,8 @@ void TerrainGen::generate(World& world, const ResourceMgr& resourceMgr, int chun
 		}
 	}
 
+	
+
 	terrain.generateMesh(resourceMgr);
 
 	addObjects(world, chunkX, chunkZ, 5, 0, 4, resourceMgr.evergreenTree, TREE);
