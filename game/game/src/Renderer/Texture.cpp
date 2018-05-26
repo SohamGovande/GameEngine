@@ -38,12 +38,13 @@ Texture::Texture(const std::string& filepath)
 	GlCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-Texture::Texture(unsigned int width, unsigned int height)
+Texture::Texture(unsigned int width, unsigned int height, bool useNullTexture)
 {
 	GlCall(glGenTextures(1, &rendererID));
 	GlCall(glBindTexture(GL_TEXTURE_2D, rendererID));
 
-	GlCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
+	if (useNullTexture)
+		GlCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
 
 	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GlCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));

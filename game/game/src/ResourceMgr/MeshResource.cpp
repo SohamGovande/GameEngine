@@ -14,8 +14,7 @@ MeshResource::~MeshResource()
 
 void MeshResource::generate()
 {
-	Mesh mesh = Loader::loadObjMeshData(objFile);
-	value = new Mesh(mesh);
+	value = new Mesh(Loader::loadObjMeshData(objFile));
 }
 
 void MeshResource::free(void* _thisPtr)

@@ -12,7 +12,7 @@ private:
 
 public:
 	Texture(const std::string& filepath);
-	Texture(unsigned int width, unsigned int height);
+	Texture(unsigned int width, unsigned int height, bool useNullTexture);
 	
 	void cleanUp() const;
 	void bind(unsigned int slot = 0U) const;

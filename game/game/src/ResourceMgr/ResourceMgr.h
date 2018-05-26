@@ -17,7 +17,7 @@ private:
 	MdlRes loadMdl(const std::string& mesh, const std::string& texture);
 
 public:
-	TexRes grass, axeSpecularMap;
+	TexRes grass, axeSpecularMap, dirt;
 	MdlRes playerModel, evergreenTree, birchTree, bt1, bt2, fernModel, axeModel, lanternModel, dragonModel;
 
 	ResourceMgr();

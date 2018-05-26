@@ -15,6 +15,18 @@ struct Mesh
 		vCount(0), iCount(0)
 	{
 	}
+
+	inline void free()
+	{
+		if (vertices != nullptr)
+			delete[] vertices;
+		if (textures != nullptr)
+			delete[] textures;
+		if (normals != nullptr)
+			delete[] normals;
+		if (indices != nullptr)
+			delete[] indices;
+	}
 };
 
 struct GlModel

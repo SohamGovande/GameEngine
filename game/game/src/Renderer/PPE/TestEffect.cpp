@@ -4,7 +4,7 @@
 TestEffect::TestEffect(unsigned int width, unsigned int height)
 	: shader("fbo/vertex.glsl","fbo/fragment.glsl"),
 	fbo(), depthStencilRbo(),
-	colorBuffer(width, height)
+	colorBuffer(width, height, true)
 {
 	shader.create();
 	shader.bind();

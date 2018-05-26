@@ -21,6 +21,15 @@ public:
 		return *reinterpret_cast<T*>(data);
 	}
 
+	inline std::string readString()
+	{
+		unsigned short len = read<unsigned short>();
+		std::string str;
+		str.reserve(len);
+		reader.read(&str.front(), len);
+		return str;
+	}
+
 	inline std::streamoff getReadPos() { return reader.tellg(); }
 	inline void close() { reader.close(); }
 	inline std::ifstream& getReader() { return reader; }

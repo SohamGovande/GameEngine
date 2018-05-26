@@ -4,24 +4,47 @@
 #include "Terrain.h"
 #include "MathUtils.h"
 #include "ModelLoader.h"
+#include "Renderer/GlMacros.h"
 
-Terrain::Terrain(TerrainGen& generator, int chunkX, int chunkZ)
+Terrain::Terrain(const ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ)
 	: generator(generator), chunkX(chunkX), chunkZ(chunkZ), model(nullptr)
 {
+	textures.emplace_back(resourceMgr.grass);
+	textures.emplace_back(resourceMgr.dirt);
+
+	blendMaps.emplace_back(128,  128, false);
+	const Texture& tex = blendMaps.back();
+	tex.bind();
+	constexpr int texSize = 128 * 128 * 4;
+	unsigned char* data = new unsigned char[texSize];
+	memset(data, 0, sizeof(unsigned char) * texSize);
+	
+	PerlinNoise noise;
+
+	for (unsigned int i = 0; i < texSize / 4; i++)
+	{
+		constexpr float scale = 0.05f;
+		float xCoord = scale * (i % 128);
+		float yCoord = scale * (i / 128);
+
+		float val = noise.noise(xCoord, yCoord, 0.4);
+		data[i * 4] = val * 255;
+		data[i * 4 + 1] = 255 * (1 - val);
+	}
+
+	GlCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
 }
 
 Terrain::~Terrain()
 {
-	delete[] mesh.vertices;
-	delete[] mesh.indices;
-	delete[] mesh.normals;
-	delete[] mesh.textures;
-	delete model;
+	mesh.free();
+	if (model != nullptr)
+		delete model;
 }
 
-void Terrain::setTerrainHeight(float x, float z, float y) 
+void Terrain::setTerrainHeight(float x, float z, float y)
 {
-	heightmap[HeightmapKey(x, z)] = y;
+	heightmap.emplace(HeightmapKey(x, z), y);
 }
 
 
@@ -30,17 +53,16 @@ float Terrain::getTerrainHeight(float x, float z) const
 	auto it = heightmap.find(HeightmapKey(x, z));
 	if (it != heightmap.end())
 		return it->second;
-	
+
 	return generator.getTerrainHeight(x, z);
 }
 
-
 glm::vec3 Terrain::getTerrainNormal(float x, float z)
 {
-	float hL = getTerrainHeight(x-TERRAIN_INTERVAL, z);
-	float hR = getTerrainHeight(x+TERRAIN_INTERVAL, z);
-	float hD = getTerrainHeight(x, z-TERRAIN_INTERVAL);
-	float hU = getTerrainHeight(x, z+TERRAIN_INTERVAL);
+	float hL = getTerrainHeight(x - TERRAIN_INTERVAL, z);
+	float hR = getTerrainHeight(x + TERRAIN_INTERVAL, z);
+	float hD = getTerrainHeight(x, z - TERRAIN_INTERVAL);
+	float hU = getTerrainHeight(x, z + TERRAIN_INTERVAL);
 	return glm::vec3(hL - hR, 2, hD - hU);
 }
 
@@ -63,17 +85,17 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 			float posZ = chunkZ * TERRAIN_SIZE + relativePosZ;
 
 			vertices[vertexPointer * 3 + 0] = posX;
-			vertices[vertexPointer * 3 + 1] = getTerrainHeight(posX, posZ);
+			vertices[vertexPointer * 3 + 1] = getTerrainHeight(relativePosX, relativePosZ);
 			vertices[vertexPointer * 3 + 2] = posZ;
 	
-			glm::vec3 normal = getTerrainNormal(posX, posZ);
+			glm::vec3 normal = getTerrainNormal(relativePosX, relativePosZ);
 
 			normals[vertexPointer * 3 + 0] = normal.x;
 			normals[vertexPointer * 3 + 1] = normal.y;
 			normals[vertexPointer * 3 + 2] = normal.z;
 			
-			textureCoords[vertexPointer * 2 + 0] = (float) x / ((float)TERRAIN_VERTEX_COUNT - 1) * 16;
-			textureCoords[vertexPointer * 2 + 1] = (float) z / ((float)TERRAIN_VERTEX_COUNT - 1) * 16;
+			textureCoords[vertexPointer * 2 + 0] = (float) x / ((float)TERRAIN_VERTEX_COUNT - 1);
+			textureCoords[vertexPointer * 2 + 1] = (float) z / ((float)TERRAIN_VERTEX_COUNT - 1);
 			vertexPointer++;
 		}
 	}
@@ -96,16 +118,12 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 		}
 	}
 	
-	model = new MaterialModel(
-		resourceMgr.grass, 
-		Loader::loadModel(vertices, textureCoords, normals, indices, vCount, iCount),
-		"terrain"
-	);
-
 	mesh.vertices = vertices;
 	mesh.indices = indices;
 	mesh.textures = textureCoords;
 	mesh.normals = normals;
 	mesh.vCount = vCount;
 	mesh.iCount = iCount;
+
+	model = new GlModel(Loader::loadModel(mesh));
 }

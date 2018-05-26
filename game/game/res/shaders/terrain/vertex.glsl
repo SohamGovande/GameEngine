@@ -16,8 +16,8 @@ uniform mat4 u_ViewMatrix;
 
 uniform vec3 u_LightPos[MAX_LIGHTS];
 
-const float density = 0.003;
-const float gradient = 1.5;
+const float FOG_DENSITY = 0.003;
+const float FOG_GRADIENT = 1.5;
 
 void main(void)
 {
@@ -42,5 +42,5 @@ void main(void)
 	v_ToCamera = (inverse(u_ViewMatrix) * vec4(0, 0, 0, 1)).xyz - positionWorldSpace.xyz;
 
 	float distance = length(positionCameraSpace.xyz);
-	v_Visibility = clamp(exp(-pow(distance * density, gradient)), 0, 1);
+	v_Visibility = clamp(exp(-pow(distance * FOG_DENSITY, FOG_GRADIENT)), 0, 1);
 }

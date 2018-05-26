@@ -45,6 +45,8 @@ static void runGame(sf::Window& window)
 	world.sendTerrain(renderer);
 
 	TestEffect effect(933, 700);
+	GaussianSinglePassBlur<HORIZONTAL> hblur(933, 700);
+	GaussianSinglePassBlur<VERTICAL> vblur(933, 700);
 
 	float quadVertices[] = {
 		-1.0f,  1.0f,  0.0f, 1.0f,
@@ -99,19 +101,11 @@ static void runGame(sf::Window& window)
 		const float partialTicks = (float)delta;
 		lastTime = now;
 
-		time += 0.25f;
-		glm::vec3 pos(sin(DEG2RAD * time), 0, cos(DEG2RAD * time));
-		pos *= 100.0f;
-		pos.y = world.getTerrainHeight(pos.x, pos.z) + 50;
-		renderer.getLights().back().setPos(pos);
-		world.getEntities().front().position = glm::vec3(pos.x, pos.y - 50, pos.z);
-
 		world.getPerson().position.y = world.getTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
-
-		renderer.prepare();
 		camera.performRotations(partialTicks);
+		
+		renderer.prepare();
 		renderer.render(partialTicks, camera);
-
 		GlCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 
 		window.display();

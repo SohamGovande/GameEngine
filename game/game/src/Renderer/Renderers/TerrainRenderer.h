@@ -19,7 +19,7 @@ private:
 	glm::mat4 projectionMatrix;
 
 private:
-	void prepareForRendering(const MaterialModel& material) const;
+	void prepareForRendering(const Terrain& material) const;
 	void renderInstance(float partialTicks, const Terrain& object, const Camera& camera);
 
 public:

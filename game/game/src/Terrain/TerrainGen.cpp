@@ -42,16 +42,16 @@ void TerrainGen::addObjects(World& world, int chunkX, int chunkZ, unsigned int c
 
 void TerrainGen::generate(World& world, const ResourceMgr& resourceMgr, int chunkX, int chunkZ)
 {
-	Terrain& terrain = world.addTerrain(Terrain(*this, chunkX, chunkZ));
+	Terrain& terrain = world.addTerrain(resourceMgr, *this, chunkX, chunkZ);
 
 	for (float z = 0; z < TERRAIN_VERTEX_COUNT; z++)
 	{
 		for (float x = 0; x < TERRAIN_VERTEX_COUNT; x++)
 		{
-			float posX = chunkX * TERRAIN_SIZE + x * TERRAIN_INTERVAL;
-			float posZ = chunkZ * TERRAIN_SIZE + z * TERRAIN_INTERVAL;
+			float posX = x * TERRAIN_INTERVAL;
+			float posZ = z * TERRAIN_INTERVAL;
 
-			terrain.setTerrainHeight(posX, posZ, getTerrainHeight(posX, posZ));
+			terrain.setTerrainHeight(posX, posZ, getTerrainHeight(chunkX * TERRAIN_SIZE + posX, chunkZ * TERRAIN_SIZE + posZ));
 		}
 	}
 

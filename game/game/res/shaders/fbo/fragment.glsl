@@ -6,7 +6,7 @@ out vec4 color;
 
 uniform sampler2D u_ScreenSampler;
 
-const float offset = 1.0 / 300.0;
+const float offset = 1.0 / 700.0;
 
 void main()
 {

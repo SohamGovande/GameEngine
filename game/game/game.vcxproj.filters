@@ -120,6 +120,9 @@
     <ClCompile Include="src\Renderer\PPE\TestEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Terrain\Region.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MathUtils.h">
@@ -249,6 +252,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\PPE\TestEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\Region.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

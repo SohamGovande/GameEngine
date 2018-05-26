@@ -30,7 +30,8 @@ public:
 	Entity& addEntity(VaArgs&&... args);
 	Entity& copyEntityIntoWorld(const Entity& object);
 
-	inline Terrain& addTerrain(const Terrain& terrain) { terrains.push_back(terrain); return terrains.back(); }
+	template<typename... VaArgs>
+	inline Terrain& addTerrain(VaArgs&&... args) { terrains.emplace_back(args...); return terrains.back(); }
 
 	inline Entity& getPerson() { return *person; }
 	inline const Entity& getPerson() const { return *person; }

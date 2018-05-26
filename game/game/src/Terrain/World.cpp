@@ -7,30 +7,11 @@ World::World(const ResourceMgr& resourceMgr)
 	: entities(), terrains(), 
 	person(nullptr)
 {
-	Entity& lantern = addEntity(*resourceMgr.lanternModel);
-	lantern.scale = 4;
-
 	person = &addEntity(*resourceMgr.playerModel);
 
 	person->addEID(PLAYER);
 	person->addComponent(new MotionComponent);
 	person->scale = 1.5f;
-
-	Entity& bt0 = addEntity(*resourceMgr.birchTree);
-	bt0.scale = 5;
-	bt0.moveTo(glm::vec3(0, 30, 0));
-
-	Entity& bt1 = addEntity(*resourceMgr.bt1);
-	bt1.scale = 5;
-	bt1.moveTo(glm::vec3(30, 30, 0));
-	
-	Entity& bt2 = addEntity(*resourceMgr.bt2);
-	bt2.scale = 5;
-	bt2.moveTo(glm::vec3(60, 30, 0));
-
-	Entity& dragon = addEntity(*resourceMgr.dragonModel);
-	dragon.scale = 5;
-	dragon.moveTo(glm::vec3(0, 30, 60));
 }
 
 World::~World()
@@ -63,7 +44,7 @@ float World::getTerrainHeight(float x, float z) const
 
 	for (const Terrain& terrain : terrains)
 		if (terrain.getChunkX() == chunkX && terrain.getChunkZ() == chunkZ)
-			return terrain.getTerrainHeight(x, z);
+			return terrain.getTerrainHeight(x - chunkX * TERRAIN_SIZE, z - chunkZ * TERRAIN_SIZE);
 
 	return 0.0f;
 }

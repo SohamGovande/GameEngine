@@ -33,6 +33,75 @@ namespace std
 	};
 }
 
+struct TerrainTextureInfo {
+	TextureResource* const texture;
+	TextureResource* const specularMap;
+	float reflectivity, shineDistanceDamper;
+
+	inline TerrainTextureInfo(TextureResource* tex)
+		: texture(tex), specularMap(nullptr), reflectivity(0), shineDistanceDamper(0)
+	{}
+
+	inline TerrainTextureInfo(TextureResource* tex,  TextureResource* specular)
+		: texture(tex), specularMap(specular), reflectivity(0), shineDistanceDamper(0)
+	{}
+
+	inline bool hasSpecularMap() const { return specularMap != nullptr; }
+};
+
+struct Heightmap 
+{
+public:
+	inline Heightmap(unsigned int size, float interval)
+		:  width(size), height(size), interval(interval)
+	{
+		ptr = new float[width * height];
+	}
+
+	Heightmap(const Heightmap& other) = delete;
+	Heightmap(Heightmap&& other) = delete;
+
+	inline ~Heightmap()
+	{
+		if (ptr != nullptr)
+			delete[] ptr;
+	}
+
+	inline void setHeight(unsigned int index, float h) const
+	{
+		ptr[index] = h;
+	}
+
+	inline void setHeight(unsigned int x, unsigned int z, float h) const
+	{
+		setHeight(width * x + z, h);
+	}
+
+	inline void setHeight(float x, float z, float h) const
+	{
+		setHeight((unsigned int)(x / interval), (unsigned int)(z / interval), h);
+	}
+
+	inline float getHeight(unsigned int index) const
+	{
+		return ptr[index];
+	}
+
+	inline float getHeight(unsigned int x, unsigned int z) const
+	{
+		return getHeight(width * x + z);
+	}
+
+	inline float getHeight(float x, float z) const 
+	{
+		return getHeight((unsigned int)(x / interval), (unsigned int)(z / interval));
+	}
+
+private:
+	float* ptr;
+	const unsigned int width, height;
+	float interval;
+};
 
 //A chunk of terrain units
 class Terrain
@@ -44,9 +113,14 @@ private:
 	int chunkX, chunkZ;
 
 	Mesh mesh;
-	MaterialModel* model;
+	GlModel* model;
+
+	std::vector<TerrainTextureInfo> textures;
+	std::vector<Texture> blendMaps;
 public:
-	Terrain(TerrainGen& generator, int chunkX, int chunkZ);
+	Terrain(const ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ);
+	Terrain(const Terrain& other) = delete;
+	Terrain(Terrain&& other) = delete;
 	~Terrain();
 
 	void setTerrainHeight(float x, float z, float y);
@@ -55,8 +129,12 @@ public:
 	glm::vec3 getTerrainNormal(float x, float z);
 
 	void generateMesh(const ResourceMgr& resourceMgr);
-	inline const MaterialModel& getTerrainModel() const { return *model; }
-	inline MaterialModel& getTerrainModel() { return *model; }
+	inline const GlModel& getTerrainModel() const { return *model; }
+	inline GlModel& getTerrainModel() { return *model; }
+
+	inline const std::vector<TerrainTextureInfo>& getTextures() const { return textures; }
+	inline std::vector<TerrainTextureInfo>& getTextures() { return textures; }
+	inline const std::vector<Texture>& getBlendMaps() const { return blendMaps; }
 
 	inline int getChunkX() const { return chunkX; }
 	inline int getChunkZ() const { return chunkZ; }

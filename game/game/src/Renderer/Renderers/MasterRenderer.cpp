@@ -16,9 +16,8 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	needsToUpdateWireframe(false),
 	timePassed(0)
 {
-	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0, .25f);
-	lights.emplace_back(glm::vec3(0, 50, 0), glm::vec3(.92f, .78f, .18f), 0.05f, 1.f);
-		
+	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0, 1.f);
+	
 	const std::string MAX_LIGHTS_STR = std::to_string(MAX_LIGHTS);
 
 	shader.addVertexPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
@@ -29,6 +28,7 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 
 	tShader.addVertexPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
 	tShader.addFragmentPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
+	tShader.addFragmentPreprocessorElement("MAX_TERRAIN_TEXTURES", "4");
 	tShader.create();
 	tShader.bind();
 	tShader.setMatrix4("u_ProjectionMatrix", projectionMatrix);
@@ -80,9 +80,11 @@ void MasterRenderer::markEntityForRendering(Entity& entity)
 
 void MasterRenderer::processTerrain(Terrain& terrain)
 {
-	terrain.getTerrainModel()
-		.getTexture()
-		.load();
+	for (TerrainTextureInfo& info : terrain.getTextures()) {
+		info.texture->load();
+		if (info.hasSpecularMap())
+			info.specularMap->load();
+	}
 	terrains.push_back(&terrain);
 }
 

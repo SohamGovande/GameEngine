@@ -176,13 +176,12 @@ static void createVertexData(const std::array<std::string, 3>& tokens,
 		it = vertexRerouting.find(vIndex);
 	}
 
-	const auto& tex = textures[std::stoi(tokens[1]) - 1];
-	const auto& norm = normals[std::stoi(tokens[2]) - 1];
-	auto& x = outPairs[vIndex];
+	const glm::vec2& tex = textures[std::stoi(tokens[1]) - 1];
+	const glm::vec3& norm = normals[std::stoi(tokens[2]) - 1];
 
 	indices.emplace_back(
 		vIndex,
-		x.add(tex, norm)
+		outPairs[vIndex].add(tex, norm)
 	);
 }
 

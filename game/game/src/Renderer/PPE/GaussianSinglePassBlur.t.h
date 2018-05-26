@@ -6,7 +6,7 @@ template<BlurType T>
 GaussianSinglePassBlur<T>::GaussianSinglePassBlur(unsigned int width, unsigned int height)
 	: shader("gaussianBlur/vertex.glsl","gaussianBlur/fragment.glsl"),
 	fbo(), depthStencilRbo(),
-	colorBuffer(width, height)
+	colorBuffer(width, height, true)
 {
 	shader.addVertexPreprocessorElement("BLUR_DIRECTION", T == HORIZONTAL ? "HORIZONTAL" : "VERTICAL");
 	shader.create();

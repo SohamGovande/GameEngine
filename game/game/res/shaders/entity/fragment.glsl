@@ -20,6 +20,7 @@ uniform vec3 u_SkyColor;
 
 uniform vec3 u_LightColor[MAX_LIGHTS];
 uniform float u_LightAttenuation[MAX_LIGHTS];
+uniform float u_LightBrightness[MAX_LIGHTS];
 uniform int u_LightsUsed;
 
 float calculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec)
@@ -57,8 +58,8 @@ void main(void)
 		vec3 unitLightVec = normalize(v_ToLightSource[i]);
 
 		float lightDistanceSq = v_ToLightSource[i].x*v_ToLightSource[i].x + v_ToLightSource[i].y*v_ToLightSource[i].y + v_ToLightSource[i].z*v_ToLightSource[i].z;
-		//a = 1.0/(1.0 + k*d^2)
-		float attenuation = 1.0 / (1.0 + u_LightAttenuation[i] * lightDistanceSq);
+		//a = brightness/(1.0 + k*d^2)
+		float attenuation =  u_LightBrightness[i] / (1.0 + u_LightAttenuation[i] * lightDistanceSq);
 
 		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
 		if (u_Reflectivity != 0)

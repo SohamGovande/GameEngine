@@ -15,13 +15,13 @@ BinaryReader::~BinaryReader()
 
 void BinaryReader::read(char* block, unsigned int size)
 {
-	if (getEndianness() == BIG_ENDIAN)
-	{
-		reader.read(block, size);
-	}
-	else
+	if (getEndianness() == LITTLE_ENDIAN)
 	{
 		for (unsigned int i = 0; i < size; i++)
 			reader.read(&block[size - i - 1], 1);
+	}
+	else
+	{
+		reader.read(block, size);
 	}
 }

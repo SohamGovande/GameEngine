@@ -27,6 +27,7 @@ void ResourceMgr::loadResources()
 	TimedScope timer("load resources");
 
 	grass = loadTex("grassblock");
+	dirt = loadTex("dirt");
 	axeSpecularMap = loadTex("axeSpecular");
 
 	playerModel = loadMdl("realisticPerson", "realisticPerson");

@@ -24,28 +24,55 @@ void TerrainRenderer::draw(float partialTicks, const Camera& camera, const std::
 		shader.setFloat("u_LightAttenuation[" + iString + "]", lights[i].getAttenuation());
 		shader.setFloat("u_LightBrightness[" + iString + "]", lights[i].getBrightness());
 	}
+
 	shader.setMatrix4("u_TransformationMatrix", glm::mat4(1.0f));
+	shader.setMatrix4("u_ViewMatrix", Math::createViewMatrix(camera));
 
 	for (const Terrain* terrain : terrains)
 	{
-		const MaterialModel& model = terrain->getTerrainModel();
-		prepareForRendering(model);
+		const GlModel& model = terrain->getTerrainModel();
+		prepareForRendering(*terrain);
 		renderInstance(partialTicks, *terrain, camera);
 	}
 }
 
 
-void TerrainRenderer::prepareForRendering(const MaterialModel& material) const
+void TerrainRenderer::prepareForRendering(const Terrain& terrain) const
 {
-	material.getGlModel().vao.bind();
-	material.getTexture().promisedFetch().bind(0);
+	terrain.getTerrainModel().vao.bind();
+
+	unsigned int lastBoundTexture = 0;
+
+	for (unsigned int i = 0; i < terrain.getTextures().size(); i++) {
+		shader.setInt("u_Textures[" + std::to_string(i) + "]", lastBoundTexture);
+		terrain.getTextures()[i].texture->promisedFetch().bind(lastBoundTexture++);
+	}
+
+	for (unsigned int i = 0; i < terrain.getTextures().size(); i++) {
+		const TerrainTextureInfo& textureInfo = terrain.getTextures()[i];
+		const std::string iString = std::to_string(i);
+
+		if (textureInfo.hasSpecularMap()) {
+			shader.setInt("u_SpecularMap[" + iString + "]", lastBoundTexture);
+			textureInfo.specularMap->promisedFetch().bind(lastBoundTexture++);
+		}
+		shader.setInt("u_HasSpecularMap[" + iString + "]", textureInfo.hasSpecularMap());
+		shader.setFloat("u_Reflectivity", textureInfo.reflectivity);
+		shader.setFloat("u_ShineDistanceDamper", textureInfo.shineDistanceDamper);
+	}
+
+	for (unsigned int i = 0; i < terrain.getBlendMaps().size(); i++) {
+		shader.setInt("u_BlendMap[" + std::to_string(i) + "]", lastBoundTexture);
+		terrain.getBlendMaps()[i].bind(lastBoundTexture++);
+	}
+
+	shader.setInt("u_TexturesUsed", terrain.getTextures().size());
 }
 
 void TerrainRenderer::renderInstance(float partialTicks, const Terrain& object, const Camera& camera)
 {
-	const MaterialModel& model = object.getTerrainModel();
+	const GlModel& model = object.getTerrainModel();
 
-	shader.setMatrix4("u_ViewMatrix", Math::createViewMatrix(camera));
 
-	GlCall(glDrawElements(GL_TRIANGLES, model.getGlModel().ibo.getCount(), GL_UNSIGNED_INT, 0));
+	GlCall(glDrawElements(GL_TRIANGLES, model.ibo.getCount(), GL_UNSIGNED_INT, 0));
 }

@@ -17,22 +17,7 @@ HeightGen::~HeightGen()
 
 float HeightGen::generateHeight(float x, float z)
 {
-	
-#if 0
-	constexpr float terrainSmoothness = 4;
-	constexpr int octaves = 2;
-	constexpr float octaveFactor = 0.7f;
-
-	float cOctaveFactor = 1;
-	float total = 0;
-	for (int i = 0; i < octaves; i++)
-	{
-		total += getInterpolatedNoise(x / terrainSmoothness * octaveFactor, z / terrainSmoothness * octaveFactor) * cOctaveFactor;
-		cOctaveFactor *= octaveFactor * octaveFactor;
-	}
-	return total;
-#else
-	constexpr float octaveFactor = 0.2f;
+	constexpr float octaveFactor = 0.3f;
 	constexpr float terrainSmoothness = 320;
 	float cOctaveFactor = 1;
 
@@ -47,7 +32,6 @@ float HeightGen::generateHeight(float x, float z)
 		cOctaveFactor *= octaveFactor;
 	}
 	return total;
-#endif
 }
 
 float HeightGen::getInterpolatedNoise(float x, float z)
