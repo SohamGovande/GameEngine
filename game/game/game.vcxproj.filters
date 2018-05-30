@@ -120,10 +120,10 @@
     <ClCompile Include="src\Renderer\PPE\TestEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Terrain\Region.cpp">
+    <ClCompile Include="src\Terrain\Heightmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Terrain\Heightmap.cpp">
+    <ClCompile Include="src\Terrain\Region\Region.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,10 +257,13 @@
     <ClInclude Include="src\Renderer\PPE\TestEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Terrain\Region.h">
+    <ClInclude Include="src\Terrain\Heightmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Terrain\Heightmap.h">
+    <ClInclude Include="src\Terrain\Region\Region.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\Region\RegionConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

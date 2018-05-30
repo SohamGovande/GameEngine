@@ -13,6 +13,10 @@ public:
 
 	void read(char* block, unsigned int size);
 
+	template<typename T, typename SizeType>
+	T* readBlock(SizeType count);
+
+
 	template<typename T>
 	inline T read()
 	{

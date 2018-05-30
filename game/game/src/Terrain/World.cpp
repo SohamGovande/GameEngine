@@ -41,8 +41,8 @@ void World::sendTerrain(MasterRenderer& renderer)
 
 float World::getInterpolatedTerrainHeight(float x, float z) const
 {
-	int chunkX = (int) floorf(x / TERRAIN_SIZE);
-	int chunkZ = (int) floorf(z / TERRAIN_SIZE);
+	int chunkX = (int)floorf(x / TERRAIN_SIZE);
+	int chunkZ = (int)floorf(z / TERRAIN_SIZE);
 
 	for (const Terrain& terrain : terrains)
 	{

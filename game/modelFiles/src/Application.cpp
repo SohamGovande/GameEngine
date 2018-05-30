@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "ModelLoader.h"
-#include "BinIO/BinaryWriter.h"
-#include "BinIO/BinaryReader.h"
+#include "BinIO/BinaryWriter.t.h"
+#include "BinIO/BinaryReader.t.h"
 
 #define RES std::string("X:\\dev\\cpp\\game\\game\\game\\res\\models\\")
 
@@ -29,14 +29,9 @@ void convertObjToBinary(const Mesh& mesh, const std::string& filename)
 	
 	writer.write<unsigned int>(mesh.vCount);
 
-	for (unsigned int i = 0; i < mesh.vCount * 3; i++)
-		writer.write<float>(mesh.vertices[i]);
-
-	for (unsigned int i = 0; i < mesh.vCount * 2; i++)
-		writer.write<float>(mesh.textures[i]);
-
-	for (unsigned int i = 0; i < mesh.vCount * 3; i++)
-		writer.write<float>(mesh.normals[i]);
+	writer.writeBlock<float, unsigned int>(mesh.vertices, mesh.vCount * 3);
+	writer.writeBlock<float, unsigned int>(mesh.textures, mesh.vCount * 2);
+	writer.writeBlock<float, unsigned int>(mesh.normals, mesh.vCount * 3);
 
 	writer.write<unsigned int>(mesh.iCount);
 

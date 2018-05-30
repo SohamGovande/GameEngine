@@ -10,7 +10,7 @@
 #include <array>
 
 #include "Renderer/VertexBufferLayout.h"
-#include "BinIO/BinaryReader.h"
+#include "BinIO/BinaryReader.t.h"
 #include "ModelLoader.h"
 
 #define Assert(x) if (!(x)) __debugbreak();
@@ -568,14 +568,10 @@ Mesh Loader::loadBinaryMeshData(const std::string& filename)
 	mesh.textures = new float[mesh.vCount * 2];
 	mesh.normals = new float[mesh.vCount * 3];
 
-	for (unsigned int i = 0; i < mesh.vCount * 3; i++)
-		mesh.vertices[i] = reader.read<float>();
+	mesh.vertices = reader.readBlock<float, unsigned int>(mesh.vCount * 3);
+	mesh.textures = reader.readBlock<float, unsigned int>(mesh.vCount * 2);
+	mesh.normals = reader.readBlock<float, unsigned int>(mesh.vCount * 3);
 
-	for (unsigned int i = 0; i < mesh.vCount * 2; i++)
-		mesh.textures[i] = reader.read<float>();
-
-	for (unsigned int i = 0; i < mesh.vCount * 3; i++)
-		mesh.normals[i] = reader.read<float>();
 	mesh.iCount = reader.read<unsigned int>();
 	unsigned char type = reader.read<unsigned char>();
 

@@ -24,6 +24,12 @@
     <ClInclude Include="src\BinIO\EndianChecker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\BinIO\BinaryWriter.t.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BinIO\BinaryReader.t.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BinIO\BinaryReader.cpp">
