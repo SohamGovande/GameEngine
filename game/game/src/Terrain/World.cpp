@@ -57,21 +57,21 @@ float World::getInterpolatedTerrainHeight(float x, float z) const
 			const float relativeX = x - chunkX * TERRAIN_SIZE;
 			const float relativeZ = z - chunkZ * TERRAIN_SIZE;
 
-			FloatXZ bl{ (unsigned int)(relativeX / TERRAIN_INTERVAL) * TERRAIN_INTERVAL, (unsigned int)(relativeZ / TERRAIN_INTERVAL) * TERRAIN_INTERVAL };
-			FloatXZ br{ bl.x, bl.z + TERRAIN_INTERVAL };
-			FloatXZ tl{ bl.x + TERRAIN_INTERVAL, bl.z };
-			FloatXZ tr{ tl.x, br.z };
+			const glm::vec2 bl{ (unsigned int)(relativeX / TERRAIN_INTERVAL) * TERRAIN_INTERVAL, (unsigned int)(relativeZ / TERRAIN_INTERVAL) * TERRAIN_INTERVAL };
+			const glm::vec2 br{ bl.x, bl.y + TERRAIN_INTERVAL };
+			const glm::vec2 tl{ bl.x + TERRAIN_INTERVAL, bl.y };
+			const glm::vec2 tr{ tl.x, br.y };
 
-			FloatXZ offset{ relativeX - bl.x, relativeZ - bl.z };
+			const glm::vec2 offset{ relativeX - bl.x, relativeZ - bl.y };
 			glm::vec2 coords(x, z);
 			glm::vec2 relativeCoords = (glm::vec2(relativeX, relativeZ) - (glm::vec2&)bl) / TERRAIN_INTERVAL;
 
-			float hBl = getExactTerrainHeight(chunkX * TERRAIN_SIZE + bl.x, chunkZ * TERRAIN_SIZE + bl.z);
-			float hBr = getExactTerrainHeight(chunkX * TERRAIN_SIZE + br.x, chunkZ * TERRAIN_SIZE + br.z);
-			float hTl = getExactTerrainHeight(chunkX * TERRAIN_SIZE + tl.x, chunkZ * TERRAIN_SIZE + tl.z);
-			float hTr = getExactTerrainHeight(chunkX * TERRAIN_SIZE + tr.x, chunkZ * TERRAIN_SIZE + tr.z);
+			float hBl = getExactTerrainHeight(chunkX * TERRAIN_SIZE + bl.x, chunkZ * TERRAIN_SIZE + bl.y);
+			float hBr = getExactTerrainHeight(chunkX * TERRAIN_SIZE + br.x, chunkZ * TERRAIN_SIZE + br.y);
+			float hTl = getExactTerrainHeight(chunkX * TERRAIN_SIZE + tl.x, chunkZ * TERRAIN_SIZE + tl.y);
+			float hTr = getExactTerrainHeight(chunkX * TERRAIN_SIZE + tr.x, chunkZ * TERRAIN_SIZE + tr.y);
 
-			if (offset.x > offset.z) //triangle is bottomleft, topleft, topright
+			if (offset.x > offset.y) //triangle is bottomleft, topleft, topright
 			{
 				return Math::getBarycentricHeight(
 					{0, hBl, 0},
@@ -80,7 +80,7 @@ float World::getInterpolatedTerrainHeight(float x, float z) const
 					relativeCoords
 				);
 			}
-			else if (offset.x < offset.z) //triangle is bottomleft, bottomright,  topright
+			else if (offset.x < offset.y) //triangle is bottomleft, bottomright,  topright
 			{
 				return Math::getBarycentricHeight(
 					{ 0, hBl, 0 },
@@ -92,8 +92,8 @@ float World::getInterpolatedTerrainHeight(float x, float z) const
 			else /*if (offset.x == offset.z)*/ //it lies on the line y = x
 			{
 				const float interpolation = offset.x / TERRAIN_INTERVAL;
-				const float beginHeight = terrain.getHeight(bl.x, bl.z);
-				return (terrain.getHeight(tr.x, tr.z) - beginHeight) * interpolation + beginHeight;
+				const float beginHeight = terrain.getHeight(bl.x, bl.y);
+				return (terrain.getHeight(tr.x, tr.y) - beginHeight) * interpolation + beginHeight;
 			}
 			return 0;
 		}
@@ -101,14 +101,14 @@ float World::getInterpolatedTerrainHeight(float x, float z) const
 	return 0.0f;
 }
 
-float World::computeBarycentricHeight(int chunkX, int chunkZ, FloatXZ bl, FloatXZ tr, FloatXZ other, float x, float z) const
+float World::computeBarycentricHeight(int chunkX, int chunkZ, const glm::vec2& bl, const glm::vec2& tr, const glm::vec2& other, float x, float z) const
 {
 	glm::vec2 coord(x, z);
 	glm::vec3 barycentric = Math::getBarycentricCoords({ x, z }, bl, tr, other);
 
-	float hBl = getExactTerrainHeight(chunkX * TERRAIN_SIZE + bl.x, chunkZ * TERRAIN_SIZE + bl.z);
-	float hTr = getExactTerrainHeight(chunkX * TERRAIN_SIZE + tr.x, chunkZ * TERRAIN_SIZE + tr.z);
-	float hOther = getExactTerrainHeight(chunkX * TERRAIN_SIZE + other.x, chunkZ * TERRAIN_SIZE + other.z);
+	float hBl = getExactTerrainHeight(chunkX * TERRAIN_SIZE + bl.x, chunkZ * TERRAIN_SIZE + bl.y);
+	float hTr = getExactTerrainHeight(chunkX * TERRAIN_SIZE + tr.x, chunkZ * TERRAIN_SIZE + tr.y);
+	float hOther = getExactTerrainHeight(chunkX * TERRAIN_SIZE + other.x, chunkZ * TERRAIN_SIZE + other.y);
 	glm::vec3 weights = (glm::vec3(1.0f) - barycentric) * 0.5f;
 
 	return weights.x * hBl + weights.y * hTr + weights.z * hOther;

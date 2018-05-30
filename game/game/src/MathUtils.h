@@ -48,5 +48,5 @@ namespace Math {
 	glm::mat4 createViewMatrix(const Camera& camera);
 
 	glm::vec3 getBarycentricCoords(const glm::vec2& p, const glm::vec2& a, const glm::vec2& b, const glm::vec2& c);
-	float getBarycentricHeight(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec2&  pos);
+	float getBarycentricHeight(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec2& pos);
 }

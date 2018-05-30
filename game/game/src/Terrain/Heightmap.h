@@ -1,24 +1,9 @@
 #pragma once
 #include <array>
+#include <glm/vec2.hpp>
 #include "TerrainConstants.h"
 
 class World;
-
-struct UnsignedXZ
-{
-	unsigned int x, z;
-};
-
-struct FloatXZ
-{
-	float x, z;
-
-	friend FloatXZ operator-(const FloatXZ& left, const FloatXZ& right);
-	inline operator glm::vec2&()
-	{
-		return *reinterpret_cast<glm::vec2*>(&x);
-	}
-};
 
 class Heightmap
 {
@@ -31,6 +16,6 @@ public:
 	Heightmap(unsigned int size, float interval);
 	~Heightmap();
 
-	float* index(UnsignedXZ coord) const;
-	float* operator[] (FloatXZ coord) const;
+	float* index(unsigned int x, unsigned int z) const;
+	float* operator[] (glm::vec2 coord) const;
 };

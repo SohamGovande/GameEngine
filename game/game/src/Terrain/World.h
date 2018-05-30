@@ -15,7 +15,7 @@ private:
 	Entity* person;
 
 private:
-	float computeBarycentricHeight(int chunkX, int chunkZ, FloatXZ bl, FloatXZ tr, FloatXZ other, float x, float z) const;
+	float computeBarycentricHeight(int chunkX, int chunkZ, const glm::vec2& bl, const glm::vec2& tr, const glm::vec2& other, float x, float z) const;
 
 public:
 	World(const ResourceMgr& resourceMgr);

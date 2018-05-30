@@ -1,11 +1,6 @@
-#include <glm/mat2x2.hpp> 
+#include <glm/mat2x2.hpp>
 #include "Heightmap.h"
 #include "World.h"
-
-FloatXZ operator-(const FloatXZ& left, const FloatXZ& right)
-{
-	return { left.x - right.x, left.z - right.z };
-}
 
 Heightmap::Heightmap(unsigned int rowColumnCount, float interval)
 	:  rowColumnCount(rowColumnCount), interval(interval)
@@ -18,21 +13,19 @@ Heightmap::~Heightmap()
 	delete[] data;
 }
 
-float* Heightmap::index(UnsignedXZ coord) const
+float* Heightmap::index(unsigned int x, unsigned int z) const
 {
-	if (coord.x > rowColumnCount - 1 || coord.z > rowColumnCount - 1)
+	if (x > rowColumnCount - 1 || z > rowColumnCount - 1)
 		return nullptr;
-	return data + (coord.x * rowColumnCount + coord.z);
+	return data + (x * rowColumnCount + z);
 }
 
-float* Heightmap::operator[](FloatXZ coord) const
+float* Heightmap::operator[](glm::vec2 coord) const
 {
-	UnsignedXZ xz{ (unsigned int)(coord.x / interval), (unsigned int)(coord.z / interval) };
-	if (xz.x == coord.x / interval && xz.z == coord.z / interval)
-		return index(xz);
+	unsigned int x = (unsigned int)(coord.x / interval);
+	unsigned int z = (unsigned int)(coord.y / interval);
+	if (x == coord.x / interval && z == coord.y / interval)
+		return index(x, z);
 
 	return nullptr;
 }
-
-
-
