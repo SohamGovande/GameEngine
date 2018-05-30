@@ -47,8 +47,8 @@ void Camera::tick(World& world)
 			direction.y + target.position.z
 		);
 
-		float terrainDiff = world.getTerrainHeight(nextPos.x, nextPos.y) - world.getTerrainHeight(target.position.x, target.position.z);
-		terrainDiff = 1 / terrainDiff;
+		float terrainDiff = world.getExactTerrainHeight(nextPos.x, nextPos.y) - world.getExactTerrainHeight(target.position.x, target.position.z);
+		terrainDiff = 1.f/ terrainDiff;
 		
 		if (terrainDiff < 0)
 			terrainDiff *= -1.5;

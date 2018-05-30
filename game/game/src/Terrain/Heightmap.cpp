@@ -1,4 +1,11 @@
+#include <glm/mat2x2.hpp> 
 #include "Heightmap.h"
+#include "World.h"
+
+FloatXZ operator-(const FloatXZ& left, const FloatXZ& right)
+{
+	return { left.x - right.x, left.z - right.z };
+}
 
 Heightmap::Heightmap(unsigned int rowColumnCount, float interval)
 	:  rowColumnCount(rowColumnCount), interval(interval)
@@ -26,3 +33,6 @@ float* Heightmap::operator[](FloatXZ coord) const
 
 	return nullptr;
 }
+
+
+

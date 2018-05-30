@@ -1,6 +1,7 @@
 #include <glm/vec3.hpp>
 #include <iostream>
 
+#include "World.h"
 #include "Terrain.h"
 #include "MathUtils.h"
 #include "ModelLoader.h"
@@ -10,8 +11,6 @@ Terrain::Terrain(const ResourceMgr& resourceMgr, TerrainGen& generator, int chun
 	: generator(generator), chunkX(chunkX), chunkZ(chunkZ), model(nullptr),
 	heightmap(TERRAIN_VERTEX_COUNT, TERRAIN_INTERVAL)
 {
-	Heightmap hmap(5, 3.f);
-
 	textures.emplace_back(resourceMgr.grass);
 	textures.emplace_back(resourceMgr.dirt);
 
@@ -53,7 +52,7 @@ void Terrain::setTerrainHeight(float x, float z, float y)
 }
 
 
-float Terrain::getTerrainHeight(float x, float z) const
+float Terrain::getHeight(float x, float z) const
 {
 	float* height = heightmap[{x, z}];
 	if (height == nullptr)
@@ -63,15 +62,11 @@ float Terrain::getTerrainHeight(float x, float z) const
 
 glm::vec3 Terrain::getTerrainNormal(float x, float z)
 {
-	float hL = getTerrainHeight(x - TERRAIN_INTERVAL, z);
-	float hR = getTerrainHeight(x + TERRAIN_INTERVAL, z);
-	float hD = getTerrainHeight(x, z - TERRAIN_INTERVAL);
-	float hU = getTerrainHeight(x, z + TERRAIN_INTERVAL);
-	glm::vec3 normal(hL - hR, 2, hD - hU);
-	
-	if (x == chunkX * TERRAIN_SIZE || z == chunkZ * TERRAIN_SIZE)
-		std::cout << normal.x << " " << normal.y << " " << normal.z << std::endl;
-	return normal;
+	float hL = getHeight(x - TERRAIN_INTERVAL, z);
+	float hR = getHeight(x + TERRAIN_INTERVAL, z);
+	float hD = getHeight(x, z - TERRAIN_INTERVAL);
+	float hU = getHeight(x, z + TERRAIN_INTERVAL);
+	return glm::vec3(hL - hR, 2, hD - hU);
 }
 
 void Terrain::generateMesh(const ResourceMgr& resourceMgr)
@@ -93,7 +88,7 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 			float posZ = chunkZ * TERRAIN_SIZE + relativePosZ;
 
 			vertices[vertexPointer * 3 + 0] = posX;
-			vertices[vertexPointer * 3 + 1] = getTerrainHeight(relativePosX, relativePosZ);
+			vertices[vertexPointer * 3 + 1] = getHeight(relativePosX, relativePosZ);
 			vertices[vertexPointer * 3 + 2] = posZ;
 	
 			glm::vec3 normal = glm::normalize(getTerrainNormal(relativePosX, relativePosZ));
@@ -108,21 +103,22 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 		}
 	}
 	
-	unsigned int pointer = 0;
+	unsigned int counter = 0;
 	for (unsigned int gz = 0; gz < TERRAIN_VERTEX_COUNT - 1; gz++) {
 		for (unsigned int gx = 0; gx < TERRAIN_VERTEX_COUNT - 1; gx++) {
 
-			unsigned int topLeft = (gz * (int) TERRAIN_VERTEX_COUNT) + gx;
-			unsigned int topRight = topLeft + 1;
-			unsigned int bottomLeft = ((gz + 1) * (int) TERRAIN_VERTEX_COUNT) + gx;
-			unsigned int bottomRight = bottomLeft + 1;
+			const unsigned int topLeft = (gz * (int) TERRAIN_VERTEX_COUNT) + gx;
+			const unsigned int topRight = topLeft + 1;
+			const unsigned int bottomLeft = ((gz + 1) * (int) TERRAIN_VERTEX_COUNT) + gx;
+			const unsigned int bottomRight = bottomLeft + 1;
 
-			indices[pointer++] = topLeft;
-			indices[pointer++] = bottomLeft;
-			indices[pointer++] = topRight;
-			indices[pointer++] = topRight;
-			indices[pointer++] = bottomLeft;
-			indices[pointer++] = bottomRight;
+			indices[counter++] = topRight;
+			indices[counter++] = topLeft;
+			indices[counter++] = bottomRight;
+
+			indices[counter++] = topLeft;
+			indices[counter++] = bottomLeft;
+			indices[counter++] = bottomRight;
 		}
 	}
 	

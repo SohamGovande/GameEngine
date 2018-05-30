@@ -71,7 +71,7 @@ public:
 	~Terrain();
 
 	void setTerrainHeight(float x, float z, float y);
-	float getTerrainHeight(float x, float z) const;
+	float getHeight(float x, float z) const;
 
 	glm::vec3 getTerrainNormal(float x, float z);
 

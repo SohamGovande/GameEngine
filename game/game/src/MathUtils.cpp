@@ -46,4 +46,32 @@ namespace Math
 		matrix = glm::translate(matrix, -camera.position);
 		return matrix;
 	}
+
+	glm::vec3 getBarycentricCoords(const glm::vec2& p, const glm::vec2& a, const glm::vec2& b, const glm::vec2& c)
+	{
+		const glm::vec2 v0 = b - a,
+			v1 = c - a,
+			v2 = p - a;
+		const float d00 = glm::dot(v0, v0);
+		const float d01 = glm::dot(v0, v1);
+		const float d11 = glm::dot(v1, v1);
+		const float d20 = glm::dot(v2, v0);
+		const float d21 = glm::dot(v2, v1);
+		const float denom = d00 * d11 - d01 * d01;
+		glm::vec3 barycentric = glm::vec3(
+			(d11 * d20 - d01 * d21) / denom,
+			(d00 * d21 - d01 * d20) / denom,
+			0
+		);
+		barycentric.z = 1 - barycentric.x - barycentric.y;
+		return barycentric;
+	}
+
+	float getBarycentricHeight(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec2&  pos) {
+		float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+		float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
+		float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
+		float l3 = 1.0f - l1 - l2;
+		return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+	}
 }

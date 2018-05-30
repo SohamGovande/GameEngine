@@ -14,6 +14,9 @@ private:
 	std::list<Terrain> terrains;
 	Entity* person;
 
+private:
+	float computeBarycentricHeight(int chunkX, int chunkZ, FloatXZ bl, FloatXZ tr, FloatXZ other, float x, float z) const;
+
 public:
 	World(const ResourceMgr& resourceMgr);
 	~World();
@@ -24,7 +27,8 @@ public:
 
 	void sendTerrain(MasterRenderer& renderer);
 
-	float getTerrainHeight(float x, float z) const;
+	float getInterpolatedTerrainHeight(float x, float z) const;
+	float getExactTerrainHeight(float x, float z) const;
 
 	template<typename... VaArgs>
 	Entity& addEntity(VaArgs&&... args);

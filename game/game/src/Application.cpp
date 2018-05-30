@@ -101,7 +101,7 @@ static void runGame(sf::Window& window)
 		const float partialTicks = (float)delta;
 		lastTime = now;
 
-		world.getPerson().position.y = world.getTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
+		world.getPerson().position.y = world.getInterpolatedTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
 		camera.performRotations(partialTicks);
 		
 		renderer.prepare();

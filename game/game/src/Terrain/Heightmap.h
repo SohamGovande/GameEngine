@@ -1,5 +1,8 @@
 #pragma once
+#include <array>
 #include "TerrainConstants.h"
+
+class World;
 
 struct UnsignedXZ
 {
@@ -9,6 +12,12 @@ struct UnsignedXZ
 struct FloatXZ
 {
 	float x, z;
+
+	friend FloatXZ operator-(const FloatXZ& left, const FloatXZ& right);
+	inline operator glm::vec2&()
+	{
+		return *reinterpret_cast<glm::vec2*>(&x);
+	}
 };
 
 class Heightmap
