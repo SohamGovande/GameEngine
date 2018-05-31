@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include <string>
+#include <vector>
 
 class BinaryReader
 {
@@ -16,7 +17,6 @@ public:
 	template<typename T, typename SizeType>
 	T* readBlock(SizeType count);
 
-
 	template<typename T>
 	inline T read()
 	{
@@ -25,13 +25,13 @@ public:
 		return *reinterpret_cast<T*>(data);
 	}
 
-	inline std::string readString()
+	inline std::string&& readString()
 	{
 		unsigned short len = read<unsigned short>();
 		std::string str;
 		str.reserve(len);
 		reader.read(&str.front(), len);
-		return str;
+		return std::move(str);
 	}
 
 	inline std::streamoff getReadPos() { return reader.tellg(); }

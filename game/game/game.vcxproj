@@ -122,8 +122,8 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\sfml\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window-s-d.lib;sfml-system-s-d.lib;winmm.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\sfml\lib\;$(SolutionDir)dependencies\glew\;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew.lib;sfml-window-s.lib;freetype.lib;jpeg.lib;sfml-graphics-s.lib;sfml-system-s.lib;winmm.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,7 +149,6 @@
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Renderer\PPE\TestEffect.cpp" />
     <ClCompile Include="src\Terrain\Heightmap.cpp" />
-    <ClCompile Include="src\Terrain\Region\Region.cpp" />
     <ClCompile Include="src\Toolkit.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
@@ -168,7 +167,6 @@
     <ClCompile Include="src\Renderer\Texture.cpp" />
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Renderer\VertexBuffer.cpp" />
-    <ClCompile Include="src\ResourceMgr\MeshResource.cpp" />
     <ClCompile Include="src\ResourceMgr\ModelResource.cpp" />
     <ClCompile Include="src\ResourceMgr\Resource.cpp" />
     <ClCompile Include="src\ResourceMgr\ResourceMgr.cpp" />
@@ -191,8 +189,6 @@
     <ClInclude Include="src\Renderer\PPE\TestEffect.h" />
     <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h" />
     <ClInclude Include="src\Terrain\Heightmap.h" />
-    <ClInclude Include="src\Terrain\Region\Region.h" />
-    <ClInclude Include="src\Terrain\Region\RegionConstants.h" />
     <ClInclude Include="src\Toolkit.h" />
     <ClInclude Include="src\MathUtils.h" />
     <ClInclude Include="src\Mesh.h" />
@@ -214,7 +210,6 @@
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\Renderer\VertexBuffer.h" />
     <ClInclude Include="src\Renderer\VertexBufferLayout.h" />
-    <ClInclude Include="src\ResourceMgr\MeshResource.h" />
     <ClInclude Include="src\ResourceMgr\ModelResource.h" />
     <ClInclude Include="src\ResourceMgr\Resource.h" />
     <ClInclude Include="src\ResourceMgr\Resource.t.h" />

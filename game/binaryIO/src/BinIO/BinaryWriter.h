@@ -38,7 +38,7 @@ public:
 	//Writing strings
 	inline void writeString(const std::string& value)
 	{
-		write<unsigned short>(value.size());
+		write<unsigned short>(static_cast<unsigned short>(value.size()));
 		writer.write(&*value.begin(), value.size());
 	}
 

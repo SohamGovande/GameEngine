@@ -9,31 +9,6 @@
 #include "Heightmap.h"
 #include "TerrainConstants.h"
 
-struct HeightmapKey
-{
-	float x, z;
-	inline HeightmapKey(float x, float z)
-		: x(x), z(z) {}
-	inline bool operator==(const HeightmapKey& other) const
-	{
-		return other.x == x && other.z == z;
-	}
-};
-
-//hash function so that a HeightmapKey can be put inside unordered_map
-namespace std
-{
-	template<>
-	struct hash<HeightmapKey>
-	{
-		//hash function
-		unsigned int operator()(const HeightmapKey& key) const
-		{
-			return hash<float>()(key.x) ^ hash<float>()(key.z);
-		}
-	};
-}
-
 struct TerrainTextureInfo {
 	TextureResource* const texture;
 	TextureResource* const specularMap;
@@ -82,6 +57,9 @@ public:
 	inline const std::vector<TerrainTextureInfo>& getTextures() const { return textures; }
 	inline std::vector<TerrainTextureInfo>& getTextures() { return textures; }
 	inline const std::vector<Texture>& getBlendMaps() const { return blendMaps; }
+
+	inline const Mesh& getMesh() const { return mesh; }
+	inline const Heightmap& getHeightmap() const { return heightmap; }
 
 	inline int getChunkX() const { return chunkX; }
 	inline int getChunkZ() const { return chunkZ; }

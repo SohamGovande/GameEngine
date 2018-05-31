@@ -4,7 +4,6 @@
 #include <tuple>
 #include <unordered_map>
 
-#include "ResourceMgr/MeshResource.h"
 #include "ResourceMgr/TextureResource.h"
 #include "Renderer/MaterialModel.h"
 #include "Mesh.h"
@@ -23,8 +22,5 @@ namespace Loader
 		);
 	}
 
-	Mesh loadObjMeshData(const std::string& filename);
 	Mesh loadBinaryMeshData(const std::string& filename);
-
-	GlModel loadObjModel(const std::string& filename);
 }
