@@ -1,27 +1,50 @@
 #pragma once
+#include <rapidjson/document.h>
 #include <list>
-#include <memory>
+#include <string>
+#include <unordered_map>
 #include "TextureResource.h"
 #include "ModelResource.h"
+#include "MaterialProperty.h"
 
 class ResourceMgr
 {
-	using TexRes = TextureResource*;
-	using MdlRes = ModelResource*;
 private:
-	std::list<TextureResource> textures;
-	std::list<ModelResource> models;
+	std::unordered_map<std::string, TextureResource> textures;
+	std::unordered_map<std::string, ModelResource> models;
 
-	TexRes loadTex(const std::string& texture);
-	MdlRes loadMdl(const std::string& mesh, const std::string& texture);
+	std::unordered_map<std::string, MaterialProperty> materialProperties;
+private:
+	TextureResource& loadTex(const std::string& name, const std::string& texture);
 
+	TextureResource& parseJsonTexture(const rapidjson::Value& value);
 public:
-	TexRes grass, axeSpecularMap, dirt;
-	MdlRes playerModel, evergreenTree, birchTree, bt1, bt2, fernModel, axeModel, lanternModel, dragonModel;
 
 	ResourceMgr();
 	~ResourceMgr();
 
+	void loadTexturesFile();
+	void loadModelsFile();
 	void loadResources();
+	
+	inline const ModelResource& model(const std::string& name) const
+	{
+		return models.find(name)->second;
+	}
+
+	inline ModelResource& model(const std::string& name)
+	{
+		return models.find(name)->second;
+	}
+
+	inline const TextureResource& texture(const std::string& name) const
+	{
+		return textures.find(name)->second;
+	}
+
+	inline TextureResource& texture(const std::string& name)
+	{
+		return textures.find(name)->second;
+	}
 };
 

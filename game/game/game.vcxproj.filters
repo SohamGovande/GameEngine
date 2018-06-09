@@ -15,40 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Application.cpp">
+    <ClCompile Include="src\Physics\CollisionCommons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MathUtils.cpp">
+    <ClCompile Include="src\Physics\CollisionTriTri.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModelLoader.cpp">
+    <ClCompile Include="src\Renderer\PPE\Framebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vendor\PerlinNoise.cpp">
+    <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Terrain\HeightGen.cpp">
+    <ClCompile Include="src\Renderer\PPE\TestEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Terrain\Terrain.cpp">
+    <ClCompile Include="src\Renderer\Renderers\EntityRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Terrain\TerrainGen.cpp">
+    <ClCompile Include="src\Renderer\Renderers\MasterRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Terrain\World.cpp">
+    <ClCompile Include="src\Renderer\Renderers\TerrainRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ResourceMgr\ModelResource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ResourceMgr\Resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ResourceMgr\ResourceMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ResourceMgr\TextureResource.cpp">
+    <ClCompile Include="src\Renderer\Shader\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Camera.cpp">
@@ -75,22 +66,49 @@
     <ClCompile Include="src\Renderer\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Shader\Shader.cpp">
+    <ClCompile Include="src\ResourceMgr\ModelResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Renderers\EntityRenderer.cpp">
+    <ClCompile Include="src\ResourceMgr\Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Renderers\MasterRenderer.cpp">
+    <ClCompile Include="src\ResourceMgr\ResourceMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Renderers\TerrainRenderer.cpp">
+    <ClCompile Include="src\ResourceMgr\TextureResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\CollisionCommons.cpp">
+    <ClCompile Include="src\Terrain\HeightGen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\CollisionTriTri.cpp">
+    <ClCompile Include="src\Terrain\Heightmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Terrain\Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Terrain\TerrainGen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Terrain\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vendor\PerlinNoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MathUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TimedScope.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Toolkit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Entity\Components\Component.cpp">
@@ -99,66 +117,60 @@
     <ClCompile Include="src\Entity\Components\MotionComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entity\ComponentRegistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Entity\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\TimedScope.cpp">
+    <ClCompile Include="src\Entity\EntityConstructor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\PPE\Framebuffer.cpp">
+    <ClCompile Include="src\Entity\EntityRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Toolkit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\PPE\TestEffect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Terrain\Heightmap.cpp">
+    <ClCompile Include="src\IOHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\MathUtils.h">
+    <ClInclude Include="src\Physics\CollisionCommons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh.h">
+    <ClInclude Include="src\Physics\CollisionMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModelLoader.h">
+    <ClInclude Include="src\Physics\CollisionResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Terrain\HeightGen.h">
+    <ClInclude Include="src\Renderer\PPE\Framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Terrain\Terrain.h">
+    <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Terrain\TerrainConstants.h">
+    <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.t.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Terrain\TerrainGen.h">
+    <ClInclude Include="src\Renderer\PPE\Renderbuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Terrain\World.h">
+    <ClInclude Include="src\Renderer\PPE\TestEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceMgr\ModelResource.h">
+    <ClInclude Include="src\Renderer\Renderers\EntityRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceMgr\Resource.h">
+    <ClInclude Include="src\Renderer\Renderers\MasterRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceMgr\Resource.t.h">
+    <ClInclude Include="src\Renderer\Renderers\TerrainRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceMgr\ResourceMgr.h">
+    <ClInclude Include="src\Renderer\Shader\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceMgr\TextureResource.h">
+    <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Camera.h">
@@ -188,25 +200,61 @@
     <ClInclude Include="src\Renderer\VertexBufferLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Shader\Shader.h">
+    <ClInclude Include="src\ResourceMgr\ModelResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Renderers\EntityRenderer.h">
+    <ClInclude Include="src\ResourceMgr\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Renderers\MasterRenderer.h">
+    <ClInclude Include="src\ResourceMgr\Resource.t.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Renderers\TerrainRenderer.h">
+    <ClInclude Include="src\ResourceMgr\ResourceMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\CollisionCommons.h">
+    <ClInclude Include="src\ResourceMgr\TextureResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\CollisionMath.h">
+    <ClInclude Include="src\Terrain\HeightGen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\CollisionResult.h">
+    <ClInclude Include="src\Terrain\Heightmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\TerrainConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\TerrainGen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vendor\PerlinNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MathUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModelLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TimedScope.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Toolkit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceMgr\MaterialProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ResourceMgr\PropertySetter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Entity\Components\Component.h">
@@ -218,37 +266,28 @@
     <ClInclude Include="src\Entity\Components\MotionComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Entity\ComponentConstructor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity\ComponentRegistry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Entity\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Vendor\PerlinNoise.h">
+    <ClInclude Include="src\Entity\EntityConstructor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\TimedScope.h">
+    <ClInclude Include="src\Entity\EntityRegistry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\PPE\Framebuffer.h">
+    <ClInclude Include="src\ResourceMgr\MaterialPropertyTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\PPE\Renderbuffer.h">
+    <ClInclude Include="src\ResourceMgr\PropertyRegisterHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Toolkit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.t.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\PPE\TestEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Terrain\Heightmap.h">
+    <ClInclude Include="src\IOHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -259,5 +298,11 @@
     <None Include="res\shaders\terrain\vertex.glsl" />
     <None Include="res\shaders\gaussianBlur\fragment.glsl" />
     <None Include="res\shaders\gaussianBlur\vertex.glsl" />
+    <None Include="res\registries\models.json" />
+    <None Include="res\registries\textures.json" />
+    <None Include="res\entities\evergreen_tree\metadata.json" />
+    <None Include="res\entities\player\metadata.json" />
+    <None Include="res\entities\axe\metadata.json" />
+    <None Include="res\entities\fern\metadata.json" />
   </ItemGroup>
 </Project>

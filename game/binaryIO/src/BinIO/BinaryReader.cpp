@@ -15,7 +15,7 @@ BinaryReader::~BinaryReader()
 
 void BinaryReader::read(char* block, unsigned int size)
 {
-	if (getEndianness() == LITTLE_ENDIAN)
+	if (GetEndianness() == LITTLE_ENDIAN)
 	{
 		for (unsigned int i = 0; i < size; i++)
 			reader.read(&block[size - i - 1], 1);

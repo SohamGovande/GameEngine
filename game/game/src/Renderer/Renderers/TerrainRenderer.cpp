@@ -45,7 +45,7 @@ void TerrainRenderer::prepareForRendering(const Terrain& terrain) const
 
 	for (unsigned int i = 0; i < terrain.getTextures().size(); i++) {
 		shader.setInt("u_Textures[" + std::to_string(i) + "]", lastBoundTexture);
-		terrain.getTextures()[i].texture->promisedFetch().bind(lastBoundTexture++);
+		terrain.getTextures()[i].texture.promisedFetch().bind(lastBoundTexture++);
 	}
 
 	for (unsigned int i = 0; i < terrain.getTextures().size(); i++) {

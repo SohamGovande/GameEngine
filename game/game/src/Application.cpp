@@ -10,22 +10,25 @@
 #include "Terrain/World.h"
 #include "Terrain/TerrainGen.h"
 #include "TimedScope.h"
+#include "Entity/EntityRegistry.h"
+#include "Entity/ComponentRegistry.h"
 
-static void runGame(sf::Window& window)
+static void RunGame(sf::Window& window)
 {
 	ResourceMgr resourceMgr;
 	resourceMgr.loadResources();
 
+	ComponentRegistry componentRegistry;
+	EntityRegistry entityRegistry(componentRegistry, resourceMgr);
+
 	Camera camera;
-
 	MasterRenderer renderer(60, 0.1f, 1000, resourceMgr);
-
 	World world(resourceMgr);
 
 	TerrainGen terrainGen(29);
 
-	long long lastTime = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-	long long startTime = lastTime;
+	long long int lastTime = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+	long long int startTime = lastTime;
 	double delta = 0;
 	constexpr double ticksPerSecond = 20;
 
@@ -38,7 +41,7 @@ static void runGame(sf::Window& window)
 		constexpr int size = 2;
 		for (int x = -size; x < size; x++)
 			for (int y = -size; y < size; y++)
-				terrainGen.generate(world, resourceMgr, x, y);
+				terrainGen.generate(world, resourceMgr, entityRegistry, x, y);
 	}
 
 	world.sendEntities(renderer);
@@ -134,6 +137,6 @@ int main()
 		std::cout << "Failed to initialize glew" << std::endl;
 	}
 
-	runGame(window);
+	RunGame(window);
 	return 0;
 }

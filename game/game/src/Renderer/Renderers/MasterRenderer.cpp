@@ -64,7 +64,7 @@ void MasterRenderer::markEntityForRendering(Entity& entity)
 	MaterialModel& model = *entity.getMaterialModel();
 	model.getTexture().load();
 	if (model.doesHaveSpecularMap())
-		model.getSpecularMap()->load();
+		model.getSpecularMap().load();
 	
 	auto it = entities.find(model);
 
@@ -81,7 +81,7 @@ void MasterRenderer::markEntityForRendering(Entity& entity)
 void MasterRenderer::processTerrain(Terrain& terrain)
 {
 	for (TerrainTextureInfo& info : terrain.getTextures()) {
-		info.texture->load();
+		info.texture.load();
 		if (info.hasSpecularMap())
 			info.specularMap->load();
 	}

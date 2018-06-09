@@ -19,7 +19,7 @@ float TerrainGen::getTerrainHeight(float posX, float posZ)
 	return heightGen.generateHeight(posX, posZ);
 }
 
-void TerrainGen::addObjects(World& world, int chunkX, int chunkZ, unsigned int count, float yOffset, float scale, ModelResource* model, EntityID id)
+void TerrainGen::addObjects(World& world, int chunkX, int chunkZ, unsigned int count, float yOffset, float scale, const EntityConstructor& constructor)
 {
 	for (unsigned int i = 0; i < count; i++)
 	{
@@ -27,20 +27,18 @@ void TerrainGen::addObjects(World& world, int chunkX, int chunkZ, unsigned int c
 		const float z = distribution(random) + chunkZ * TERRAIN_SIZE;
 		const float y = getTerrainHeight(x, z);
 
-		Entity entity(*model);
+		Entity& entity = world.addEntity();
 
-		entity.addEID(id);
+		constructor.construct(entity);
 
 		entity.scale = scale;
 		entity.position.x = x;
 		entity.position.y = y + yOffset;
 		entity.position.z = z;
-
-		world.copyEntityIntoWorld(entity);
 	}
 }
 
-void TerrainGen::generate(World& world, const ResourceMgr& resourceMgr, int chunkX, int chunkZ)
+void TerrainGen::generate(World& world, ResourceMgr& resourceMgr, const EntityRegistry& entityRegistry, int chunkX, int chunkZ)
 {
 	Terrain& terrain = world.addTerrain(resourceMgr, *this, chunkX, chunkZ);
 
@@ -55,11 +53,9 @@ void TerrainGen::generate(World& world, const ResourceMgr& resourceMgr, int chun
 		}
 	}
 
-	
-
 	terrain.generateMesh(resourceMgr);
-
-	addObjects(world, chunkX, chunkZ, 5, 0, 4, resourceMgr.evergreenTree, TREE);
-	addObjects(world, chunkX, chunkZ, 25, 0, 3, resourceMgr.fernModel, FERN);
-	addObjects(world, chunkX, chunkZ, 2,  0, 2, resourceMgr.axeModel, LANTERN);
+	
+	addObjects(world, chunkX, chunkZ, 5, 0, 4, entityRegistry.getConstructor("evergreen_tree"));
+	addObjects(world, chunkX, chunkZ, 25, 0, 3, entityRegistry.getConstructor("fern"));
+	addObjects(world, chunkX, chunkZ, 2,  0, 2, entityRegistry.getConstructor("axe"));
 }

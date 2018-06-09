@@ -9,7 +9,7 @@ T* BinaryReader::readBlock(SizeType count)
 	const unsigned int size = sizeof(T) * count;
 	T* block = reinterpret_cast<T*>(malloc(size));
 
-	if (getEndianness() == LITTLE_ENDIAN)
+	if (GetEndianness() == LITTLE_ENDIAN)
 	{
 		for (SizeType i = 0; i < count; i++)
 			block[i] = read<T>();

@@ -9,7 +9,7 @@ static void checkEndianness()
 	endianness = (c[0] == 1) ? LITTLE_ENDIAN : BIG_ENDIAN;
 }
 
-int getEndianness()
+int GetEndianness()
 {
 	if (endianness == -1)
 		checkEndianness();

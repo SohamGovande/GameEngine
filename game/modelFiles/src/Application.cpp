@@ -3,6 +3,7 @@
 #include <limits>
 #include <vector>
 
+#include "Header.h"
 #include "ModelLoader.h"
 #include "BinIO/BinaryWriter.t.h"
 #include "BinIO/BinaryReader.t.h"
@@ -40,11 +41,13 @@ void convertObjToBinary(const Mesh& mesh, const std::string& filename)
 			writeIndices<unsigned int, 2>(writer, mesh);
 
 	writer.close();
-
 }
+
 
 int main()
 {
+	Run();
+#if 0
 	std::cout << 
 				"+---------------------------------+\n" <<
 				"| Modeling Command-Line Interface |\n" << 
@@ -58,9 +61,8 @@ int main()
 	convertObjToBinary(mesh, modelName);
 
 	mesh.free();
-	
+#endif
 	char a;
 	std::cin >> a;
-
 	return 0;
 }

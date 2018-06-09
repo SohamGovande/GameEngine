@@ -4,14 +4,13 @@
 #include "ModelLoader.h"
 #include "MathUtils.h"
 
-World::World(const ResourceMgr& resourceMgr)
+World::World(ResourceMgr& resourceMgr)
 	: entities(), terrains(), 
 	person(nullptr)
 {
-	person = &addEntity(*resourceMgr.playerModel);
-
+	person = &addEntity();
+	person->setMaterialModel(resourceMgr.model("player"));
 	person->moveTo(glm::vec3(0, 100, 0));
-	person->addEID(PLAYER);
 	person->addComponent(new MotionComponent);
 	person->scale = 1.5f;
 }

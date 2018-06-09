@@ -91,7 +91,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\rapidjson\include;$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PROGRAM_DEBUG_MODE;SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -116,7 +116,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\rapidjson\include;$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -142,6 +142,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Entity\ComponentRegistry.cpp" />
+    <ClCompile Include="src\Entity\EntityConstructor.cpp" />
+    <ClCompile Include="src\Entity\EntityRegistry.cpp" />
+    <ClCompile Include="src\IOHelper.cpp" />
     <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Entity\Components\Component.cpp" />
@@ -179,6 +183,11 @@
     <ClCompile Include="src\TimedScope.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Entity\ComponentConstructor.h" />
+    <ClInclude Include="src\Entity\ComponentRegistry.h" />
+    <ClInclude Include="src\Entity\EntityConstructor.h" />
+    <ClInclude Include="src\Entity\EntityRegistry.h" />
+    <ClInclude Include="src\IOHelper.h" />
     <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.h" />
     <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.t.h" />
     <ClInclude Include="src\Renderer\PPE\Renderbuffer.h" />
@@ -188,6 +197,10 @@
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Renderer\PPE\TestEffect.h" />
     <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h" />
+    <ClInclude Include="src\ResourceMgr\MaterialProperty.h" />
+    <ClInclude Include="src\ResourceMgr\MaterialPropertyTypes.h" />
+    <ClInclude Include="src\ResourceMgr\PropertyRegisterHelper.h" />
+    <ClInclude Include="src\ResourceMgr\PropertySetter.h" />
     <ClInclude Include="src\Terrain\Heightmap.h" />
     <ClInclude Include="src\Toolkit.h" />
     <ClInclude Include="src\MathUtils.h" />
@@ -229,6 +242,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\entities\evergreen_tree\metadata.json">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="res\entities\player\metadata.json" />
+    <None Include="res\entities\axe\metadata.json" />
+    <None Include="res\entities\fern\metadata.json" />
+    <None Include="res\registries\models.json" />
+    <None Include="res\registries\textures.json" />
     <None Include="res\shaders\entity\fragment.glsl" />
     <None Include="res\shaders\entity\vertex.glsl" />
     <None Include="res\shaders\gaussianBlur\fragment.glsl" />

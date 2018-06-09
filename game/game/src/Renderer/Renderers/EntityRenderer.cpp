@@ -41,9 +41,9 @@ void EntityRenderer::draw(float partialTicks, const Camera& camera, const std::u
 
 void EntityRenderer::prepareForRendering(const MaterialModel& material)
 {
-	if (lastCullingState != !material.fullyRender)
+	if (lastCullingState != !material.properties.fullyRender)
 	{
-		if (material.fullyRender)
+		if (material.properties.fullyRender)
 		{
 			GlCall(glDisable(GL_CULL_FACE));
 		}
@@ -52,18 +52,18 @@ void EntityRenderer::prepareForRendering(const MaterialModel& material)
 			GlCall(glEnable(GL_CULL_FACE));
 		}
 
-		lastCullingState = !material.fullyRender;
+		lastCullingState = !material.properties.fullyRender;
 	}
 
 	material.getGlModel().vao.bind();
 	material.getTexture().promisedFetch().bind(0);
 
-	shader.setFloat("u_Reflectivity", material.reflectivity);
-	shader.setFloat("u_ShineDistanceDamper", material.shineDistanceDamper);
+	shader.setFloat("u_Reflectivity", material.properties.reflectivity);
+	shader.setFloat("u_ShineDistanceDamper", material.properties.shineDistanceDamper);
 
 	if (material.doesHaveSpecularMap())
 	{
-		material.getSpecularMap()->promisedFetch().bind(1);
+		material.getSpecularMap().promisedFetch().bind(1);
 
 		shader.setInt("u_SpecularMap", 1);
 		shader.setBool("u_HasSpecularMap", true);

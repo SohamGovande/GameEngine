@@ -1,0 +1,8 @@
+{
+  "name": "player",
+  "ids": [ 0 ],
+  "model": "player",
+  "components": {
+    "motion": {}
+  }
+}

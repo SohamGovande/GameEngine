@@ -23,9 +23,11 @@ uniform float u_LightAttenuation[MAX_LIGHTS];
 uniform float u_LightBrightness[MAX_LIGHTS];
 uniform int u_LightsUsed;
 
+#define PI 3.1416
+
 float calculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec)
 {
-	return max(dot(unitSurfaceNorm, unitLightVec), 0);
+	return acos(max(dot(unitSurfaceNorm, unitLightVec), 0))/PI;
 }
 
 float calculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 unitVecToCamera)

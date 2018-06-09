@@ -7,12 +7,12 @@
 #include "ModelLoader.h"
 #include "Renderer/GlMacros.h"
 
-Terrain::Terrain(const ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ)
+Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ)
 	: generator(generator), chunkX(chunkX), chunkZ(chunkZ), model(nullptr),
 	heightmap(TERRAIN_VERTEX_COUNT, TERRAIN_INTERVAL)
 {
-	textures.emplace_back(resourceMgr.grass);
-	textures.emplace_back(resourceMgr.dirt);
+	textures.emplace_back(resourceMgr.texture("grass_tile"));
+	textures.emplace_back(resourceMgr.texture("dirt_tile"));
 
 	blendMaps.emplace_back(128,  128, false);
 	const Texture& tex = blendMaps.back();

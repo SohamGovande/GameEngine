@@ -15,7 +15,7 @@ BinaryWriter::~BinaryWriter()
 
 void BinaryWriter::write(const char* data, unsigned int size)
 {
-	if (getEndianness() == LITTLE_ENDIAN)
+	if (GetEndianness() == LITTLE_ENDIAN)
 	{
 		//Write the data in reverse
 		for (unsigned int i = 0; i < size; i++)

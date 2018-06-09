@@ -10,16 +10,16 @@
 #include "TerrainConstants.h"
 
 struct TerrainTextureInfo {
-	TextureResource* const texture;
-	TextureResource* const specularMap;
+	TextureResource& texture;
+	TextureResource* specularMap;
 	float reflectivity, shineDistanceDamper;
 
-	inline TerrainTextureInfo(TextureResource* tex)
+	inline TerrainTextureInfo(TextureResource& tex)
 		: texture(tex), specularMap(nullptr), reflectivity(0), shineDistanceDamper(0)
 	{}
 
-	inline TerrainTextureInfo(TextureResource* tex,  TextureResource* specular)
-		: texture(tex), specularMap(specular), reflectivity(0), shineDistanceDamper(0)
+	inline TerrainTextureInfo(TextureResource& tex,  TextureResource& specular)
+		: texture(tex), specularMap(&specular), reflectivity(0), shineDistanceDamper(0)
 	{}
 
 	inline bool hasSpecularMap() const { return specularMap != nullptr; }
@@ -40,7 +40,7 @@ private:
 	std::vector<TerrainTextureInfo> textures;
 	std::vector<Texture> blendMaps;
 public:
-	Terrain(const ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ);
+	Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ);
 	Terrain(const Terrain& other) = delete;
 	Terrain(Terrain&& other) = delete;
 	~Terrain();

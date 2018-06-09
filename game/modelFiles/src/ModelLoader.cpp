@@ -3,6 +3,7 @@
 #include <glm/detail/func_geometric.inl>
 
 #include <unordered_map>
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -271,6 +272,10 @@ static Mesh packDataToMesh(const std::vector<PositionedVData>& vdata, const std:
 static void collapseEdge(const std::array<unsigned int, 2>& targetEdge, std::vector<PositionedVData>& vdata, std::vector<Index>& indices)
 {
 	const glm::vec3 avgPos = (vdata[targetEdge[0]].pos + vdata[targetEdge[1]].pos) * 0.5f;
+	glm::vec3 avgNorm(0);
+	for (unsigned int i = 0; i < vdata[targetEdge[0]].amount; i++) avgNorm += vdata[targetEdge[0]].getInfo(i).normal;
+	for (unsigned int i = 0; i < vdata[targetEdge[1]].amount; i++) avgNorm += vdata[targetEdge[1]].getInfo(i).normal;
+	avgNorm = glm::normalize(avgNorm);
 
 	const unsigned int newVPosIndex = vdata.size();
 	vdata.emplace_back(avgPos);
@@ -295,20 +300,25 @@ static void collapseEdge(const std::array<unsigned int, 2>& targetEdge, std::vec
 
 		if (count == 1)
 		{
+			std::function<void(unsigned int indicesIndex)> moveVertex = [&](unsigned int indicesIndex) 
+			{
+				ExtraInfo info = vdata[indices[indicesIndex].posIndex].getInfo(indices[indicesIndex].extraIndex);
+				info.normal = avgNorm;
+				indices[indicesIndex].extraIndex = newVertex.add(info);
+				indices[indicesIndex].posIndex = newVPosIndex;
+			};
+
 			if (matchingPositions[0] || matchingPositions[3])
 			{
-				indices[i].extraIndex = newVertex.add(vdata[indices[i].posIndex].getInfo(indices[i].extraIndex));
-				indices[i].posIndex = newVPosIndex;
+				moveVertex(i);
 			}
 			else if (matchingPositions[1] || matchingPositions[4])
 			{
-				indices[i + 1].extraIndex = newVertex.add(vdata[indices[i + 1].posIndex].getInfo(indices[i + 1].extraIndex));
-				indices[i + 1].posIndex = newVPosIndex;
+				moveVertex(i + 1);
 			}
 			else /* if (matchingPositions[2] || matchingPositions[5]) */
 			{
-				indices[i + 2].extraIndex = newVertex.add(vdata[indices[i + 2].posIndex].getInfo(indices[i + 2].extraIndex));
-				indices[i + 2].posIndex = newVPosIndex;
+				moveVertex(i + 2);
 			}
 		}
 		else if (count == 2)
@@ -463,15 +473,15 @@ Mesh Loader::loadObjMeshData(const std::string& filename)
 			);
 
 			bool duplicate = false;
-		//	for (unsigned int i = 0; i < vertices.size(); i++)
-		//	{
-		//		if (vertices[i] == pos)
-		//		{
-		//			duplicate = true;
-		//			vertexRerouting[vertexCounter] = i;
-		//			break;
-		//		}
-		//	}
+			//	for (unsigned int i = 0; i < vertices.size(); i++)
+			//	{
+			//		if (vertices[i] == pos)
+			//		{
+			//			duplicate = true;
+			//			vertexRerouting[vertexCounter] = i;
+			//			break;
+			//		}
+			//	}
 			if (!duplicate)
 				vertices.emplace_back(pos);
 			else
@@ -549,5 +559,6 @@ Mesh Loader::loadObjMeshData(const std::string& filename)
 			<< std::endl;
 	}
 	else mesh = packDataToMesh(vdata, indices);
+
 	return mesh;
 }

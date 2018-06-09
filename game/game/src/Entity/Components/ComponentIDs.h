@@ -3,5 +3,5 @@
 enum ComponentID
 {
 	INVALID_MOVED = -1,
-	MOTION = 57
+	MOTION = 0
 };

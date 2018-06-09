@@ -16,8 +16,8 @@ uniform mat4 u_ViewMatrix;
 
 uniform vec3 u_LightPos[MAX_LIGHTS];
 
-const float FOG_DENSITY = 0.003;
-const float FOG_GRADIENT = 1.5;
+const float FOG_DENSITY = 0.002;
+const float FOG_GRADIENT = 2;
 
 void main(void)
 {

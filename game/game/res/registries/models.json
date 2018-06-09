@@ -1,0 +1,31 @@
+{
+  "player": {
+    "model": "realistic_person",
+    "texture": "realistic_person"
+  },
+  "fern": {
+    "model": "fern",
+    "texture": "fern"
+  },
+  "evergreen_tree": {
+    "model": "evergreen_tree",
+    "texture": "evergreen_tree"
+  },
+  "deciduous_tree": {
+    "model": "deciduous_tree",
+    "texture": "birchwood"
+  },
+  "axe": {
+    "model": "axe",
+    "texture": "axe",
+    "properties": {
+      "reflectivity": 1.0,
+      "shine_distance_damper": 8,
+      "specular_map": "axe_specular_map"
+    }
+  },
+  "lantern": {
+    "model": "lantern",
+    "texture": "lantern"
+  }
+}
