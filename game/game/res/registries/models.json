@@ -1,7 +1,7 @@
 {
   "player": {
-    "model": "realistic_person",
-    "texture": "realistic_person"
+    "model": "person",
+    "texture": "player"
   },
   "fern": {
     "model": "fern",

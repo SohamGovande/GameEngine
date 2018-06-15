@@ -16,7 +16,7 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	needsToUpdateWireframe(false),
 	timePassed(0)
 {
-	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0, 1.f);
+	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0.0f, 1.0f);
 	
 	const std::string MAX_LIGHTS_STR = std::to_string(MAX_LIGHTS);
 
@@ -24,14 +24,14 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	shader.addFragmentPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
 	shader.create();
 	shader.bind();
-	shader.setMatrix4("u_ProjectionMatrix", projectionMatrix);
+	shader.setMat4("u_ProjectionMatrix", projectionMatrix);
 
 	tShader.addVertexPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
 	tShader.addFragmentPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
 	tShader.addFragmentPreprocessorElement("MAX_TERRAIN_TEXTURES", "4");
 	tShader.create();
 	tShader.bind();
-	tShader.setMatrix4("u_ProjectionMatrix", projectionMatrix);
+	tShader.setMat4("u_ProjectionMatrix", projectionMatrix);
 }
 
 MasterRenderer::~MasterRenderer()
@@ -66,16 +66,12 @@ void MasterRenderer::markEntityForRendering(Entity& entity)
 	if (model.doesHaveSpecularMap())
 		model.getSpecularMap().load();
 	
-	auto it = entities.find(model);
+	std::unordered_map<MaterialModel, std::list<Entity*>>::iterator it = entities.find(model);
 
 	if (it != entities.end())
-	{
 		it->second.push_back(&entity);
-	}
 	else
-	{
-		entities[model] = { &entity };
-	}
+		entities.emplace(model, std::list<Entity*>{ &entity });
 }
 
 void MasterRenderer::processTerrain(Terrain& terrain)
@@ -90,6 +86,6 @@ void MasterRenderer::processTerrain(Terrain& terrain)
 
 void MasterRenderer::render(float partialTicks, const Camera& camera)
 {
-	terrainRenderer.draw(partialTicks, camera, terrains);
-	entityRenderer.draw(partialTicks, camera, entities);
+	terrainRenderer.render(partialTicks, camera, terrains);
+	entityRenderer.render(gl, partialTicks, camera, entities);
 }

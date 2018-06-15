@@ -3,17 +3,15 @@
 #include <iostream>
 #include <cmath>
 
-#include "../GlMacros.h"
 #include "EntityRenderer.h"
 #include "MathUtils.h"
 
 EntityRenderer::EntityRenderer(const std::vector<Light>& lights, Shader& shader)
-	: lights(lights), shader(shader),
-	lastCullingState(true)
+	: lights(lights), shader(shader)
 {
 }
 
-void EntityRenderer::draw(float partialTicks, const Camera& camera, const std::unordered_map<MaterialModel, std::list<Entity*>>& entities)
+void EntityRenderer::render(GlStateManager& gl, float partialTicks, const Camera& camera, const std::unordered_map<MaterialModel, std::list<Entity*>>& entities)
 {
 	shader.bind();
 	shader.setVec3("u_SkyColor", 176/255.f, 231/255.f, 232/255.f);
@@ -32,28 +30,19 @@ void EntityRenderer::draw(float partialTicks, const Camera& camera, const std::u
 	{
 		const MaterialModel& material = it->first;
 		const std::list<Entity*>& batch = it->second;
-		prepareForRendering(material);
+		prepareForRendering(gl, material);
 
 		for (const Entity* object : batch)
 			renderInstance(partialTicks, *object, camera);
 	}
 }
 
-void EntityRenderer::prepareForRendering(const MaterialModel& material)
+void EntityRenderer::prepareForRendering(GlStateManager& gl, const MaterialModel& material)
 {
-	if (lastCullingState != !material.properties.fullyRender)
-	{
-		if (material.properties.fullyRender)
-		{
-			GlCall(glDisable(GL_CULL_FACE));
-		}
-		else
-		{
-			GlCall(glEnable(GL_CULL_FACE));
-		}
-
-		lastCullingState = !material.properties.fullyRender;
-	}
+	if (material.properties.fullyRender)
+		gl.disable(GL_CULL_FACE);
+	else
+		gl.enable(GL_CULL_FACE);
 
 	material.getGlModel().vao.bind();
 	material.getTexture().promisedFetch().bind(0);
@@ -77,8 +66,8 @@ void EntityRenderer::renderInstance(float partialTicks, const Entity& object, co
 	glm::vec3 pos = object.interpolatePosition(partialTicks);
 	glm::vec3 rot = object.interpolateRotation(partialTicks);
 
-	shader.setMatrix4("u_TransformationMatrix", Math::createTransformationMatrix(pos, rot, object.scale));
-	shader.setMatrix4("u_ViewMatrix", Math::createViewMatrix(camera));
+	shader.setMat4("u_TransformationMatrix", Math::createTransformationMatrix(pos, rot, object.scale));
+	shader.setMat4("u_ViewMatrix", Math::createViewMatrix(camera));
 
 	GlCall(glDrawElements(GL_TRIANGLES, object.getMaterialModel()->getGlModel().ibo.getCount(), GL_UNSIGNED_INT, 0));
 }

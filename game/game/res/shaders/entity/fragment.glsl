@@ -27,7 +27,7 @@ uniform int u_LightsUsed;
 
 float calculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec)
 {
-	return acos(max(dot(unitSurfaceNorm, unitLightVec), 0))/PI;
+	return max(dot(unitSurfaceNorm, unitLightVec), 0);
 }
 
 float calculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 unitVecToCamera)

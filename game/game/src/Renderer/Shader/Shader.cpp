@@ -60,7 +60,7 @@ void Shader::setVec3(const std::string& name, float v0, float v1, float v2)
 	GlCall(glUniform3f(getUniformLocation(name), v0, v1, v2));
 }
 
-void Shader::setMatrix4(const std::string& name, const glm::mat4& matrix)
+void Shader::setMat4(const std::string& name, const glm::mat4& matrix)
 {
 	GlCall(glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix)));
 }

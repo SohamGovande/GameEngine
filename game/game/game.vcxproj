@@ -145,13 +145,16 @@
     <ClCompile Include="src\Entity\ComponentRegistry.cpp" />
     <ClCompile Include="src\Entity\EntityConstructor.cpp" />
     <ClCompile Include="src\Entity\EntityRegistry.cpp" />
+    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\IOHelper.cpp" />
+    <ClCompile Include="src\Renderer\GlStateManager.cpp" />
     <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Entity\Components\Component.cpp" />
     <ClCompile Include="src\Entity\Components\MotionComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Renderer\PPE\TestEffect.cpp" />
+    <ClCompile Include="src\Renderer\QuadVBO.cpp" />
     <ClCompile Include="src\Terrain\Heightmap.cpp" />
     <ClCompile Include="src\Toolkit.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
@@ -187,7 +190,9 @@
     <ClInclude Include="src\Entity\ComponentRegistry.h" />
     <ClInclude Include="src\Entity\EntityConstructor.h" />
     <ClInclude Include="src\Entity\EntityRegistry.h" />
+    <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\IOHelper.h" />
+    <ClInclude Include="src\Renderer\GlStateManager.h" />
     <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.h" />
     <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.t.h" />
     <ClInclude Include="src\Renderer\PPE\Renderbuffer.h" />
@@ -196,6 +201,7 @@
     <ClInclude Include="src\Entity\Components\MotionComponent.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Renderer\PPE\TestEffect.h" />
+    <ClInclude Include="src\Renderer\QuadVBO.h" />
     <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h" />
     <ClInclude Include="src\ResourceMgr\MaterialProperty.h" />
     <ClInclude Include="src\ResourceMgr\MaterialPropertyTypes.h" />

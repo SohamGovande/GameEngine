@@ -25,7 +25,7 @@ private:
 public:
 	TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, Shader& shader);
 
-	void draw(float partialTicks, const Camera& camera, const std::list<Terrain*>& terrains);
+	void render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains);
 
 	inline void loadProjectionMatrix(const glm::mat4& mat) { projectionMatrix = mat; }
 };

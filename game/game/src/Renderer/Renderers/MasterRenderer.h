@@ -4,6 +4,7 @@
 
 #include "Terrain/Terrain.h"
 
+#include "Renderer/GlStateManager.h"
 #include "EntityRenderer.h"
 #include "TerrainRenderer.h"
 
@@ -23,12 +24,13 @@ private:
 	Shader shader, tShader;
 	
 	std::unordered_map<MaterialModel, std::list<Entity*>> entities;
-	std::list<Terrain*> terrains;
+	std::vector<Terrain*> terrains;
 
 	bool wireframe, needsToUpdateWireframe;
 	
 	float timePassed;
 
+	GlStateManager gl;
 public:
 	MasterRenderer(float fov, float nearPlane, float farPlane, ResourceMgr& mgr);
 	~MasterRenderer();
@@ -43,4 +45,7 @@ public:
 	
 	inline const std::vector<Light>& getLights() const { return lights; }
 	inline std::vector<Light>& getLights() { return lights; }
+
+	inline GlStateManager& getGl() { return gl; }
+	inline const GlStateManager& getGl() const { return gl; }
 };

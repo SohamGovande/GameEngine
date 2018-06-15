@@ -1,75 +1,19 @@
 #include <SFML/Window.hpp>
 #include <chrono>
 
-#include "ResourceMgr/ResourceMgr.h"
-#include "Renderer/Renderers/MasterRenderer.h"
-#include "Renderer/GlMacros.h"
-#include "Renderer/VertexBufferLayout.h"
-#include "Renderer/PPE/GaussianSinglePassBlur.t.h"
-#include "Renderer/PPE/TestEffect.h"
-#include "Terrain/World.h"
-#include "Terrain/TerrainGen.h"
-#include "TimedScope.h"
-#include "Entity/EntityRegistry.h"
-#include "Entity/ComponentRegistry.h"
+#include "Game.h"
 
 static void RunGame(sf::Window& window)
 {
-	ResourceMgr resourceMgr;
-	resourceMgr.loadResources();
-
-	ComponentRegistry componentRegistry;
-	EntityRegistry entityRegistry(componentRegistry, resourceMgr);
-
-	Camera camera;
-	MasterRenderer renderer(60, 0.1f, 1000, resourceMgr);
-	World world(resourceMgr);
-
-	TerrainGen terrainGen(29);
+	Game game;
+	game.init();
 
 	long long int lastTime = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 	long long int startTime = lastTime;
 	double delta = 0;
 	constexpr double ticksPerSecond = 20;
 
-	camera.controlEntity(&world.getPerson());
-
-	Toolkit::hideCursor();
-
-	{
-		TimedScope timer("generate terrain");
-		constexpr int size = 2;
-		for (int x = -size; x < size; x++)
-			for (int y = -size; y < size; y++)
-				terrainGen.generate(world, resourceMgr, entityRegistry, x, y);
-	}
-
-	world.sendEntities(renderer);
-	world.sendTerrain(renderer);
-
-	TestEffect effect(933, 700);
-	GaussianSinglePassBlur<HORIZONTAL> hblur(933, 700);
-	GaussianSinglePassBlur<VERTICAL> vblur(933, 700);
-
-	float quadVertices[] = {
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		1.0f, -1.0f,  1.0f, 0.0f,
-
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		1.0f, -1.0f,  1.0f, 0.0f,
-		1.0f,  1.0f,  1.0f, 1.0f
-	};
-	VertexBuffer vbo(quadVertices, sizeof(quadVertices));
-	VertexArray vao;
-	VertexBufferLayout layout;
-	layout.push<float>(2);
-	layout.push<float>(2);
-	vao.addBuffer(vbo, layout);
-
 	bool running = true;
-
-	float time = 0;
 
 	while (running)
 	{
@@ -77,16 +21,22 @@ static void RunGame(sf::Window& window)
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
+			{
 				running = false;
+				game.onWindowClosed();
+			}
 			else if (event.type == sf::Event::Resized)
-				glViewport(0, 0, event.size.width, event.size.height);
+			{
+				game.onWindowResized(event);
+			}
 			else if (event.type == sf::Event::GainedFocus)
-				Toolkit::hideCursor();
+			{
+				game.onFocusGained(event);
+			}
 			else if (event.type == sf::Event::LostFocus)
-				Toolkit::showCursor();
-			else if (event.type == sf::Event::KeyPressed)
-				if (event.key.code == sf::Keyboard::Key::T)
-					renderer.toggleWireframeView();
+			{
+				game.onFocusLost(event);
+			}
 		}
 		
 		long long int now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -95,22 +45,12 @@ static void RunGame(sf::Window& window)
 
 		while (delta >= 1)
 		{
-			world.tick();
-			camera.tick(world);
-
+			game.tick();
 			delta--;
 		}
-
-		const float partialTicks = (float)delta;
 		lastTime = now;
 
-		world.getPerson().position.y = world.getInterpolatedTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
-		camera.performRotations(partialTicks);
-		
-		renderer.prepare();
-		renderer.render(partialTicks, camera);
-		GlCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-
+		game.render((float)delta);
 		window.display();
 	}
 	

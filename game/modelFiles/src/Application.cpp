@@ -46,8 +46,6 @@ void convertObjToBinary(const Mesh& mesh, const std::string& filename)
 
 int main()
 {
-	Run();
-#if 0
 	std::cout << 
 				"+---------------------------------+\n" <<
 				"| Modeling Command-Line Interface |\n" << 
@@ -57,11 +55,11 @@ int main()
 	std::string modelName;
 	std::cin >> modelName;
 
-	Mesh mesh = Loader::loadObjMeshData(RES + modelName + ".obj");
+	Mesh mesh = Loader::loadObjMeshData(RES + "obj/" + modelName + ".obj");
 	convertObjToBinary(mesh, modelName);
 
 	mesh.free();
-#endif
+
 	char a;
 	std::cin >> a;
 	return 0;

@@ -109,7 +109,7 @@ void Camera::performRotations(float partialTicks)
 	
 	glm::vec3 positionOffset(
 		sin(smoothFacingEntityRot.y * DEG2RAD) * horizDistance,
-		vertDistance + 10, //+head offset
+		vertDistance + 20, //+head offset
 		cos(smoothFacingEntityRot.y * DEG2RAD) * horizDistance
 	);
 	

@@ -8,7 +8,7 @@ TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, const std::vect
 {
 	
 }
-void TerrainRenderer::draw(float partialTicks, const Camera& camera, const std::list<Terrain*>& terrains)
+void TerrainRenderer::render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains)
 {
 	shader.bind();
 
@@ -25,8 +25,8 @@ void TerrainRenderer::draw(float partialTicks, const Camera& camera, const std::
 		shader.setFloat("u_LightBrightness[" + iString + "]", lights[i].getBrightness());
 	}
 
-	shader.setMatrix4("u_TransformationMatrix", glm::mat4(1.0f));
-	shader.setMatrix4("u_ViewMatrix", Math::createViewMatrix(camera));
+	shader.setMat4("u_TransformationMatrix", glm::mat4(1.0f));
+	shader.setMat4("u_ViewMatrix", Math::createViewMatrix(camera));
 
 	for (const Terrain* terrain : terrains)
 	{
@@ -71,8 +71,5 @@ void TerrainRenderer::prepareForRendering(const Terrain& terrain) const
 
 void TerrainRenderer::renderInstance(float partialTicks, const Terrain& object, const Camera& camera)
 {
-	const GlModel& model = object.getTerrainModel();
-
-
-	GlCall(glDrawElements(GL_TRIANGLES, model.ibo.getCount(), GL_UNSIGNED_INT, 0));
+	GlCall(glDrawElements(GL_TRIANGLES, object.getTerrainModel().ibo.getCount(), GL_UNSIGNED_INT, 0));
 }
