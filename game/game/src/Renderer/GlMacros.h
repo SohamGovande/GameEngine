@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 
-#ifdef PROGRAM_DEBUG_MODE
+#if defined PROGRAM_DEBUG_MODE
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 

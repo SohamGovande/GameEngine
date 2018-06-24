@@ -129,5 +129,5 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 	mesh.vCount = vCount;
 	mesh.iCount = iCount;
 
-	model = new GlModel(Loader::loadModel(mesh));
+	model = new GlModel(Loader::loadModelToGL(mesh));
 }

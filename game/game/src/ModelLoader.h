@@ -10,17 +10,7 @@
 
 namespace Loader
 {
-
-	GlModel loadModel(float* verticesArray, float* texturesArray, float* normalsArray, unsigned int* indicesArray, 
-		unsigned int vertexCount, unsigned int indexCount);
-
-	inline GlModel loadModel(const Mesh& mesh)
-	{
-		return loadModel(
-			mesh.vertices, mesh.textures, mesh.normals, mesh.indices,
-			mesh.vCount, mesh.iCount
-		);
-	}
-
+	GlModel loadModelToGL(Mesh mesh);
 	Mesh loadBinaryMeshData(const std::string& filename);
+	Mesh loadObjMeshData(const std::string& filename, bool calculateTangents);
 }

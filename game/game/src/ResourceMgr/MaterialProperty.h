@@ -23,4 +23,5 @@ public:
 			data, size);
 	}
 	inline MaterialPropertyType getType() const { return type; }
+	inline unsigned int getOffset() const { return offset; }
 };

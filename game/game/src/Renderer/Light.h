@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/vec3.hpp>
 #define MAX_LIGHTS 5
+#define MAX_LIGHTS_STR "5"
 
 class Light
 {

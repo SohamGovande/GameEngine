@@ -147,6 +147,7 @@
     <ClCompile Include="src\Entity\EntityRegistry.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\IOHelper.cpp" />
+    <ClCompile Include="src\OBJModelLoader.cpp" />
     <ClCompile Include="src\Renderer\GlStateManager.cpp" />
     <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -255,6 +256,8 @@
     <None Include="res\entities\player\metadata.json" />
     <None Include="res\entities\axe\metadata.json" />
     <None Include="res\entities\fern\metadata.json" />
+    <None Include="res\shaders\entityNormalMapped\fragment.glsl" />
+    <None Include="res\shaders\entityNormalMapped\vertex.glsl" />
     <None Include="res\registries\models.json" />
     <None Include="res\registries\textures.json" />
     <None Include="res\shaders\entity\fragment.glsl" />

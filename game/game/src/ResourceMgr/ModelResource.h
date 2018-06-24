@@ -17,6 +17,9 @@ private:
 	TextureResource& texture;
 	std::vector<PropertySetter> propertySetters;
 
+private:
+	bool hasNormalMap();
+
 protected:
 	void generate() override;
 

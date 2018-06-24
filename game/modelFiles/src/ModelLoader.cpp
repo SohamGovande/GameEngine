@@ -12,16 +12,16 @@
 
 #include "ModelLoader.h"
 
-struct ExtraInfo
+struct NormalAndTexture
 {
 	glm::vec2 tex;
 	glm::vec3 normal;
 
-	ExtraInfo(const glm::vec2& tex, const glm::vec3& normal)
+	NormalAndTexture(const glm::vec2& tex, const glm::vec3& normal)
 		: tex(tex), normal(normal)
 	{}
 
-	inline bool operator==(const ExtraInfo& other) const
+	inline bool operator==(const NormalAndTexture& other) const
 	{
 		return tex == other.tex && normal == other.normal;
 	}
@@ -31,8 +31,8 @@ struct PositionedVData
 {
 	glm::vec3 pos;
 
-	ExtraInfo first;
-	std::vector<ExtraInfo> additional;
+	NormalAndTexture first;
+	std::vector<NormalAndTexture> additional;
 
 	unsigned int amount;
 
@@ -44,7 +44,7 @@ struct PositionedVData
 		: pos(pos), first(tex, normal), amount(1)
 	{}
 
-	inline const ExtraInfo& getInfo(unsigned int index) const
+	inline const NormalAndTexture& getNormalAndTexture(unsigned int index) const
 	{
 		return index == 0 ? first : additional[index - 1];
 	}
@@ -54,23 +54,23 @@ struct PositionedVData
 	{
 		for (unsigned int i = 0; i < amount; i++)
 		{
-			const ExtraInfo& ei = getInfo(i);
+			const NormalAndTexture& ei = getNormalAndTexture(i);
 			if (ei.tex == tex && ei.normal == normal)
 				return i;
 		}
 
 		if (amount == 0)
-			first = ExtraInfo(tex, normal);
+			first = NormalAndTexture(tex, normal);
 		else
 			additional.emplace_back(tex, normal);
 		amount++;
 		return amount - 1;
 	}
 
-	unsigned int add(const ExtraInfo& info)
+	unsigned int add(const NormalAndTexture& info)
 	{
 		for (unsigned int i = 0; i < amount; i++)
-			if (getInfo(i) == info)
+			if (getNormalAndTexture(i) == info)
 				return i;
 
 		if (amount == 0)
@@ -225,7 +225,7 @@ static Mesh packDataToMesh(const std::vector<PositionedVData>& vdata, const std:
 			if (!used[i].wasUsed(j))
 				continue;
 
-			const ExtraInfo& ei = data.getInfo(j);
+			const NormalAndTexture& ei = data.getNormalAndTexture(j);
 			mesh.vertices[vi * 3 + 0] = data.pos.x;
 			mesh.vertices[vi * 3 + 1] = data.pos.y;
 			mesh.vertices[vi * 3 + 2] = data.pos.z;
@@ -273,8 +273,8 @@ static void collapseEdge(const std::array<unsigned int, 2>& targetEdge, std::vec
 {
 	const glm::vec3 avgPos = (vdata[targetEdge[0]].pos + vdata[targetEdge[1]].pos) * 0.5f;
 	glm::vec3 avgNorm(0);
-	for (unsigned int i = 0; i < vdata[targetEdge[0]].amount; i++) avgNorm += vdata[targetEdge[0]].getInfo(i).normal;
-	for (unsigned int i = 0; i < vdata[targetEdge[1]].amount; i++) avgNorm += vdata[targetEdge[1]].getInfo(i).normal;
+	for (unsigned int i = 0; i < vdata[targetEdge[0]].amount; i++) avgNorm += vdata[targetEdge[0]].getNormalAndTexture(i).normal;
+	for (unsigned int i = 0; i < vdata[targetEdge[1]].amount; i++) avgNorm += vdata[targetEdge[1]].getNormalAndTexture(i).normal;
 	avgNorm = glm::normalize(avgNorm);
 
 	const unsigned int newVPosIndex = vdata.size();
@@ -302,7 +302,7 @@ static void collapseEdge(const std::array<unsigned int, 2>& targetEdge, std::vec
 		{
 			std::function<void(unsigned int indicesIndex)> moveVertex = [&](unsigned int indicesIndex) 
 			{
-				ExtraInfo info = vdata[indices[indicesIndex].posIndex].getInfo(indices[indicesIndex].extraIndex);
+				NormalAndTexture info = vdata[indices[indicesIndex].posIndex].getNormalAndTexture(indices[indicesIndex].extraIndex);
 				info.normal = avgNorm;
 				indices[indicesIndex].extraIndex = newVertex.add(info);
 				indices[indicesIndex].posIndex = newVPosIndex;

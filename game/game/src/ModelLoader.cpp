@@ -15,26 +15,27 @@
 
 #define Assert(x) if (!(x)) __debugbreak();
 
-GlModel Loader::loadModel(float* verticesArray, float* texturesArray, float* normalsArray, unsigned int* indicesArray,
-	unsigned int vertexCount, unsigned int indexCount)
+GlModel Loader::loadModelToGL(Mesh mesh)
 {
 	VertexArray vao;
 
-	VertexBuffer verticesVbo (verticesArray, sizeof(float) * 3 * vertexCount);
-	vao.addBuffer(verticesVbo, VertexBufferLayout::simple<float>(3));
-
-	VertexBuffer texturesVbo(texturesArray, sizeof(float) * 2 * vertexCount);
-	vao.addBuffer(texturesVbo, VertexBufferLayout::simple<float>(2));
-
-	VertexBuffer normalsVbo(normalsArray, sizeof(float) * 3 * vertexCount);
-	vao.addBuffer(normalsVbo, VertexBufferLayout::simple<float>(3));
-
 	std::vector<VertexBuffer> vbos;
-	vbos.emplace_back(verticesVbo);
-	vbos.emplace_back(texturesVbo);
-	vbos.emplace_back(normalsVbo);
+	vbos.emplace_back(mesh.vertices, sizeof(float) * 3 * mesh.vCount);
+	vao.addBuffer(vbos.back(), VertexBufferLayout::simple<float>(3));
 
-	IndexBuffer ibo(indicesArray, indexCount);
+	vbos.emplace_back(mesh.textures, sizeof(float) * 2 * mesh.vCount);
+	vao.addBuffer(vbos.back(), VertexBufferLayout::simple<float>(2));
+
+	vbos.emplace_back(mesh.normals, sizeof(float) * 3 * mesh.vCount);
+	vao.addBuffer(vbos.back(), VertexBufferLayout::simple<float>(3));
+
+	if (mesh.hasTangentAttribute())
+	{
+		vbos.emplace_back(mesh.tangents, sizeof(float) * 3 * mesh.vCount);
+		vao.addBuffer(vbos.back(), VertexBufferLayout::simple<float>(3));
+	}
+
+	IndexBuffer ibo(mesh.indices, mesh.iCount);
 	return { vao, ibo, vbos };
 }
 
@@ -81,6 +82,7 @@ Mesh Loader::loadBinaryMeshData(const std::string& filename)
 	}
 
 	reader.close();
+
 	std::cout << "Model " << filename << " had " << mesh.vCount << " vertices and " << mesh.iCount / 3 << " triangles." << std::endl;
 
 	return mesh;

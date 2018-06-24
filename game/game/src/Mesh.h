@@ -6,26 +6,28 @@
 
 struct Mesh
 {
-	float* vertices, *textures, *normals;
+	float* vertices, *textures, *normals, *tangents;
 	unsigned int* indices;
 	unsigned int vCount, iCount;
 
 	inline Mesh()
-		: vertices(nullptr), textures(nullptr), normals(nullptr), indices(nullptr),
+		: vertices(nullptr), textures(nullptr), normals(nullptr), tangents(nullptr), indices(nullptr),
 		vCount(0), iCount(0)
 	{
 	}
 
 	inline void free()
 	{
-		if (vertices != nullptr)
-			delete[] vertices;
-		if (textures != nullptr)
-			delete[] textures;
-		if (normals != nullptr)
-			delete[] normals;
-		if (indices != nullptr)
-			delete[] indices;
+		delete[] vertices;
+		delete[] textures;
+		delete[] normals;
+		delete[] tangents;
+		delete[] indices;
+	}
+
+	inline bool hasTangentAttribute() const
+	{
+		return tangents != nullptr;
 	}
 };
 

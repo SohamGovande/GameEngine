@@ -21,8 +21,6 @@ private:
 	EntityRenderer entityRenderer;
 	TerrainRenderer terrainRenderer;
 
-	Shader shader, tShader;
-	
 	std::unordered_map<MaterialModel, std::list<Entity*>> entities;
 	std::vector<Terrain*> terrains;
 

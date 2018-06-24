@@ -3,11 +3,23 @@
 #include "MathUtils.h"
 #include "MasterRenderer.h"
 
-TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, Shader& shader)
-	: lights(lights), shader(shader), masterRenderer(masterRenderer)
+TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr)
+	: lights(lights), shader("terrain/vertex.glsl", "terrain/fragment.glsl"), 
+	masterRenderer(masterRenderer)
 {
-	
+	shader.addVertexPreprocessorElement("MAX_LIGHTS", maxLightsStr);
+	shader.addFragmentPreprocessorElement("MAX_LIGHTS", maxLightsStr);
+	shader.addFragmentPreprocessorElement("MAX_TERRAIN_TEXTURES", "4");
+	shader.create();
+	shader.bind();
+	shader.setMat4("u_ProjectionMatrix", projectionMatrix);
 }
+
+TerrainRenderer::~TerrainRenderer()
+{
+	shader.cleanUp();
+}
+
 void TerrainRenderer::render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains)
 {
 	shader.bind();
@@ -16,6 +28,7 @@ void TerrainRenderer::render(float partialTicks, const Camera& camera, const std
 	shader.setVec3("u_SkyColor", 176 / 255.f, 231 / 255.f, 232 / 255.f);
 
 	shader.setInt("u_LightsUsed", lights.size());
+
 	for (unsigned int i = 0; i < lights.size(); i++)
 	{
 		std::string iString = std::to_string(i);
@@ -37,7 +50,7 @@ void TerrainRenderer::render(float partialTicks, const Camera& camera, const std
 }
 
 
-void TerrainRenderer::prepareForRendering(const Terrain& terrain) const
+void TerrainRenderer::prepareForRendering(const Terrain& terrain)
 {
 	terrain.getTerrainModel().vao.bind();
 

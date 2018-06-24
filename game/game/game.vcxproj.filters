@@ -141,6 +141,9 @@
     <ClCompile Include="src\Renderer\GlStateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\OBJModelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\CollisionCommons.h">
@@ -322,5 +325,7 @@
     <None Include="res\entities\player\metadata.json" />
     <None Include="res\entities\axe\metadata.json" />
     <None Include="res\entities\fern\metadata.json" />
+    <None Include="res\shaders\entityNormalMapped\fragment.glsl" />
+    <None Include="res\shaders\entityNormalMapped\vertex.glsl" />
   </ItemGroup>
 </Project>

@@ -30,4 +30,5 @@ public:
 	}
 
 	inline const PropertySetterValue& getValue() const { return value; }
+	inline const MaterialProperty& getTargetProperty() const { return target; }
 };

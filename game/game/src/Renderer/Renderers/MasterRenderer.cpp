@@ -4,11 +4,9 @@
 MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, ResourceMgr& mgr)
 	: projectionMatrix(Math::createProjectionMatrix(nearPlane, farPlane, fov)),
 	lights(),
-	shader("entity/vertex.glsl", "entity/fragment.glsl"),
-	tShader("terrain/vertex.glsl", "terrain/fragment.glsl"),
 	
-	entityRenderer(lights, shader),
-	terrainRenderer(*this, lights, tShader),
+	entityRenderer(lights, projectionMatrix, MAX_LIGHTS_STR),
+	terrainRenderer(*this, lights, projectionMatrix, MAX_LIGHTS_STR),
 
 	entities(),
 	terrains(),
@@ -16,28 +14,12 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	needsToUpdateWireframe(false),
 	timePassed(0)
 {
+	toggleWireframeView();
 	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0.0f, 1.0f);
-	
-	const std::string MAX_LIGHTS_STR = std::to_string(MAX_LIGHTS);
-
-	shader.addVertexPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
-	shader.addFragmentPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
-	shader.create();
-	shader.bind();
-	shader.setMat4("u_ProjectionMatrix", projectionMatrix);
-
-	tShader.addVertexPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
-	tShader.addFragmentPreprocessorElement("MAX_LIGHTS", MAX_LIGHTS_STR);
-	tShader.addFragmentPreprocessorElement("MAX_TERRAIN_TEXTURES", "4");
-	tShader.create();
-	tShader.bind();
-	tShader.setMat4("u_ProjectionMatrix", projectionMatrix);
 }
 
 MasterRenderer::~MasterRenderer()
 {
-	shader.cleanUp();
-	tShader.cleanUp();
 }
 
 void MasterRenderer::prepare() const
@@ -65,6 +47,8 @@ void MasterRenderer::markEntityForRendering(Entity& entity)
 	model.getTexture().load();
 	if (model.doesHaveSpecularMap())
 		model.getSpecularMap().load();
+	if (model.doesHaveNormalMap())
+		model.getNormalMap().load();
 	
 	std::unordered_map<MaterialModel, std::list<Entity*>>::iterator it = entities.find(model);
 

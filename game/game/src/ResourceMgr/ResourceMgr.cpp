@@ -24,6 +24,7 @@ ResourceMgr::ResourceMgr()
 	RegisterProperty(shineDistanceDamper);
 	RegisterProperty(fullyRender);
 	RegisterProperty(specularMap);
+	RegisterProperty(normalMap);
 
 	loadResources();
 }

@@ -15,17 +15,15 @@ class TerrainRenderer
 private:
 	MasterRenderer& masterRenderer;
 	const std::vector<Light>& lights;
-	Shader& shader;
-	glm::mat4 projectionMatrix;
-
+	Shader shader;
+	
 private:
-	void prepareForRendering(const Terrain& material) const;
+	void prepareForRendering(const Terrain& material);
 	void renderInstance(float partialTicks, const Terrain& object, const Camera& camera);
 
 public:
-	TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, Shader& shader);
+	TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr);
+	~TerrainRenderer();
 
 	void render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains);
-
-	inline void loadProjectionMatrix(const glm::mat4& mat) { projectionMatrix = mat; }
 };

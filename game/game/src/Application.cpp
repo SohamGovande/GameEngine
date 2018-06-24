@@ -59,6 +59,7 @@ static void RunGame(sf::Window& window)
 int main()
 {
 	sf::ContextSettings settings;
+	settings.attributeFlags = settings.Default;
 	settings.depthBits = 24;
 	settings.stencilBits = 8;
 	settings.antialiasingLevel = 0;

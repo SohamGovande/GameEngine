@@ -57,5 +57,5 @@ void TerrainGen::generate(World& world, ResourceMgr& resourceMgr, const EntityRe
 	
 	addObjects(world, chunkX, chunkZ, 5, 0, 4, entityRegistry.getConstructor("evergreen_tree"));
 	addObjects(world, chunkX, chunkZ, 25, 0, 3, entityRegistry.getConstructor("fern"));
-	addObjects(world, chunkX, chunkZ, 2,  0, 2, entityRegistry.getConstructor("axe"));
+	addObjects(world, chunkX, chunkZ, 1, 20, 2, entityRegistry.getConstructor("axe"));
 }
