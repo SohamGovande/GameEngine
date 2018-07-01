@@ -26,13 +26,31 @@
   },
   "lantern": {
     "model": "lantern",
-    "texture": "lantern"
+    "texture": "lantern",
+    "properties": {
+      "reflectivity": 1.0,
+      "shine_distance_damper": 8
+    }
   },
   "barrel": {
     "model": "barrel",
     "texture": "barrel",
     "properties": {
       "normal_map": "barrelNormal"
+    }
+  },
+  "cube": {
+    "model": "cube",
+    "texture": "metal",
+    "properties": {
+      "normal_map": "metal_normal_map"
+    }
+  },
+  "green_tree": {
+    "model": "greentree",
+    "texture": "green_tree",
+    "properties": {
+      "normal_map": "green_tree_normal_map"
     }
   }
 }

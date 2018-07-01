@@ -18,7 +18,6 @@ Resource<T>::Resource(T* value)
 template<typename T>
 Resource<T>::~Resource()
 {
-	free();
 }
 
 template<typename T>

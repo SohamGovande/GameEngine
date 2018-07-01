@@ -12,16 +12,18 @@
 
 #include "ModelLoader.h"
 
-struct NormalAndTexture
+
+struct VertexOtherInfo
 {
 	glm::vec2 tex;
 	glm::vec3 normal;
+	glm::vec3 tangent;
 
-	NormalAndTexture(const glm::vec2& tex, const glm::vec3& normal)
-		: tex(tex), normal(normal)
+	VertexOtherInfo(const glm::vec2& tex, const glm::vec3& normal)
+		: tex(tex), normal(normal), tangent(0)
 	{}
 
-	inline bool operator==(const NormalAndTexture& other) const
+	inline bool operator==(const VertexOtherInfo& other) const
 	{
 		return tex == other.tex && normal == other.normal;
 	}
@@ -31,8 +33,8 @@ struct PositionedVData
 {
 	glm::vec3 pos;
 
-	NormalAndTexture first;
-	std::vector<NormalAndTexture> additional;
+	VertexOtherInfo first;
+	std::vector<VertexOtherInfo> additional;
 
 	unsigned int amount;
 
@@ -44,30 +46,34 @@ struct PositionedVData
 		: pos(pos), first(tex, normal), amount(1)
 	{}
 
-	inline const NormalAndTexture& getNormalAndTexture(unsigned int index) const
+	inline const VertexOtherInfo& getNormalAndTexture(unsigned int index) const
 	{
 		return index == 0 ? first : additional[index - 1];
 	}
 
+	inline VertexOtherInfo& getNormalAndTexture(unsigned int index)
+	{
+		return index == 0 ? first : additional[index - 1];
+	}
 
 	unsigned int add(const glm::vec2& tex, const glm::vec3& normal)
 	{
 		for (unsigned int i = 0; i < amount; i++)
 		{
-			const NormalAndTexture& ei = getNormalAndTexture(i);
+			const VertexOtherInfo& ei = getNormalAndTexture(i);
 			if (ei.tex == tex && ei.normal == normal)
 				return i;
 		}
 
 		if (amount == 0)
-			first = NormalAndTexture(tex, normal);
+			first = VertexOtherInfo(tex, normal);
 		else
 			additional.emplace_back(tex, normal);
 		amount++;
 		return amount - 1;
 	}
 
-	unsigned int add(const NormalAndTexture& info)
+	unsigned int add(const VertexOtherInfo& info)
 	{
 		for (unsigned int i = 0; i < amount; i++)
 			if (getNormalAndTexture(i) == info)
@@ -161,7 +167,7 @@ static bool startsWith(const std::string& full, const char* prefix)
 	return true;
 }
 
-static void createVertexData(const std::array<std::string, 3>& tokens,
+static Index createVertexData(const std::array<std::string, 3>& tokens,
 	const std::unordered_map<unsigned int, unsigned int>& vertexRerouting,
 	const std::vector<glm::vec2>& textures,
 	const std::vector<glm::vec3>& normals,
@@ -184,9 +190,10 @@ static void createVertexData(const std::array<std::string, 3>& tokens,
 		vIndex,
 		outPairs[vIndex].add(tex, norm)
 	);
+	return indices.back();
 }
 
-static Mesh packDataToMesh(const std::vector<PositionedVData>& vdata, const std::vector<Index>& indices)
+static Mesh packDataToMesh(const std::vector<PositionedVData>& vdata, const std::vector<Index>& indices, bool includeTangents)
 {
 	std::vector<PositionedVDataUsage> used(vdata.size());
 	for (const Index& index : indices)
@@ -213,6 +220,10 @@ static Mesh packDataToMesh(const std::vector<PositionedVData>& vdata, const std:
 	mesh.vertices = new float[mesh.vCount * 3];
 	mesh.normals = new float[mesh.vCount * 3];
 	mesh.textures = new float[mesh.vCount * 2];
+	if (includeTangents)
+		mesh.tangents = new float[mesh.vCount * 3];
+	else
+		mesh.tangents = nullptr;
 
 	//Temp variable we use to add things into the arrays
 	unsigned int vi = 0;
@@ -225,15 +236,13 @@ static Mesh packDataToMesh(const std::vector<PositionedVData>& vdata, const std:
 			if (!used[i].wasUsed(j))
 				continue;
 
-			const NormalAndTexture& ei = data.getNormalAndTexture(j);
-			mesh.vertices[vi * 3 + 0] = data.pos.x;
-			mesh.vertices[vi * 3 + 1] = data.pos.y;
-			mesh.vertices[vi * 3 + 2] = data.pos.z;
-			mesh.textures[vi * 2 + 0] = ei.tex.x;
-			mesh.textures[vi * 2 + 1] = ei.tex.y;
-			mesh.normals[vi * 3 + 0] = ei.normal.x;
-			mesh.normals[vi * 3 + 1] = ei.normal.y;
-			mesh.normals[vi * 3 + 2] = ei.normal.z;
+			const VertexOtherInfo& info = data.getNormalAndTexture(j);
+			reinterpret_cast<glm::vec3&>(mesh.vertices[vi * 3]) = data.pos;
+			reinterpret_cast<glm::vec2&>(mesh.textures[vi * 2]) = info.tex;
+			reinterpret_cast<glm::vec3&>(mesh.normals[vi * 3]) = info.normal;
+			if (includeTangents)
+				reinterpret_cast<glm::vec3&>(mesh.tangents[vi * 3]) = glm::normalize(info.tangent);
+			
 			vi++;
 		}
 	}
@@ -302,7 +311,7 @@ static void collapseEdge(const std::array<unsigned int, 2>& targetEdge, std::vec
 		{
 			std::function<void(unsigned int indicesIndex)> moveVertex = [&](unsigned int indicesIndex) 
 			{
-				NormalAndTexture info = vdata[indices[indicesIndex].posIndex].getNormalAndTexture(indices[indicesIndex].extraIndex);
+				VertexOtherInfo info = vdata[indices[indicesIndex].posIndex].getNormalAndTexture(indices[indicesIndex].extraIndex);
 				info.normal = avgNorm;
 				indices[indicesIndex].extraIndex = newVertex.add(info);
 				indices[indicesIndex].posIndex = newVPosIndex;
@@ -428,7 +437,41 @@ static void simplifyMesh(unsigned int edgesToReduce, std::vector<PositionedVData
 	}
 }
 
-Mesh Loader::loadObjMeshData(const std::string& filename)
+static void calculateTangentVectors(std::vector<PositionedVData>& vdata, const Index& i0, const Index& i1, const Index& i2)
+{
+	std::array<std::reference_wrapper<PositionedVData>, 3> tri{
+		vdata[i0.posIndex],
+		vdata[i1.posIndex],
+		vdata[i2.posIndex]
+	};
+	VertexOtherInfo& o0 = tri[0].get().getNormalAndTexture(i0.extraIndex);
+	VertexOtherInfo& o1 = tri[1].get().getNormalAndTexture(i1.extraIndex);
+	VertexOtherInfo& o2 = tri[2].get().getNormalAndTexture(i2.extraIndex);
+
+	glm::vec3 deltaPos1 = tri[1].get().pos - tri[0].get().pos;
+	glm::vec3 deltaPos2 = tri[2].get().pos - tri[0].get().pos;
+	glm::vec2 deltaUv1 = o1.tex - o0.tex;
+	glm::vec2 deltaUv2 = o2.tex - o0.tex;
+
+	float r = 1.0f / (deltaUv1.x * deltaUv2.y - deltaUv1.y * deltaUv2.x);
+	deltaPos1 *= deltaUv2.y;
+	deltaPos2 *= deltaUv1.y;
+
+	glm::vec3 tangent = r * (deltaPos1 - deltaPos2);
+	o0.tangent += tangent;
+	o1.tangent += tangent;
+	o2.tangent += tangent;
+}
+
+static void calculateAllTangentVectors(std::vector<PositionedVData>& vdata, const std::vector<Index>& indices)
+{
+	for (unsigned int i = 0; i < indices.size(); i += 3)
+	{
+		calculateTangentVectors(vdata, indices[i + 0], indices[i + 1], indices[i + 2]);
+	}
+}
+
+Mesh Loader::loadObjMeshData(const std::string& filename, bool calculateTangents)
 {
 	std::ifstream stream(filename);
 	if (!stream.is_open())
@@ -548,7 +591,10 @@ Mesh Loader::loadObjMeshData(const std::string& filename)
 
 		simplifyMesh(reduction, vdata, indices);
 
-		mesh = packDataToMesh(vdata, indices);
+		if (calculateTangents)
+			calculateAllTangentVectors(vdata, indices);
+
+		mesh = packDataToMesh(vdata, indices, calculateTangents);
 
 		const unsigned int indicesCount = mesh.iCount;
 		const unsigned int verticesCount = mesh.vCount;
@@ -558,7 +604,12 @@ Mesh Loader::loadObjMeshData(const std::string& filename)
 			<< "  Edges: " << indicesCount << " (Removed " << indicesCountPrev - indicesCount << ")"
 			<< std::endl;
 	}
-	else mesh = packDataToMesh(vdata, indices);
+	else
+	{
+		if (calculateTangents)
+			calculateAllTangentVectors(vdata, indices);
+		mesh = packDataToMesh(vdata, indices, calculateTangents);
+	}
 
 	return mesh;
 }

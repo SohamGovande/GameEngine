@@ -1,5 +1,6 @@
 #include <SFML/Window.hpp>
 #include <chrono>
+#include <thread>
 
 #include "Game.h"
 

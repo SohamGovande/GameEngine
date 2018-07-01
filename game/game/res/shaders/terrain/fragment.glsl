@@ -45,16 +45,17 @@ float calculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 u
 }
 
 float getBlendmapValue(in int index) {
-	int channel = index % 4;
-	
-	if (channel == 0)
-		return texture(u_BlendMap[index / 4], v_TexCoord).r;
-	else if (channel == 1)
-		return texture(u_BlendMap[index / 4], v_TexCoord).g;
-	else if (channel == 2)
-		return texture(u_BlendMap[index / 4], v_TexCoord).b;
-	else
-		return texture(u_BlendMap[index / 4], v_TexCoord).a;
+	switch (index % 4)
+	{
+		case 0:
+			return texture(u_BlendMap[index / 4], v_TexCoord).r;
+		case 1:
+			return texture(u_BlendMap[index / 4], v_TexCoord).g;
+		case 2:		
+			return texture(u_BlendMap[index / 4], v_TexCoord).b;
+		default: /*case 3:*/
+			return texture(u_BlendMap[index / 4], v_TexCoord).a;
+	}
 }
 
 void main(void)

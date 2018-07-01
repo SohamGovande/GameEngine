@@ -4,5 +4,5 @@
 
 namespace Loader
 {
-	Mesh loadObjMeshData(const std::string& filename);
+	Mesh loadObjMeshData(const std::string& filename, bool calculateTangents);
 }

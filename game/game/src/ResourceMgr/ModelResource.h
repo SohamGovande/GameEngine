@@ -16,6 +16,7 @@ private:
 	std::string modelFile;
 	TextureResource& texture;
 	std::vector<PropertySetter> propertySetters;
+	Mesh mesh;
 
 private:
 	bool hasNormalMap();
@@ -28,10 +29,10 @@ public:
 	ModelResource(ModelResource&& other);
 	~ModelResource();
 
-	static void free(void* thisPtr);
+	static void freeObject(void* thisPtr);
 
-	template<typename... VaArgs>
-	inline void addPropertySetter(VaArgs&&... args)
+	template<typename... ConstructorArgs>
+	inline void addPropertySetter(ConstructorArgs&&... args)
 	{
 		propertySetters.emplace_back(args...);
 	}

@@ -2,7 +2,6 @@
 
 layout(location = 0) out vec4 color;
 
-in vec3 v_TangentFragPos;
 in vec2 v_TexCoord;
 in vec3 v_SurfaceNormal;
 in vec3 v_TangentToLightSource[MAX_LIGHTS];

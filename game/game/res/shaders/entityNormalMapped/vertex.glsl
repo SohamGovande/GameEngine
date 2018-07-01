@@ -5,7 +5,6 @@ layout(location = 1) in vec2 vbo_TexCoord;
 layout(location = 2) in vec3 vbo_Normal;
 layout(location = 3) in vec3 vbo_Tangent;
 
-out vec3 v_TangentFragPos;
 out vec2 v_TexCoord;
 out vec3 v_SurfaceNormal;
 out vec3 v_TangentToLightSource[MAX_LIGHTS];
@@ -44,16 +43,14 @@ void main(void)
 	mat3 TBN = transpose(mat3(T, B, N));
 
 	for (int i = 0; i < MAX_LIGHTS; i++)
-	{
-		v_TangentToLightSource[i] = TBN * u_LightPos[i] - TBN * positionWorldSpace.xyz;
-	}
+		v_TangentToLightSource[i] = TBN * (u_LightPos[i] - positionWorldSpace.xyz);
 
 	/*
 	We have to invert the view matrix because it stores the camera transformations
 	in reverse, then we convert it to a vec4 by multiplying it by 0,0,0,1 and obtain
 	its xyz position. 
 	*/
-	v_TangentToCamera = TBN * (inverse(u_ViewMatrix) * vec4(0, 0, 0, 1)).xyz - TBN * positionWorldSpace.xyz;
+	v_TangentToCamera = TBN * ((inverse(u_ViewMatrix) * vec4(0, 0, 0, 1)).xyz - positionWorldSpace.xyz);
 
 	float distance = length(positionCameraSpace.xyz);
 	v_Visibility = clamp(exp(-pow(distance * density, gradient)), 0, 1);

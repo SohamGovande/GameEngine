@@ -24,6 +24,7 @@
     <ClInclude Include="src\BinIO\BinaryWriter.h" />
     <ClInclude Include="src\BinIO\BinaryWriter.t.h" />
     <ClInclude Include="src\BinIO\EndianChecker.h" />
+    <ClInclude Include="src\BinIO\Version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BinIO\BinaryReader.cpp" />

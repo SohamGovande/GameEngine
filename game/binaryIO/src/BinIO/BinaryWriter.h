@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include <string>
+#include "Version.h"
 
 class BinaryWriter
 {
@@ -11,12 +12,14 @@ public:
 	BinaryWriter(const std::string& filepath);
 	~BinaryWriter();
 
+	void writeHeader(const char* header, const Version& version);
+
 	void write(const char* data, unsigned int size);
 
-	template<typename T, typename U>
-	void writeBlock(const T* begin, U count);
+	template<typename T, typename SizeType>
+	void writeBlock(const T* begin, SizeType count);
 
-	template<typename T> //Primitive / fundamental type
+	template<typename T>
 	inline void write(T value) //T is a primitive, so don't pass it by const reference
 	{
 		write(reinterpret_cast<const char*>(&value), sizeof(T)); 

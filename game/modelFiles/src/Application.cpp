@@ -28,11 +28,16 @@ void convertObjToBinary(const Mesh& mesh, const std::string& filename)
 {
 	BinaryWriter writer(RES + filename + ".dat");
 	
+	writer.writeHeader("model", Version(1, 0, 0));
 	writer.write<unsigned int>(mesh.vCount);
 
 	writer.writeBlock<float, unsigned int>(mesh.vertices, mesh.vCount * 3);
 	writer.writeBlock<float, unsigned int>(mesh.textures, mesh.vCount * 2);
 	writer.writeBlock<float, unsigned int>(mesh.normals, mesh.vCount * 3);
+
+	writer.write<bool>(mesh.hasTangentAttribute());
+	if (mesh.hasTangentAttribute())
+		writer.writeBlock<float, unsigned int>(mesh.tangents, mesh.vCount * 3);
 
 	writer.write<unsigned int>(mesh.iCount);
 
@@ -48,17 +53,34 @@ int main()
 {
 	std::cout << 
 				"+---------------------------------+\n" <<
-				"| Modeling Command-Line Interface |\n" << 
+				"| OBJ to Binary Format Converter  |\n" << 
 				"+---------------------------------+" << std::endl;
 	
-	std::cout << "Model name: ";
 	std::string modelName;
+
+	std::cout << "OBJ name: ";
 	std::cin >> modelName;
+	
+	while (!modelName.empty())
+	{
+		Mesh mesh = Loader::loadObjMeshData(RES + "obj/" + modelName + ".obj", true);
 
-	Mesh mesh = Loader::loadObjMeshData(RES + "obj/" + modelName + ".obj");
-	convertObjToBinary(mesh, modelName);
+		std::cout << "Binary name: ";
+		std::string binaryName;
+		std::cin >> binaryName;
 
-	mesh.free();
+		if (mesh.vertices != nullptr)
+		{
+			std::cout << "Saved " << binaryName << ".dat\n";
+			convertObjToBinary(mesh, modelName);
+		}
+		std::cout << std::endl;
+
+		mesh.free();
+		
+		std::cout << "OBJ name: ";
+		std::cin >> modelName;
+	}
 
 	char a;
 	std::cin >> a;

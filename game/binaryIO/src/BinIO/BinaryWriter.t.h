@@ -2,12 +2,12 @@
 #include "BinaryWriter.h"
 #include "EndianChecker.h"
 
-template<typename T, typename U>
-void BinaryWriter::writeBlock(const T* begin, U count)
+template<typename T, typename SizeType>
+void BinaryWriter::writeBlock(const T* begin, SizeType count)
 {
-	if (GetEndianness() == LITTLE_ENDIAN)
-		for (unsigned int i = 0; i < count; i++)
+	if (GetEndianness() == BIG_ENDIAN)
+		for (SizeType i = 0; i < count; i++)
 			write<T>(begin[i]);
 	else
-		writer.write(reinterpret_cast<const char*>(begin), static_cast<std::streamsize>(count));
+		writer.write(reinterpret_cast<const char*>(begin), static_cast<std::streamsize>(sizeof(T) * count));
 }

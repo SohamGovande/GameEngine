@@ -31,6 +31,11 @@ ResourceMgr::ResourceMgr()
 
 ResourceMgr::~ResourceMgr()
 {
+	for (auto it = textures.begin(); it != textures.end(); it++)
+		it->second.free();
+
+	for (auto it = models.begin(); it != models.end(); it++)
+		it->second.free();
 }
 
 TextureResource& ResourceMgr::loadTex(const std::string& name, const std::string& texture)

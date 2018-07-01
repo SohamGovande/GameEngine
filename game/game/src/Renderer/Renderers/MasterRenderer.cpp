@@ -14,7 +14,6 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	needsToUpdateWireframe(false),
 	timePassed(0)
 {
-	toggleWireframeView();
 	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0.0f, 1.0f);
 }
 

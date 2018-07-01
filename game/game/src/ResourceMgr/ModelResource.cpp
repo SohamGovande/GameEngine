@@ -4,13 +4,14 @@
 ModelResource::ModelResource(const std::string& modelFile, TextureResource& texture)
 	: modelFile(modelFile), texture(texture)
 {
-	freeFunc = &ModelResource::free;
+	freeFunc = &ModelResource::freeObject;
 }
 
 ModelResource::ModelResource(ModelResource&& other)
 	: modelFile(std::move(other.modelFile)), texture(other.texture),
 	propertySetters(std::move(other.propertySetters))
 {
+	freeFunc = other.freeFunc;
 }
 
 ModelResource::~ModelResource()
@@ -29,9 +30,11 @@ bool ModelResource::hasNormalMap()
 
 void ModelResource::generate()
 {
+	mesh = Loader::loadBinaryMeshData(modelFile);
+	
 	value = new MaterialModel(
 		texture,
-		Loader::loadModelToGL(Loader::loadObjMeshData(modelFile, hasNormalMap())),
+		Loader::loadModelToGL(mesh, hasNormalMap()),
 		modelFile
 	);
 
@@ -39,9 +42,11 @@ void ModelResource::generate()
 		propertySetter.apply(*value);
 }
 
-void ModelResource::free(void* thisPtr)
+void ModelResource::freeObject(void* thisPtr)
 {
 	ModelResource* This = reinterpret_cast<ModelResource*>(thisPtr);
 	
+	This->mesh.free();
+	std::cout << "Freed a ModelResource: " << This->modelFile << std::endl;
 	delete This->value;
 }

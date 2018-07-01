@@ -17,10 +17,9 @@ struct VertexOtherInfo
 	glm::vec2 tex;
 	glm::vec3 normal;
 	glm::vec3 tangent;
-	bool hasTangent;
 
-	VertexOtherInfo(const glm::vec2& tex, const glm::vec3& normal, bool hasTangent)
-		: tex(tex), normal(normal), tangent(0), hasTangent(hasTangent)
+	VertexOtherInfo(const glm::vec2& tex, const glm::vec3& normal)
+		: tex(tex), normal(normal), tangent(0)
 	{}
 
 	inline bool operator==(const VertexOtherInfo& other) const
@@ -38,12 +37,12 @@ struct PositionedVData
 
 	unsigned int amount;
 
-	PositionedVData(const glm::vec3& pos, bool hasTangent)
-		: pos(pos), first(glm::vec2(0), glm::vec3(0), hasTangent), amount(0)
+	PositionedVData(const glm::vec3& pos)
+		: pos(pos), first(glm::vec2(0), glm::vec3(0)), amount(0)
 	{}
 
-	PositionedVData(const glm::vec3& pos, const glm::vec2& tex, const glm::vec3& normal, bool hasTangent)
-		: pos(pos), first(tex, normal, hasTangent), amount(1)
+	PositionedVData(const glm::vec3& pos, const glm::vec2& tex, const glm::vec3& normal)
+		: pos(pos), first(tex, normal), amount(1)
 	{}
 
 	inline const VertexOtherInfo& getVertexOtherInfo(unsigned int index) const
@@ -56,7 +55,7 @@ struct PositionedVData
 		return index == 0 ? first : additional[index - 1];
 	}
 
-	unsigned int add(const glm::vec2& tex, const glm::vec3& normal, bool hasTangent)
+	unsigned int add(const glm::vec2& tex, const glm::vec3& normal)
 	{
 		for (unsigned int i = 0; i < amount; i++)
 		{
@@ -66,9 +65,9 @@ struct PositionedVData
 		}
 
 		if (amount == 0)
-			first = VertexOtherInfo(tex, normal, hasTangent);
+			first = VertexOtherInfo(tex, normal);
 		else
-			additional.emplace_back(tex, normal, hasTangent);
+			additional.emplace_back(tex, normal);
 		amount++;
 		return amount - 1;
 	}
@@ -140,8 +139,7 @@ static Index createVertexData(const std::array<std::string, 3>& tokens,
 	const std::vector<glm::vec2>& textures,
 	const std::vector<glm::vec3>& normals,
 	std::vector<PositionedVData>& outPairs,
-	std::vector<Index>& indices,
-	bool calculateTangents)
+	std::vector<Index>& indices)
 {
 	unsigned int vIndex = std::stoi(tokens[0]) - 1;
 	
@@ -150,7 +148,7 @@ static Index createVertexData(const std::array<std::string, 3>& tokens,
 
 	indices.emplace_back(
 		vIndex,
-		outPairs[vIndex].add(tex, norm, calculateTangents)
+		outPairs[vIndex].add(tex, norm)
 	);
 	return indices.back();
 }
@@ -299,14 +297,14 @@ Mesh Loader::loadObjMeshData(const std::string& filename, bool calculateTangents
 				vdata.reserve(vertices.size());
 
 				for (unsigned int i = 0; i < vertices.size(); i++)
-					vdata.emplace_back(vertices[i], calculateTangents);
+					vdata.emplace_back(vertices[i]);
 			}
 
 			std::array<std::string, 3> words = optimizedSplit<4, 1>(line, ' ');
 
-			Index i0 = createVertexData(optimizedSplit<3, 0>(words[0], '/'), textures, normals, vdata, indices, calculateTangents);
-			Index i1 = createVertexData(optimizedSplit<3, 0>(words[1], '/'), textures, normals, vdata, indices, calculateTangents);
-			Index i2 = createVertexData(optimizedSplit<3, 0>(words[2], '/'), textures, normals, vdata, indices, calculateTangents);
+			Index i0 = createVertexData(optimizedSplit<3, 0>(words[0], '/'), textures, normals, vdata, indices);
+			Index i1 = createVertexData(optimizedSplit<3, 0>(words[1], '/'), textures, normals, vdata, indices);
+			Index i2 = createVertexData(optimizedSplit<3, 0>(words[2], '/'), textures, normals, vdata, indices);
 	
 			if (calculateTangents)
 				calculateTangentVectors(vdata, i0, i1, i2);
@@ -318,5 +316,7 @@ Mesh Loader::loadObjMeshData(const std::string& filename, bool calculateTangents
 		}
 	}
 
-	return packDataToMesh(vdata, indices, calculateTangents);
+	Mesh mesh = packDataToMesh(vdata, indices, calculateTangents);
+	
+	return mesh;
 }

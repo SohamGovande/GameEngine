@@ -55,7 +55,15 @@ void TerrainGen::generate(World& world, ResourceMgr& resourceMgr, const EntityRe
 
 	terrain.generateMesh(resourceMgr);
 	
-	addObjects(world, chunkX, chunkZ, 5, 0, 4, entityRegistry.getConstructor("evergreen_tree"));
+	addObjects(world, chunkX, chunkZ, 2, -5, 6, entityRegistry.getConstructor("evergreen_tree"));
+	addObjects(world, chunkX, chunkZ, 2, -5, 3, entityRegistry.getConstructor("green_tree"));
 	addObjects(world, chunkX, chunkZ, 25, 0, 3, entityRegistry.getConstructor("fern"));
-	addObjects(world, chunkX, chunkZ, 1, 20, 2, entityRegistry.getConstructor("axe"));
+	addObjects(world, chunkX, chunkZ, 1, 1, 2, entityRegistry.getConstructor("axe"));
+	for (Entity& entity : world.getEntities())
+		if (entity.hasEntityID(3))
+			entity.rotation.x = 90;
+
+	addObjects(world, chunkX, chunkZ, 1, 5, 5, entityRegistry.getConstructor("cube"));
+	addObjects(world, chunkX, chunkZ, 1, 10, 2, entityRegistry.getConstructor("barrel"));
+	addObjects(world, chunkX, chunkZ, 1, 0, 4, entityRegistry.getConstructor("lantern"));
 }

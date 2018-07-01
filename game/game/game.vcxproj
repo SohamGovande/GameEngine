@@ -256,6 +256,10 @@
     <None Include="res\entities\player\metadata.json" />
     <None Include="res\entities\axe\metadata.json" />
     <None Include="res\entities\fern\metadata.json" />
+    <None Include="res\entities\green_tree\metadata.json" />
+    <None Include="res\entities\barrel\metadata.json" />
+    <None Include="res\entities\cube\metadata.json" />
+    <None Include="res\entities\lantern\metadata.json" />
     <None Include="res\shaders\entityNormalMapped\fragment.glsl" />
     <None Include="res\shaders\entityNormalMapped\vertex.glsl" />
     <None Include="res\registries\models.json" />

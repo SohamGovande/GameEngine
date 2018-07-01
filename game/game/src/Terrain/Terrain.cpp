@@ -39,6 +39,7 @@ Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, in
 
 Terrain::~Terrain()
 {
+	std::cout << "Freed a terrain mesh" << std::endl;
 	mesh.free();
 	if (model != nullptr)
 		delete model;
@@ -129,5 +130,5 @@ void Terrain::generateMesh(const ResourceMgr& resourceMgr)
 	mesh.vCount = vCount;
 	mesh.iCount = iCount;
 
-	model = new GlModel(Loader::loadModelToGL(mesh));
+	model = new GlModel(Loader::loadModelToGL(mesh, false));
 }

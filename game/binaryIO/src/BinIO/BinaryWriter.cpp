@@ -13,9 +13,17 @@ BinaryWriter::~BinaryWriter()
 		writer.close();
 }
 
+void BinaryWriter::writeHeader(const char* header, const Version& version)
+{
+	writer.write(header, strlen(header));
+	write<unsigned char>(version.major);
+	write<unsigned short>(version.minor);
+	write<unsigned char>(version.patch);
+}
+
 void BinaryWriter::write(const char* data, unsigned int size)
 {
-	if (GetEndianness() == LITTLE_ENDIAN)
+	if (GetEndianness() == BIG_ENDIAN)
 	{
 		//Write the data in reverse
 		for (unsigned int i = 0; i < size; i++)
@@ -23,7 +31,7 @@ void BinaryWriter::write(const char* data, unsigned int size)
 	}
 	else
 	{
-		//Data is already big endian
+		//Data is already little endian
 		writer.write(data, size);
 	}
 }

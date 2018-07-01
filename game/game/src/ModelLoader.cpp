@@ -15,7 +15,7 @@
 
 #define Assert(x) if (!(x)) __debugbreak();
 
-GlModel Loader::loadModelToGL(Mesh mesh)
+GlModel Loader::loadModelToGL(Mesh mesh, bool includeTangents)
 {
 	VertexArray vao;
 
@@ -29,7 +29,7 @@ GlModel Loader::loadModelToGL(Mesh mesh)
 	vbos.emplace_back(mesh.normals, sizeof(float) * 3 * mesh.vCount);
 	vao.addBuffer(vbos.back(), VertexBufferLayout::simple<float>(3));
 
-	if (mesh.hasTangentAttribute())
+	if (mesh.hasTangentAttribute() && includeTangents)
 	{
 		vbos.emplace_back(mesh.tangents, sizeof(float) * 3 * mesh.vCount);
 		vao.addBuffer(vbos.back(), VertexBufferLayout::simple<float>(3));
@@ -55,15 +55,18 @@ Mesh Loader::loadBinaryMeshData(const std::string& filename)
 	Mesh mesh;
 
 	BinaryReader reader("res/models/" + filename + ".dat");
+	reader.ensureHeader("model", Version(1, 0, 0));
+	
 	mesh.vCount = reader.read<unsigned int>();
-
-	mesh.vertices = new float[mesh.vCount * 3];
-	mesh.textures = new float[mesh.vCount * 2];
-	mesh.normals = new float[mesh.vCount * 3];
 
 	mesh.vertices = reader.readBlock<float, unsigned int>(mesh.vCount * 3);
 	mesh.textures = reader.readBlock<float, unsigned int>(mesh.vCount * 2);
 	mesh.normals = reader.readBlock<float, unsigned int>(mesh.vCount * 3);
+	
+	if (reader.read<bool>()) //whether tangents are stored in this model
+		mesh.tangents = reader.readBlock<float, unsigned int>(mesh.vCount * 3);
+	else
+		mesh.tangents = nullptr;
 
 	mesh.iCount = reader.read<unsigned int>();
 	unsigned char type = reader.read<unsigned char>();
@@ -79,6 +82,8 @@ Mesh Loader::loadBinaryMeshData(const std::string& filename)
 	case 2:
 		readIndices<unsigned int>(reader, mesh);
 		break;
+	default:
+		std::cout << "Incompatible indices type: " << (unsigned int) type << std::endl;
 	}
 
 	reader.close();
