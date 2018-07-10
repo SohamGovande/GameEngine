@@ -13,4 +13,17 @@ Features:
 - Terrain multitexturing
 - Heightmap procedural terrain generation
 - Binary file IO, from my library which you can find on [this page](https://github.com/Matrix4f/Binary-IO).
-- Mesh Simplification :D Soon, I'm going to implement support for level-of-detail mapping, allowing me to optimize 
+- Mesh Simplification :D Soon, I'm going to implement support for level-of-detail mapping, allowing me to optimize rendering speeds
+- Framebuffer API (Currently, doesn't offer any post-processing-effects, but soon will.)
+- Fast & efficient resource manager
+
+Planned features:
+
+- Post processing effects
+- Custom allocators for the reosurce manager
+- Terrain normal mapping
+- More realistic terrain generation
+- Water
+- Parallax mapping
+
+Hope you enjoy toying with this game engine! The main file is at game/game/src/Application.cpp
