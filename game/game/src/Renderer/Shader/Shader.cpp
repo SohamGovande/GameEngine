@@ -212,8 +212,8 @@ std::string Shader::readFile(const std::string& filename, const std::vector<Shad
 				//Include the file from the current shader's directory
 				includeDir = shaderDirectory;
 			}
-			includedFiles.push_back(includeDir + afterInclude.substr(1, afterInclude.size() - 2));
-			const std::string& includeFilepath = includedFiles.back();
+			std::pair<std::unordered_set<std::string>::iterator, bool> positionInSet = includedFiles.insert(includeDir + afterInclude.substr(1, afterInclude.size() - 2));
+			const std::string& includeFilepath = *positionInSet.first;
 			ss << readFile(includeFilepath, preprocessor) << '\n';
 		}
 		else

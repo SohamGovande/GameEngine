@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <glm/mat4x4.hpp>
 #include "ShaderPreprocessorElement.h"
 
@@ -20,7 +21,7 @@ private:
 	std::vector<ShaderPreprocessorElement> fPreprocessorElements;
 
 	std::string vertexFile, fragmentFile, shaderDirectory;
-	std::vector<std::string> includedFiles;
+	std::unordered_set<std::string> includedFiles;
 
 public:
 	Shader(const std::string& vertexFile, const std::string& fragmentFile,
