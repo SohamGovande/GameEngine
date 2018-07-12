@@ -1,4 +1,5 @@
 #version 330 core
+#include <phong_lighting.glsl>
 
 layout(location = 0) out vec4 color;
 

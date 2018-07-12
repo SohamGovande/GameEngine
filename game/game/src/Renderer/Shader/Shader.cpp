@@ -12,13 +12,19 @@ Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile,
 	std::vector<ShaderPreprocessorElement>&& vPreprocessors,
 	std::vector<ShaderPreprocessorElement>&& fPreprocessors)
 	: rendererID(0), vs(0), fs(0),
-	vertexFile("res/shaders/" + vertexFile), fragmentFile("res/shaders/" + fragmentFile),
-	vPreprocessorElements(vPreprocessors), fPreprocessorElements(fPreprocessors)
+	vertexFile("res/shader/shaders/" + vertexFile), fragmentFile("res/shader/shaders/" + fragmentFile),
+	vPreprocessorElements(std::move(vPreprocessors)), fPreprocessorElements(std::move(fPreprocessors))
 {
 	rendererID = createShader(
 		readFile(this->vertexFile, vPreprocessorElements),
 		readFile(this->fragmentFile, fPreprocessorElements)
 	);
+
+	//Find which directory the shader files are located in.
+	//NOTE: Should be the same for both vertex and fragment shaders.
+	unsigned int baseShadersDirLen = strlen("res/shader/shaders/");
+	unsigned int specificShaderDirIndex = this->vertexFile.find('/', baseShadersDirLen) + 1;
+	shaderDirectory = this->vertexFile.substr(baseShadersDirLen, specificShaderDirIndex - baseShadersDirLen);
 }
 
 Shader::Shader(Shader&& other)
@@ -191,7 +197,30 @@ std::string Shader::readFile(const std::string& filename, const std::vector<Shad
 	
 	while (getline(stream, line))
 	{
-		ss << line << '\n';
+		if (line.find("#include") == 0)
+		{
+			const unsigned int includeDirectiveSize = strlen("#include ");
+			std::string afterInclude = line.substr(includeDirectiveSize, line.size() - includeDirectiveSize);
+			std::string includeDir;
+			if (line[includeDirectiveSize] == '<')
+			{
+				//Include the file from shaders/include/
+				includeDir = "res/shader/include/";
+			}
+			else if (line[includeDirectiveSize] == '\"')
+			{
+				//Include the file from the current shader's directory
+				includeDir = shaderDirectory;
+			}
+			includedFiles.push_back(includeDir + afterInclude.substr(1, afterInclude.size() - 2));
+			const std::string& includeFilepath = includedFiles.back();
+			ss << readFile(includeFilepath, preprocessor) << '\n';
+		}
+		else
+		{
+			ss << line << '\n';
+		}
+
 		if (line.find("#version") == 0)
 		{
 			for (const ShaderPreprocessorElement& preproc : preprocessor)

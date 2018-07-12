@@ -310,12 +310,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\entity\fragment.glsl" />
-    <None Include="res\shaders\entity\vertex.glsl" />
-    <None Include="res\shaders\terrain\fragment.glsl" />
-    <None Include="res\shaders\terrain\vertex.glsl" />
-    <None Include="res\shaders\gaussianBlur\fragment.glsl" />
-    <None Include="res\shaders\gaussianBlur\vertex.glsl" />
     <None Include="res\registries\models.json" />
     <None Include="res\registries\textures.json" />
     <None Include="res\entities\evergreen_tree\metadata.json" />
@@ -326,9 +320,16 @@
     <None Include="res\entities\barrel\metadata.json" />
     <None Include="res\entities\cube\metadata.json" />
     <None Include="res\entities\lantern\metadata.json" />
-    <None Include="res\shaders\entity_normal_mapped\fragment.glsl" />
-    <None Include="res\shaders\entity_normal_mapped\vertex.glsl" />
-    <None Include="res\shaders\entity_parallax_mapped\fragment.glsl" />
-    <None Include="res\shaders\entity_parallax_mapped\vertex.glsl" />
+    <None Include="res\shader\include\phong_lighting.glsl" />
+    <None Include="res\shader\shaders\entity\fragment.glsl" />
+    <None Include="res\shader\shaders\entity\vertex.glsl" />
+    <None Include="res\shader\shaders\entity_normal_mapped\fragment.glsl" />
+    <None Include="res\shader\shaders\entity_normal_mapped\vertex.glsl" />
+    <None Include="res\shader\shaders\entity_parallax_mapped\fragment.glsl" />
+    <None Include="res\shader\shaders\entity_parallax_mapped\vertex.glsl" />
+    <None Include="res\shader\shaders\gaussianBlur\fragment.glsl" />
+    <None Include="res\shader\shaders\gaussianBlur\vertex.glsl" />
+    <None Include="res\shader\shaders\terrain\fragment.glsl" />
+    <None Include="res\shader\shaders\terrain\vertex.glsl" />
   </ItemGroup>
 </Project>

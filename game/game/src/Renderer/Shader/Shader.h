@@ -19,7 +19,9 @@ private:
 	std::vector<ShaderPreprocessorElement> vPreprocessorElements;
 	std::vector<ShaderPreprocessorElement> fPreprocessorElements;
 
-	std::string vertexFile, fragmentFile;
+	std::string vertexFile, fragmentFile, shaderDirectory;
+	std::vector<std::string> includedFiles;
+
 public:
 	Shader(const std::string& vertexFile, const std::string& fragmentFile,
 		std::vector<ShaderPreprocessorElement>&& vPreprocessors = std::vector<ShaderPreprocessorElement>(),
