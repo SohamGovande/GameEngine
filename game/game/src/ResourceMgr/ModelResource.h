@@ -10,7 +10,7 @@
 #include "PropertySetter.h"
 
 class ModelResource
-	: public Resource<MaterialModel>
+	: public Resource<RenderableMaterialModel>
 {
 private:
 	std::string modelFile;

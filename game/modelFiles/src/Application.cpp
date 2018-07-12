@@ -3,15 +3,12 @@
 #include <limits>
 #include <vector>
 
-#include "Header.h"
 #include "ModelLoader.h"
 #include "BinIO/BinaryWriter.t.h"
 #include "BinIO/BinaryReader.t.h"
 
-#define RES std::string("X:\\dev\\cpp\\game\\game\\game\\res\\models\\")
-
 template<typename T, unsigned char type>
-bool writeIndices(BinaryWriter& writer, const Mesh& mesh)
+static bool WriteIndices(BinaryWriter& writer, const Mesh& mesh)
 {
 	if (mesh.iCount <= std::numeric_limits<T>::max())
 	{
@@ -24,9 +21,9 @@ bool writeIndices(BinaryWriter& writer, const Mesh& mesh)
 	return false;
 }
 
-void convertObjToBinary(const Mesh& mesh, const std::string& filename)
+static void ConvertObjToBinary(const Mesh& mesh, const std::string& filename)
 {
-	BinaryWriter writer(RES + filename + ".dat");
+	BinaryWriter writer(filename + ".dat");
 	
 	writer.writeHeader("model", Version(1, 0, 0));
 	writer.write<unsigned int>(mesh.vCount);
@@ -40,10 +37,12 @@ void convertObjToBinary(const Mesh& mesh, const std::string& filename)
 		writer.writeBlock<float, unsigned int>(mesh.tangents, mesh.vCount * 3);
 
 	writer.write<unsigned int>(mesh.iCount);
-
-	if (!writeIndices<unsigned char, 0>(writer, mesh))
-		if (!writeIndices<unsigned short, 1>(writer, mesh))
-			writeIndices<unsigned int, 2>(writer, mesh);
+	
+	//Choose the smallest data type that works for the model's indices:
+	//uchar, ushort, then uint
+	if (!WriteIndices<unsigned char, 0>(writer, mesh))
+		if (!WriteIndices<unsigned short, 1>(writer, mesh))
+			WriteIndices<unsigned int, 2>(writer, mesh);
 
 	writer.close();
 }
@@ -55,15 +54,15 @@ int main()
 				"+---------------------------------+\n" <<
 				"| OBJ to Binary Format Converter  |\n" << 
 				"+---------------------------------+" << std::endl;
-	
+
 	std::string modelName;
 
 	std::cout << "OBJ name: ";
 	std::cin >> modelName;
 	
-	while (!modelName.empty())
+	while (!modelName.empty()) //Whether the user entered anything in
 	{
-		Mesh mesh = Loader::loadObjMeshData(RES + "obj/" + modelName + ".obj", true);
+		Mesh mesh = Loader::loadObjMeshData(modelName + ".obj", true);
 
 		std::cout << "Binary name: ";
 		std::string binaryName;
@@ -72,12 +71,13 @@ int main()
 		if (mesh.vertices != nullptr)
 		{
 			std::cout << "Saved " << binaryName << ".dat\n";
-			convertObjToBinary(mesh, modelName);
+			ConvertObjToBinary(mesh, modelName);
 		}
 		std::cout << std::endl;
 
 		mesh.free();
 		
+		//Continue with the next model
 		std::cout << "OBJ name: ";
 		std::cin >> modelName;
 	}

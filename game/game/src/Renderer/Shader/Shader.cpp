@@ -8,18 +8,59 @@
 #include "../GlMacros.h"
 #include "Shader.h"
 
-Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile)
+Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile,
+	std::vector<ShaderPreprocessorElement>&& vPreprocessors,
+	std::vector<ShaderPreprocessorElement>&& fPreprocessors)
 	: rendererID(0), vs(0), fs(0),
-	vertexFile(vertexFile), fragmentFile(fragmentFile)
-{
-}
-
-void Shader::create()
+	vertexFile("res/shaders/" + vertexFile), fragmentFile("res/shaders/" + fragmentFile),
+	vPreprocessorElements(vPreprocessors), fPreprocessorElements(fPreprocessors)
 {
 	rendererID = createShader(
-		readFile("res/shaders/" + vertexFile, vPreprocessorElements),
-		readFile("res/shaders/" + fragmentFile, fPreprocessorElements)
+		readFile(this->vertexFile, vPreprocessorElements),
+		readFile(this->fragmentFile, fPreprocessorElements)
 	);
+}
+
+Shader::Shader(Shader&& other)
+	: rendererID(other.rendererID), vs(other.vs), fs(other.fs),
+	
+	uniformLocationCache(std::move(other.uniformLocationCache)),
+	vPreprocessorElements(std::move(other.vPreprocessorElements)),
+	fPreprocessorElements(std::move(other.fPreprocessorElements)),
+	
+	vertexFile(std::move(other.vertexFile)), fragmentFile(std::move(other.fragmentFile))
+{
+	other.rendererID = other.vs = other.fs = 0;
+}
+
+Shader::~Shader()
+{
+	release();
+}
+
+Shader& Shader::operator=(Shader&& other)
+{
+	if (this != &other)
+	{
+		release();
+
+		vPreprocessorElements = std::move(other.vPreprocessorElements);
+		fPreprocessorElements = std::move(other.fPreprocessorElements);
+		rendererID = other.rendererID;
+		vs = other.vs;
+		fs = other.fs;
+		other.rendererID = other.vs = other.fs = 0;
+	}
+	return *this;
+}
+
+void Shader::release()
+{
+	GlCall(glDetachShader(rendererID, vs));
+	GlCall(glDetachShader(rendererID, fs));
+	GlCall(glDeleteShader(vs));
+	GlCall(glDeleteShader(fs));
+	GlCall(glDeleteProgram(rendererID));
 }
 
 int Shader::getUniformLocation(const std::string& name)
@@ -40,6 +81,11 @@ void Shader::setVec4(const std::string& name, float v0, float v1, float v2, floa
 	GlCall(glUniform4f(getUniformLocation(name), v0, v1, v2, v3));
 }
 
+void Shader::setVec4(const std::string & name, const glm::vec4 & vec)
+{
+	GlCall(glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w));
+}
+
 void Shader::setFloat(const std::string& name, float v)
 {
 	GlCall(glUniform1f(getUniformLocation(name), v));
@@ -58,6 +104,11 @@ void Shader::setBool(const std::string& name, bool v)
 void Shader::setVec3(const std::string& name, float v0, float v1, float v2)
 {
 	GlCall(glUniform3f(getUniformLocation(name), v0, v1, v2));
+}
+
+void Shader::setVec3(const std::string& name, const glm::vec3& vec)
+{
+	GlCall(glUniform3f(getUniformLocation(name), vec.x, vec.y, vec.z));
 }
 
 void Shader::setMat4(const std::string& name, const glm::mat4& matrix)
@@ -96,12 +147,31 @@ unsigned int Shader::compileShader(const std::string& source, unsigned int type)
 		GlCall(glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &len));
 		char* message = new char[len];
 
+		bool vertexShader = type == GL_VERTEX_SHADER;
+
 		GlCall(glGetShaderInfoLog(shaderId, len, &len, message));
-		std::cout << "Shader failed to compile: " << (type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT") << std::endl;
+
+		std::cout << (vertexShader ? "VERTEX" : "FRAGMENT") <<
+			" shader compilation error: " << std::endl;
+		std::cout << "Add " << 
+			-(int)(vertexShader ? vPreprocessorElements : fPreprocessorElements).size() <<
+			" to line numbers.\n" << std::endl;
 		std::cout << message << std::endl;
+
 		GlCall(glDeleteShader(0));
 
 		delete[] message;
+
+		//Allow the shader to be recompiled on the fly
+		std::cout << "Press ENTER to recompile! ";
+		std::cin.get();
+
+		std::string newSource = readFile(
+			vertexShader ? vertexFile : fragmentFile,
+			vertexShader ? vPreprocessorElements : fPreprocessorElements
+		);
+
+		return compileShader(newSource, type);
 	}
 
 	return shaderId;
@@ -132,14 +202,6 @@ std::string Shader::readFile(const std::string& filename, const std::vector<Shad
 	return ss.str();
 }
 
-void Shader::cleanUp() const
-{
-	GlCall(glDetachShader(rendererID, vs));
-	GlCall(glDetachShader(rendererID, fs));
-	GlCall(glDeleteShader(vs));
-	GlCall(glDeleteShader(fs));
-	GlCall(glDeleteProgram(rendererID));
-}
 
 void Shader::bind() const
 {

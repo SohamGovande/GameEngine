@@ -12,11 +12,18 @@ private:
 
 public:
 	VertexArray();
+	VertexArray(const VertexArray& other) = delete;
+	VertexArray(VertexArray&& other);
+	~VertexArray();
 
-	void cleanUp() const;
+	VertexArray& operator=(const VertexArray& other) = delete;
+	VertexArray& operator=(VertexArray&& other);
+
 	void bind() const;
 	void unbind() const;
 	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
+private:
+	void release();
 };
 

@@ -13,7 +13,7 @@ struct Mesh
 
 	}
 
-	inline void free()
+	inline void free() //Don't use RAII because that causes some problems returning a Mesh from a method
 	{
 		delete[] vertices;
 		delete[] textures;

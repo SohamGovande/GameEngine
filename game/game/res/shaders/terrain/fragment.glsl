@@ -20,8 +20,7 @@ uniform sampler2D u_BlendMap[MAX_TERRAIN_TEXTURES/4 + ((MAX_TERRAIN_TEXTURES % 4
 uniform vec3 u_SkyColor;
 
 uniform vec3 u_LightColor[MAX_LIGHTS];
-uniform float u_LightAttenuation[MAX_LIGHTS];
-uniform float u_LightBrightness[MAX_LIGHTS];
+uniform vec3 u_LightAttenuation[MAX_LIGHTS];
 uniform int u_LightsUsed;
 
 #define PI 3.1416
@@ -63,7 +62,7 @@ void main(void)
 
 	vec4 texColor = vec4(0);
 	for (int i = 0; i < u_TexturesUsed; i++) {
-		texColor += texture(u_Textures[i], v_TexCoord * 12) * getBlendmapValue(i);
+		texColor += texture(u_Textures[i], v_TexCoord * 10) * getBlendmapValue(i);
 	}
 	if (texColor.a < 0.7) {
 		discard;
@@ -78,11 +77,10 @@ void main(void)
 	
 	for (int i = 0; i < u_LightsUsed; i++)
 	{
-		vec3 unitLightVec = normalize(v_ToLightSource[i]);
+		float lightDistance = length(v_ToLightSource[i]);
+		vec3 unitLightVec = v_ToLightSource[i] / lightDistance;
 
-		float lightDistanceSq = v_ToLightSource[i].x*v_ToLightSource[i].x + v_ToLightSource[i].y*v_ToLightSource[i].y + v_ToLightSource[i].z*v_ToLightSource[i].z;
-		//attenuation = brightness/(1.0 + k*d^2)
-		float attenuation = u_LightBrightness[i] / (1.0 + u_LightAttenuation[i] * lightDistanceSq);
+		float attenuation =  1.0 / (lightDistance * lightDistance * u_LightAttenuation[i].z + lightDistance * u_LightAttenuation[i].y + u_LightAttenuation[i].x);
 
 		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
 
@@ -95,5 +93,9 @@ void main(void)
 	diffuse = max(diffuse, 0.2);
 
 	color =	vec4(diffuse, 1) * texColor + vec4(specular, 1);
+
+    vec4 grayscale = vec4(vec3(dot(color.rgb, vec3(0.2125, 0.7154, 0.0721))), 1.0);
+
+    color = mix(grayscale, color, 1.25);
 	color = mix(vec4(u_SkyColor.xyz, 1.0), color, v_Visibility);
 }

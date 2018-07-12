@@ -7,7 +7,7 @@ public:
 	unsigned char major, patch;
 	unsigned short minor;
 
-	inline Version(unsigned char major, unsigned short minor, unsigned short patch)
+	inline Version(unsigned char major, unsigned short minor, unsigned char patch)
 		: major(major), minor(minor), patch(patch)
 	{}
 

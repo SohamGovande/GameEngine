@@ -9,9 +9,34 @@ VertexArray::VertexArray()
 	GlCall(glBindVertexArray(rendererID));
 }
 
-void VertexArray::cleanUp() const
+VertexArray::VertexArray(VertexArray&& other)
+	: rendererID(other.rendererID), lastAttribIndex(other.lastAttribIndex)
+{
+	other.rendererID = 0;
+	other.lastAttribIndex = 0;
+}
+
+VertexArray::~VertexArray()
+{
+	release();
+}
+
+void VertexArray::release()
 {
 	GlCall(glDeleteVertexArrays(1, &rendererID));
+}
+
+VertexArray& VertexArray::operator=(VertexArray&& other)
+{
+	if (this != &other)
+	{
+		release();
+		rendererID = other.rendererID;
+		lastAttribIndex = other.lastAttribIndex;
+		other.rendererID = 0;
+		other.lastAttribIndex = 0;
+	}
+	return *this;
 }
 
 void VertexArray::bind() const

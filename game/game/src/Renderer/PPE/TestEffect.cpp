@@ -6,7 +6,6 @@ TestEffect::TestEffect(unsigned int width, unsigned int height)
 	fbo(), depthStencilRbo(),
 	colorBuffer(width, height, true)
 {
-	shader.create();
 	shader.bind();
 	shader.setInt("u_ScreenSampler", 0);
 
@@ -28,7 +27,6 @@ TestEffect::TestEffect(unsigned int width, unsigned int height)
 TestEffect::~TestEffect()
 {
 	shader.unbind();
-	shader.cleanUp();
 	fbo.cleanUp();
 	depthStencilRbo.cleanUp();
 	colorBuffer.cleanUp();
@@ -55,6 +53,6 @@ void TestEffect::renderQuad(const VertexArray & quadVao)
 	shader.bind();
 	quadVao.bind();
 	GlCall(glDisable(GL_DEPTH_TEST));
-	colorBuffer.bind();
+	colorBuffer.bind(0);
 	GlCall(glDrawArrays(GL_TRIANGLES, 0, 6));
 }

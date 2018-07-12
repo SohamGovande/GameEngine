@@ -36,7 +36,7 @@ GlModel Loader::loadModelToGL(Mesh mesh, bool includeTangents)
 	}
 
 	IndexBuffer ibo(mesh.indices, mesh.iCount);
-	return { vao, ibo, vbos };
+	return GlModel(std::move(vao), std::move(ibo), std::move(vbos));
 }
 
 template<typename T>
@@ -87,8 +87,6 @@ Mesh Loader::loadBinaryMeshData(const std::string& filename)
 	}
 
 	reader.close();
-
-	std::cout << "Model " << filename << " had " << mesh.vCount << " vertices and " << mesh.iCount / 3 << " triangles." << std::endl;
-
+	
 	return mesh;
 }

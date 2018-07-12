@@ -138,10 +138,8 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
-    <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Header.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\ModelLoader.h" />
   </ItemGroup>

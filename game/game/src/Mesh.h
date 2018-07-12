@@ -36,5 +36,25 @@ struct GlModel
 	VertexArray vao;
 	IndexBuffer ibo;
 	std::vector<VertexBuffer> vbos;
+
+	GlModel(VertexArray&& vao, IndexBuffer&& ibo, std::vector<VertexBuffer>&& vbos)
+		: vao(std::move(vao)), ibo(std::move(ibo)), vbos(std::move(vbos))
+	{}
+	GlModel(const GlModel& other) = delete;
+	GlModel(GlModel&& other)
+		: vao(std::move(other.vao)), ibo(std::move(other.ibo)), vbos(std::move(other.vbos))
+	{}
+	
+	GlModel& operator=(const GlModel& other) = delete;
+	GlModel& operator=(GlModel&& other)
+	{
+		if (this != &other)
+		{
+			vao = std::move(other.vao);
+			ibo = std::move(other.ibo);
+			vbos = std::move(other).vbos;
+		}
+		return *this;
+	}
 };
 

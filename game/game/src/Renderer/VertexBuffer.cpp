@@ -8,9 +8,31 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 	GlCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 }
 
-void VertexBuffer::cleanUp() const
+VertexBuffer::VertexBuffer(VertexBuffer&& other)
+	: rendererID(other.rendererID)
+{
+	other.rendererID = 0;
+}
+
+VertexBuffer::~VertexBuffer()
+{
+	release();
+}
+
+void VertexBuffer::release()
 {
 	GlCall(glDeleteBuffers(1, &rendererID));
+}
+
+VertexBuffer& VertexBuffer::operator=(VertexBuffer&& other)
+{
+	if (this != &other)
+	{
+		release();
+		rendererID = other.rendererID;
+		other.rendererID = 0;
+	}
+	return *this;
 }
 
 void VertexBuffer::bind() const

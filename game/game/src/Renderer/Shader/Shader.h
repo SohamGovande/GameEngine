@@ -19,33 +19,33 @@ private:
 	std::vector<ShaderPreprocessorElement> vPreprocessorElements;
 	std::vector<ShaderPreprocessorElement> fPreprocessorElements;
 
-	const std::string vertexFile, fragmentFile;
+	std::string vertexFile, fragmentFile;
 public:
-	Shader(const std::string& vertexFile, const std::string& fragmentFile);
-	
-	void create();
+	Shader(const std::string& vertexFile, const std::string& fragmentFile,
+		std::vector<ShaderPreprocessorElement>&& vPreprocessors = std::vector<ShaderPreprocessorElement>(),
+		std::vector<ShaderPreprocessorElement>&& fPreprocessors = std::vector<ShaderPreprocessorElement>());
+	Shader(const Shader& other) = delete;
+	Shader(Shader&& other);
+	~Shader();
 
-	inline void addVertexPreprocessorElement(const std::string& name, const std::string& value)
-	{
-		vPreprocessorElements.emplace_back(name, value);
-	}
-	inline void addFragmentPreprocessorElement(const std::string& name, const std::string& value)
-	{
-		fPreprocessorElements.emplace_back(name, value);
-	}
+	Shader& operator=(const Shader& other) = delete;
+	Shader& operator=(Shader&& other);
+
+	void release();
 
 	void bind() const;
 	void unbind() const;
 
 	//Uniform accessors
 	void setVec4(const std::string& name, float v0, float v1, float v2, float v3);
+	void setVec4(const std::string& name, const glm::vec4& vec);
 	void setVec3(const std::string& name, float v0, float v1, float v2);
+	void setVec3(const std::string& name, const glm::vec3& vec);
 	void setFloat(const std::string& name, float v);
 	void setInt(const std::string& name, int v);
 	void setBool(const std::string& name, bool v);
 	void setMat4(const std::string& name, const glm::mat4& matrix);
 	
-	void cleanUp() const;
 private:
 	int getUniformLocation(const std::string& name);
 

@@ -50,7 +50,8 @@ void main(void)
 	in reverse, then we convert it to a vec4 by multiplying it by 0,0,0,1 and obtain
 	its xyz position. 
 	*/
-	v_TangentToCamera = TBN * ((inverse(u_ViewMatrix) * vec4(0, 0, 0, 1)).xyz - positionWorldSpace.xyz);
+	vec3 cameraPos = (inverse(u_ViewMatrix) * vec4(0, 0, 0, 1)).xyz;
+	v_TangentToCamera = TBN * (cameraPos - positionWorldSpace.xyz);
 
 	float distance = length(positionCameraSpace.xyz);
 	v_Visibility = clamp(exp(-pow(distance * density, gradient)), 0, 1);

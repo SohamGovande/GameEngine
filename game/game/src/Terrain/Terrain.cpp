@@ -12,26 +12,31 @@ Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, in
 	heightmap(TERRAIN_VERTEX_COUNT, TERRAIN_INTERVAL)
 {
 	textures.emplace_back(resourceMgr.texture("grass_tile"));
-	textures.emplace_back(resourceMgr.texture("dirt_tile"));
-
+	textures.emplace_back(resourceMgr.texture("gravel_tile"));
+		
 	blendMaps.emplace_back(128,  128, false);
 	const Texture& tex = blendMaps.back();
-	tex.bind();
+	tex.bind(0);
 	constexpr int texSize = 128 * 128 * 4;
 	unsigned char* data = new unsigned char[texSize];
 	memset(data, 0, sizeof(unsigned char) * texSize);
 	
 	PerlinNoise noise;
 
+	float(*interpolate)(float x) = [](float x) -> float {
+		return 1.0f / (1 + exp2(-20 * (x - 0.52f)));
+	};
+
 	for (unsigned int i = 0; i < texSize / 4; i++)
 	{
 		constexpr float scale = 0.05f;
-		float xCoord = scale * (i % 128);
-		float yCoord = scale * (i / 128);
+		float xCoord = chunkX * 128 + scale * (i % 128);
+		float yCoord = chunkZ * 128 + scale * (i / 128);
 
-		float val = noise.noise(xCoord, yCoord, 0.4);
-		data[i * 4] = val * 255;
-		data[i * 4 + 1] = 255 * (1 - val);
+		float noiseVal = interpolate(noise.noise(xCoord, yCoord, 0.4));
+		
+		data[i*4 + 0] = (unsigned char) (noiseVal * 255.0f);
+		data[i*4 + 1] = (unsigned char) ((1.0f - noiseVal) * 255.0f);
 	}
 
 	GlCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
@@ -41,8 +46,7 @@ Terrain::~Terrain()
 {
 	std::cout << "Freed a terrain mesh" << std::endl;
 	mesh.free();
-	if (model != nullptr)
-		delete model;
+	delete model;
 }
 
 void Terrain::setTerrainHeight(float x, float z, float y)

@@ -11,11 +11,11 @@ class EntityRenderer
 {
 private:
 	const std::vector<Light>& lights;
-	Shader shader, normalMappedShader;
+	Shader shader, normalMappedShader, parallaxMappedShader;
 	glm::mat4 projectionMatrix;
 
 private:
-	void prepareForRendering(GlStateManager& gl, Shader& shader, const MaterialModel& material);
+	void prepareForRendering(GlStateManager& gl, Shader& shader, const RenderableMaterialModel& material);
 	void renderInstance(float partialTicks, Shader& shader, const Entity& object, const Camera& camera);
 
 public:

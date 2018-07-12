@@ -14,7 +14,7 @@ private:
 	std::vector<unsigned int> entityIDs;
 	std::vector<Component*> components;
 
-	MaterialModel* materialModel;
+	RenderableMaterialModel* materialModel;
 public:
 	glm::vec3 position;
 	glm::vec3 rotation;
@@ -39,8 +39,8 @@ public:
 
 	inline const std::vector<unsigned int>& getEntityIDs() const { return entityIDs; }
 
-	inline void setMaterialModel(MaterialModel* model) { this->materialModel = model; }
-	inline MaterialModel* getMaterialModel() const { return materialModel; }
+	inline void setMaterialModel(RenderableMaterialModel* model) { this->materialModel = model; }
+	inline RenderableMaterialModel* getMaterialModel() const { return materialModel; }
 
 	inline void addEID(unsigned int id) { entityIDs.push_back(id); }
 

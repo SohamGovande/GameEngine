@@ -9,9 +9,30 @@ IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count)
 	GlCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
 }
 
-void IndexBuffer::cleanUp() const
+IndexBuffer::IndexBuffer(IndexBuffer&& other)
+	: rendererID(other.rendererID), indicesCount(other.indicesCount)
 {
-	GlCall(glDeleteBuffers(1, &rendererID));
+	other.rendererID = 0;
+	other.indicesCount = 0;
+}
+
+IndexBuffer::~IndexBuffer()
+{
+	release();
+}
+
+IndexBuffer& IndexBuffer::operator=(IndexBuffer&& other)
+{
+	if (this != &other)
+	{
+		release();
+
+		rendererID = other.rendererID;
+		indicesCount = other.indicesCount;
+		other.rendererID = 0;
+		other.indicesCount = 0;
+	}
+	return *this;
 }
 
 void IndexBuffer::bind() const
@@ -22,4 +43,9 @@ void IndexBuffer::bind() const
 void IndexBuffer::unbind() const
 {
 	GlCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+}
+
+void IndexBuffer::release()
+{
+	GlCall(glDeleteBuffers(1, &rendererID));
 }

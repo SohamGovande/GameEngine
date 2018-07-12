@@ -21,6 +21,4 @@ QuadVBO::QuadVBO()
 
 QuadVBO::~QuadVBO()
 {
-	vao.cleanUp();
-	vbo.cleanUp();
 }

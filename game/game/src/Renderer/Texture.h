@@ -15,7 +15,7 @@ public:
 	Texture(unsigned int width, unsigned int height, bool useNullTexture);
 	
 	void cleanUp() const;
-	void bind(unsigned int slot = 0U) const;
+	void bind(unsigned int slot) const;
 	void unbind() const;
 
 	inline int getID() const { return rendererID; }

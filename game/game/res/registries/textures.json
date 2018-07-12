@@ -1,4 +1,5 @@
 {
-  "grass_tile": "grassblock",
-  "dirt_tile": "dirt"
+  "grass_tile": "grass_tile",
+  "dirt_tile": "dirt",
+  "gravel_tile": "gravel_tile"
 }

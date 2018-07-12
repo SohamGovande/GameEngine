@@ -27,7 +27,7 @@ void TerrainGen::addObjects(World& world, int chunkX, int chunkZ, unsigned int c
 		const float z = distribution(random) + chunkZ * TERRAIN_SIZE;
 		const float y = getTerrainHeight(x, z);
 
-		Entity& entity = world.addEntity();
+		Entity& entity = world.emplaceEntity();
 
 		constructor.construct(entity);
 
@@ -63,7 +63,6 @@ void TerrainGen::generate(World& world, ResourceMgr& resourceMgr, const EntityRe
 		if (entity.hasEntityID(3))
 			entity.rotation.x = 90;
 
-	addObjects(world, chunkX, chunkZ, 1, 5, 5, entityRegistry.getConstructor("cube"));
+	addObjects(world, chunkX, chunkZ, 1, 10, 10, entityRegistry.getConstructor("cube"));
 	addObjects(world, chunkX, chunkZ, 1, 10, 2, entityRegistry.getConstructor("barrel"));
-	addObjects(world, chunkX, chunkZ, 1, 0, 4, entityRegistry.getConstructor("lantern"));
 }

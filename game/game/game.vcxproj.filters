@@ -51,9 +51,6 @@
     <ClCompile Include="src\Renderer\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Renderer\MaterialModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -325,11 +322,13 @@
     <None Include="res\entities\player\metadata.json" />
     <None Include="res\entities\axe\metadata.json" />
     <None Include="res\entities\fern\metadata.json" />
-    <None Include="res\shaders\entityNormalMapped\fragment.glsl" />
-    <None Include="res\shaders\entityNormalMapped\vertex.glsl" />
     <None Include="res\entities\green_tree\metadata.json" />
     <None Include="res\entities\barrel\metadata.json" />
     <None Include="res\entities\cube\metadata.json" />
     <None Include="res\entities\lantern\metadata.json" />
+    <None Include="res\shaders\entity_normal_mapped\fragment.glsl" />
+    <None Include="res\shaders\entity_normal_mapped\vertex.glsl" />
+    <None Include="res\shaders\entity_parallax_mapped\fragment.glsl" />
+    <None Include="res\shaders\entity_parallax_mapped\vertex.glsl" />
   </ItemGroup>
 </Project>

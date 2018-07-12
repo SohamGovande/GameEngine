@@ -41,16 +41,14 @@
   },
   "cube": {
     "model": "cube",
-    "texture": "metal",
+    "texture": "wallDiffuseMap",
     "properties": {
-      "normal_map": "metal_normal_map"
     }
   },
   "green_tree": {
     "model": "greentree",
     "texture": "green_tree",
     "properties": {
-      "normal_map": "green_tree_normal_map"
     }
   }
 }

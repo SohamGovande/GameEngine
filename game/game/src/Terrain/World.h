@@ -30,9 +30,8 @@ public:
 	float getInterpolatedTerrainHeight(float x, float z) const;
 	float getExactTerrainHeight(float x, float z) const;
 
-	template<typename... VaArgs>
-	Entity& addEntity(VaArgs&&... args);
-	Entity& copyEntityIntoWorld(const Entity& object);
+	template<typename... ConstructorArgs>
+	Entity& emplaceEntity(ConstructorArgs&&... args);
 
 	template<typename... VaArgs>
 	inline Terrain& addTerrain(VaArgs&&... args) { terrains.emplace_back(args...); return terrains.back(); }

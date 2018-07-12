@@ -20,12 +20,7 @@
 
 ResourceMgr::ResourceMgr()
 {
-	RegisterProperty(reflectivity);
-	RegisterProperty(shineDistanceDamper);
-	RegisterProperty(fullyRender);
-	RegisterProperty(specularMap);
-	RegisterProperty(normalMap);
-
+	initMaterialProperties();
 	loadResources();
 }
 
@@ -41,6 +36,17 @@ ResourceMgr::~ResourceMgr()
 TextureResource& ResourceMgr::loadTex(const std::string& name, const std::string& texture)
 {
 	return textures.emplace(name, TextureResource(texture)).first->second;
+}
+
+void ResourceMgr::initMaterialProperties()
+{
+	RegisterProperty(reflectivity);
+	RegisterProperty(shineDistanceDamper);
+	RegisterProperty(fullyRender);
+	RegisterProperty(specularMap);
+	RegisterProperty(normalMap);
+	RegisterProperty(parallaxMap);
+	RegisterProperty(parallaxMapAmplitude);
 }
 
 void ResourceMgr::loadTexturesFile()

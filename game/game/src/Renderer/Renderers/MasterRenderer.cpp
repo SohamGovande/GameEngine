@@ -14,7 +14,7 @@ MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, Resou
 	needsToUpdateWireframe(false),
 	timePassed(0)
 {
-	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 0.0f, 1.0f);
+	lights.push_back(Light(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), glm::vec3(1, 0, 0)));
 }
 
 MasterRenderer::~MasterRenderer()
@@ -44,12 +44,14 @@ void MasterRenderer::markEntityForRendering(Entity& entity)
 {
 	MaterialModel& model = *entity.getMaterialModel();
 	model.getTexture().load();
-	if (model.doesHaveSpecularMap())
-		model.getSpecularMap().load();
-	if (model.doesHaveNormalMap())
-		model.getNormalMap().load();
+	if (model.properties.hasSpecularMap())
+		model.properties.specularMap->load();
+	if (model.properties.hasNormalMap())
+		model.properties.normalMap->load();
+	if (model.properties.hasParallaxMap())
+		model.properties.parallaxMap->load();
 	
-	std::unordered_map<MaterialModel, std::list<Entity*>>::iterator it = entities.find(model);
+	auto it = entities.find(model);
 
 	if (it != entities.end())
 		it->second.push_back(&entity);

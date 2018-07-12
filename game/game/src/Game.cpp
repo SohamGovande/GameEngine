@@ -52,6 +52,27 @@ void Game::init()
 	world.sendEntities(renderer);
 	world.sendTerrain(renderer);
 
+	std::mt19937 engine;
+	std::uniform_real_distribution<float> distribution(-TERRAIN_SIZE, TERRAIN_SIZE);
+
+	for (unsigned int i = 0; i < 3; i++)
+	{
+		float x = distribution(engine);
+		float z = distribution(engine);
+		float y = world.getInterpolatedTerrainHeight(x, z);
+		
+		Entity& entity = world.emplaceEntity();
+		entityRegistry.getConstructor("lantern").construct(entity);
+		entity.position = glm::vec3(x, y + 10, z);
+		entity.scale = 2;
+
+		renderer.getLights().push_back(Light(
+			glm::vec3(x, y + 50, z),
+			glm::vec3(1, 0, 0),
+			glm::vec3(0.01, 0, 0.001)
+		));
+	}
+
 	Toolkit::hideCursor();
 }
 

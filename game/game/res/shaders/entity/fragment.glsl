@@ -19,8 +19,7 @@ uniform float u_Reflectivity;
 uniform vec3 u_SkyColor;
 
 uniform vec3 u_LightColor[MAX_LIGHTS];
-uniform float u_LightAttenuation[MAX_LIGHTS];
-uniform float u_LightBrightness[MAX_LIGHTS];
+uniform vec3 u_LightAttenuation[MAX_LIGHTS];
 uniform int u_LightsUsed;
 
 #define PI 3.1416
@@ -57,11 +56,10 @@ void main(void)
 	
 	for (int i = 0; i < u_LightsUsed; i++)
 	{
-		vec3 unitLightVec = normalize(v_ToLightSource[i]);
+		float lightDistance = length(v_ToLightSource[i]);
+		vec3 unitLightVec = v_ToLightSource[i] / lightDistance;
 
-		float lightDistanceSq = v_ToLightSource[i].x*v_ToLightSource[i].x + v_ToLightSource[i].y*v_ToLightSource[i].y + v_ToLightSource[i].z*v_ToLightSource[i].z;
-		//a = brightness/(1.0 + k*d^2)
-		float attenuation =  u_LightBrightness[i] / (1.0 + u_LightAttenuation[i] * lightDistanceSq);
+		float attenuation = 1.0 / (lightDistance * lightDistance * u_LightAttenuation[i].z + lightDistance * u_LightAttenuation[i].y + u_LightAttenuation[i].x);
 
 		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
 		if (u_Reflectivity != 0)

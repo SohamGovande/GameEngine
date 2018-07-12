@@ -23,6 +23,8 @@ public:
 	ResourceMgr();
 	~ResourceMgr();
 
+	void initMaterialProperties();
+
 	void loadTexturesFile();
 	void loadModelsFile();
 	void loadResources();

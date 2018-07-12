@@ -12,7 +12,6 @@
 
 #include "ModelLoader.h"
 
-
 struct VertexOtherInfo
 {
 	glm::vec2 tex;
@@ -515,20 +514,7 @@ Mesh Loader::loadObjMeshData(const std::string& filename, bool calculateTangents
 				std::stof(words[2])
 			);
 
-			bool duplicate = false;
-			//	for (unsigned int i = 0; i < vertices.size(); i++)
-			//	{
-			//		if (vertices[i] == pos)
-			//		{
-			//			duplicate = true;
-			//			vertexRerouting[vertexCounter] = i;
-			//			break;
-			//		}
-			//	}
-			if (!duplicate)
-				vertices.emplace_back(pos);
-			else
-				vertices.emplace_back(0, 0, 0);
+			vertices.emplace_back(pos);
 
 			vertexCounter++;
 		}

@@ -4,20 +4,21 @@
 #include "MasterRenderer.h"
 
 TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr)
-	: lights(lights), shader("terrain/vertex.glsl", "terrain/fragment.glsl"), 
+	: lights(lights),
+	shader("terrain/vertex.glsl", "terrain/fragment.glsl", {
+		{ "MAX_LIGHTS", maxLightsStr }
+	}, {
+		{ "MAX_LIGHTS", maxLightsStr },
+		{ "MAX_TERRAIN_TEXTURES", "4" }
+	}),
 	masterRenderer(masterRenderer)
 {
-	shader.addVertexPreprocessorElement("MAX_LIGHTS", maxLightsStr);
-	shader.addFragmentPreprocessorElement("MAX_LIGHTS", maxLightsStr);
-	shader.addFragmentPreprocessorElement("MAX_TERRAIN_TEXTURES", "4");
-	shader.create();
 	shader.bind();
 	shader.setMat4("u_ProjectionMatrix", projectionMatrix);
 }
 
 TerrainRenderer::~TerrainRenderer()
 {
-	shader.cleanUp();
 }
 
 void TerrainRenderer::render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains)
@@ -34,8 +35,7 @@ void TerrainRenderer::render(float partialTicks, const Camera& camera, const std
 		std::string iString = std::to_string(i);
 		shader.setVec3("u_LightPos[" + iString + "]", lights[i].getPos().x, lights[i].getPos().y, lights[i].getPos().z);
 		shader.setVec3("u_LightColor[" + iString + "]", lights[i].getColor().r, lights[i].getColor().g, lights[i].getColor().b);
-		shader.setFloat("u_LightAttenuation[" + iString + "]", lights[i].getAttenuation());
-		shader.setFloat("u_LightBrightness[" + iString + "]", lights[i].getBrightness());
+		shader.setVec3("u_LightAttenuation[" + iString + "]", lights[i].getAttenuation());
 	}
 
 	shader.setMat4("u_TransformationMatrix", glm::mat4(1.0f));

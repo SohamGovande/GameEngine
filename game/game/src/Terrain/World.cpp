@@ -8,11 +8,11 @@ World::World(ResourceMgr& resourceMgr)
 	: entities(), terrains(), 
 	person(nullptr)
 {
-	person = &addEntity();
+	person = &emplaceEntity();
 	person->setMaterialModel(resourceMgr.model("player"));
 	person->moveTo(glm::vec3(0, 100, 0));
 	person->addComponent(new MotionComponent);
-	person->scale = 1.5f;
+	person->scale = 1.0f;
 }
 
 World::~World()
@@ -125,15 +125,9 @@ float World::getExactTerrainHeight(float x, float z) const
 	return 0.0f;
 }
 
-template<typename... VaArgs>
-Entity& World::addEntity(VaArgs&&... args)
+template<typename... ConstructorArgs>
+Entity& World::emplaceEntity(ConstructorArgs&&... args)
 {
 	entities.emplace_back(args...);
-	return entities.back();
-}
-
-Entity& World::copyEntityIntoWorld(const Entity& entity)
-{
-	entities.push_back(entity);
 	return entities.back();
 }

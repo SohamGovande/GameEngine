@@ -32,9 +32,9 @@ void ModelResource::generate()
 {
 	mesh = Loader::loadBinaryMeshData(modelFile);
 	
-	value = new MaterialModel(
-		texture,
+	value = new RenderableMaterialModel(
 		Loader::loadModelToGL(mesh, hasNormalMap()),
+		texture,
 		modelFile
 	);
 

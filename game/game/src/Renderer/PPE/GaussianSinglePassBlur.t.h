@@ -32,8 +32,6 @@ GaussianSinglePassBlur<T>::GaussianSinglePassBlur(unsigned int width, unsigned i
 template<BlurType T>
 GaussianSinglePassBlur<T>::~GaussianSinglePassBlur()
 {
-	shader.unbind();
-	shader.cleanUp();
 	fbo.cleanUp();
 	depthStencilRbo.cleanUp();
 	colorBuffer.cleanUp();
