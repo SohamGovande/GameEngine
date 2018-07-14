@@ -30,13 +30,15 @@ uniform int u_LightsUsed;
 
 #define PI 3.1416
 
-float CalculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec);
-float CalculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 unitVecToCamera, in vec2 mappedTexCoords);
-vec2 CalculateParallaxTextureCoords();
+#define LIGHTING_UNIFORMS_IN_TANGENT_SPACE
+#include <phong_lighting.glsl>
+#include <multiple_light_sources.glsl>
+
+vec2 calculateParallaxTextureCoords();
 
 void main(void)
 {
-	vec2 mappedTexCoords = clamp(CalculateParallaxTextureCoords(), 0.0, 1.0);
+	vec2 mappedTexCoords = clamp(calculateParallaxTextureCoords(), 0.0, 1.0);
 
 	vec4 texColor = texture(u_Texture, mappedTexCoords);
 	if (texColor.a < 0.7)
@@ -50,17 +52,7 @@ void main(void)
 	vec3 diffuse = vec3(0);
 	vec3 specular = vec3(0);
 	
-	for (int i = 0; i < u_LightsUsed; i++)
-	{
-		float lightDistance = length(v_TangentToLightSource[i]);
-		vec3 unitLightVec = v_TangentToLightSource[i] / lightDistance;
-
-		float attenuation =  1.0 / (lightDistance * lightDistance * u_LightAttenuation[i].z + lightDistance * u_LightAttenuation[i].y + u_LightAttenuation[i].x);
-
-		diffuse += CalculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
-		if (u_Reflectivity != 0)
-			specular += CalculateSpecular(unitSurfaceNorm, unitLightVec, unitVecToCamera, mappedTexCoords) * attenuation * u_LightColor[i];
-	}
+	calculateLighting(unitVecToCamera, unitSurfaceNorm, mappedTexCoords, diffuse, specular);
 	
 	diffuse = max(diffuse, 0.2);
 
@@ -68,7 +60,7 @@ void main(void)
 	color = mix(vec4(u_SkyColor.xyz, 1.0), color, v_Visibility);
 }
 
-vec2 CalculateParallaxTextureCoords()
+vec2 calculateParallaxTextureCoords()
 {
 	float height = texture(u_ParallaxMap, v_TexCoord).r;
 	vec3 viewDir = normalize(v_TangentToCamera);
@@ -110,21 +102,4 @@ vec2 CalculateParallaxTextureCoords()
 	vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
 
 	return finalTexCoords;
-}
-
-float CalculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec)
-{
-	return max(dot(unitSurfaceNorm, unitLightVec), 0);
-}
-
-float CalculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 unitVecToCamera, in vec2 mappedTexCoords)
-{
-	float specularDot = max(dot(reflect(-unitLightVec, unitSurfaceNorm), unitVecToCamera), 0.5);
-	float actualSpecular = pow(specularDot, u_ShineDistanceDamper) * u_Reflectivity;
-
-	//If there is specular map data, multiply the specular value by the map's red component (shininess amplitude)
-	if (u_HasSpecularMap)
-		actualSpecular *= texture(u_SpecularMap, mappedTexCoords).r;
-
-	return actualSpecular;
 }

@@ -24,22 +24,8 @@ uniform int u_LightsUsed;
 
 #define PI 3.1416
 
-float calculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec)
-{
-	return max(dot(unitSurfaceNorm, unitLightVec), 0);
-}
-
-float calculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 unitVecToCamera)
-{
-	float specularDot = max(dot(reflect(-unitLightVec, unitSurfaceNorm), unitVecToCamera), 0.5);
-	float actualSpecular = pow(specularDot, u_ShineDistanceDamper) * u_Reflectivity;
-
-	//If there is specular map data, multiply the specular value by the map's red component (amount of shinyness to the material)
-	if (u_HasSpecularMap)
-		actualSpecular *= texture(u_SpecularMap, v_TexCoord).r;
-
-	return actualSpecular;
-}
+#include <phong_lighting.glsl>
+#include <multiple_light_sources.glsl>
 
 void main(void)
 {
@@ -53,18 +39,7 @@ void main(void)
 
 	vec3 diffuse = vec3(0);
 	vec3 specular = vec3(0);
-	
-	for (int i = 0; i < u_LightsUsed; i++)
-	{
-		float lightDistance = length(v_ToLightSource[i]);
-		vec3 unitLightVec = v_ToLightSource[i] / lightDistance;
-
-		float attenuation = 1.0 / (lightDistance * lightDistance * u_LightAttenuation[i].z + lightDistance * u_LightAttenuation[i].y + u_LightAttenuation[i].x);
-
-		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
-		if (u_Reflectivity != 0)
-			specular += calculateSpecular(unitSurfaceNorm, unitLightVec, unitVecToCamera) * attenuation * u_LightColor[i];
-	}
+	calculateLighting(unitVecToCamera, unitSurfaceNorm, v_TexCoord, diffuse, specular);
 	
 	diffuse = max(diffuse, 0.2);
 

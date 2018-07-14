@@ -43,6 +43,9 @@
     "model": "cube",
     "texture": "wallDiffuseMap",
     "properties": {
+      "normal_map": "wallNormalMap",
+      "parallax_map": "wallDisplacementMap",
+      "parallax_map_amplitude": 0.05
     }
   },
   "green_tree": {

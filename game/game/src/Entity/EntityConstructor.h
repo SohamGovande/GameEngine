@@ -19,5 +19,4 @@ public:
 	EntityConstructor(EntityConstructor&& other);
 
 	void construct(Entity& owner) const;
-	
 };

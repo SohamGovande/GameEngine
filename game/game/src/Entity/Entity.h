@@ -28,7 +28,7 @@ public:
 
 	void tick();
 
-	bool hasEntityID(unsigned int id);
+	bool hasEntityID(unsigned int id) const;
 	glm::vec3 interpolatePosition(float partialTicks) const;
 	glm::vec3 interpolateRotation(float partialTicks) const;
 	inline void moveTo(const glm::vec3& position)

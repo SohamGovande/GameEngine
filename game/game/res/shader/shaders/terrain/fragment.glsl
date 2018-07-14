@@ -1,5 +1,4 @@
 #version 330 core
-#include <phong_lighting.glsl>
 
 layout(location = 0) out vec4 color;
 
@@ -26,23 +25,9 @@ uniform int u_LightsUsed;
 
 #define PI 3.1416
 
-float calculateDiffuse(in vec3 unitSurfaceNorm, in vec3 unitLightVec)
-{
-	return max(dot(unitSurfaceNorm, unitLightVec), 0);
-}
-
-float calculateSpecular(in vec3 unitSurfaceNorm, in vec3 unitLightVec, in vec3 unitVecToCamera, in int i)
-{
-
-	float specularDot = max(dot(reflect(-unitLightVec, unitSurfaceNorm), unitVecToCamera), 0.5);
-	float actualSpecular = pow(specularDot, u_ShineDistanceDamper[i]) * u_Reflectivity[i];
-
-	//If there is specular map data, multiply the specular value by the map's red component (amount of shinyness to the material)
-	if (u_HasSpecularMap[i])
-		actualSpecular *= texture(u_SpecularMap[i], v_TexCoord).r;
-
-	return actualSpecular;
-}
+#define PHONG_LIGHTING_USE_SPECULAR_ARRAYS
+#include <phong_lighting.glsl>
+#include <multiple_light_sources.glsl>
 
 float getBlendmapValue(in int index) {
 	switch (index % 4)
@@ -65,10 +50,8 @@ void main(void)
 	for (int i = 0; i < u_TexturesUsed; i++) {
 		texColor += texture(u_Textures[i], v_TexCoord * 10) * getBlendmapValue(i);
 	}
-	if (texColor.a < 0.7) {
+	if (texColor.a < 0.7)
 		discard;
-		return;
-	}
 
 	vec3 unitSurfaceNorm = normalize(v_SurfaceNormal);
 	vec3 unitVecToCamera = normalize(v_ToCamera);
@@ -76,21 +59,7 @@ void main(void)
 	vec3 diffuse = vec3(0);
 	vec3 specular = vec3(0);
 	
-	for (int i = 0; i < u_LightsUsed; i++)
-	{
-		float lightDistance = length(v_ToLightSource[i]);
-		vec3 unitLightVec = v_ToLightSource[i] / lightDistance;
-
-		float attenuation =  1.0 / (lightDistance * lightDistance * u_LightAttenuation[i].z + lightDistance * u_LightAttenuation[i].y + u_LightAttenuation[i].x);
-
-		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
-
-		for (int j = 0; j < u_TexturesUsed; j++) {
-			if (u_Reflectivity[j] != 0)
-				specular += calculateSpecular(unitSurfaceNorm, unitLightVec, unitVecToCamera, j) * attenuation * u_LightColor[i];
-		}
-	}
-	
+	calculateLighting(unitVecToCamera, unitSurfaceNorm, v_TexCoord * 10, diffuse, specular);
 	diffuse = max(diffuse, 0.2);
 
 	color =	vec4(diffuse, 1) * texColor + vec4(specular, 1);

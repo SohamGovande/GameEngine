@@ -22,6 +22,7 @@ private:
 
 	std::string vertexFile, fragmentFile, shaderDirectory;
 	std::unordered_set<std::string> includedFiles;
+	unsigned int vsLineOffset, fsLineOffset;
 
 public:
 	Shader(const std::string& vertexFile, const std::string& fragmentFile,
@@ -55,5 +56,5 @@ private:
 	unsigned int compileShader(const std::string& source, unsigned int type);
 	unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
 
-	std::string readFile(const std::string& filename, const std::vector<ShaderPreprocessorElement>& preprocessor);
+	std::string readFile(const std::string& filename, const std::vector<ShaderPreprocessorElement>& preprocessor, unsigned int shaderType);
 };

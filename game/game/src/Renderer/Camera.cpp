@@ -9,7 +9,7 @@ Camera::Camera()
 	lastCursorDistance(),
 	entityAngle(0, 0),
 	prevEntityAngle(0, 0),
-	entityDistance(40),
+	entityDistance(30),
 
 	pitch(0), yaw(0), roll(0),
 	position(0, 0, 0)
@@ -32,9 +32,9 @@ void Camera::tick(World& world)
 		constexpr float speed = 2;
 
 		float forwardFactor = 0;
-		if (Toolkit::isKeyPressed(Keys::W))
+		if (Toolkit::isKeyPressed(Keys::W) || Toolkit::isKeyPressed(Keys::Up))
 			forwardFactor += speed;
-		if (Toolkit::isKeyPressed(Keys::S))
+		if (Toolkit::isKeyPressed(Keys::S) || Toolkit::isKeyPressed(Keys::Down))
 			forwardFactor -= speed;
 
 		glm::vec2 direction(
@@ -48,8 +48,8 @@ void Camera::tick(World& world)
 		);
 
 		float terrainDiff = world.getExactTerrainHeight(nextPos.x, nextPos.y) - world.getExactTerrainHeight(target.position.x, target.position.z);
-		terrainDiff = 1.f/ terrainDiff;
-		
+		terrainDiff = 1.f / terrainDiff;
+
 		if (terrainDiff < 0)
 			terrainDiff *= -1.5;
 
@@ -58,18 +58,18 @@ void Camera::tick(World& world)
 		if (forwardFactor != 0)
 		{
 			MotionComponent& motionComp = (MotionComponent&)target.findChild(MOTION);
-			motionComp.motion.x = direction.x * terrainDiff;
-			motionComp.motion.z = direction.y * terrainDiff;
+			motionComp.motion.x = direction.x;
+			motionComp.motion.z = direction.y;
 		}
 	}
 	{
 		int turnFactor = 0;
 		constexpr int turnSpeed = 5;
 
-		if (Toolkit::isKeyPressed(Keys::A))
+		if (Toolkit::isKeyPressed(Keys::A) || Toolkit::isKeyPressed(Keys::Left))
 			turnFactor += turnSpeed;
 
-		if (Toolkit::isKeyPressed(Keys::D))
+		if (Toolkit::isKeyPressed(Keys::D) || Toolkit::isKeyPressed(Keys::Right))
 			turnFactor -= turnSpeed;
 
 		if (turnFactor != 0)
@@ -109,7 +109,7 @@ void Camera::performRotations(float partialTicks)
 	
 	glm::vec3 positionOffset(
 		sin(smoothFacingEntityRot.y * DEG2RAD) * horizDistance,
-		vertDistance + 20, //+head offset
+		vertDistance + 15, //+head offset
 		cos(smoothFacingEntityRot.y * DEG2RAD) * horizDistance
 	);
 	

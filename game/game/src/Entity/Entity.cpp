@@ -36,7 +36,7 @@ void Entity::tick()
 		component->tick(*this, nullptr);
 }
 
-bool Entity::hasEntityID(unsigned int id)
+bool Entity::hasEntityID(unsigned int id) const
 {
 	for (unsigned int eid : entityIDs)
 		if (eid == id)

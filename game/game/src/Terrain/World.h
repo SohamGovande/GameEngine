@@ -31,7 +31,7 @@ public:
 	float getExactTerrainHeight(float x, float z) const;
 
 	template<typename... ConstructorArgs>
-	Entity& emplaceEntity(ConstructorArgs&&... args);
+	Entity& newEntity(ConstructorArgs&&... args);
 
 	template<typename... VaArgs>
 	inline Terrain& addTerrain(VaArgs&&... args) { terrains.emplace_back(args...); return terrains.back(); }
@@ -41,4 +41,20 @@ public:
 
 	inline std::list<Entity>& getEntities() { return entities; };
 	inline const std::list<Entity>& getEntities() const { return entities; }
+
+	inline std::vector<Entity*> getEntitiesByID(unsigned int id)
+	{
+		std::vector<Entity*> targets;
+		for (Entity& entity : entities)
+			if (entity.hasEntityID(id))
+				targets.push_back(&entity);
+		return targets;
+	}
+
+	inline unsigned int countEntitiesByID(unsigned int id)
+	{
+		return std::count_if(entities.begin(), entities.end(), [id](const Entity& entity) {
+			return entity.hasEntityID(id);
+		});
+	}
 };

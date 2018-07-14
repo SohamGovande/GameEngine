@@ -27,14 +27,12 @@ void TerrainGen::addObjects(World& world, int chunkX, int chunkZ, unsigned int c
 		const float z = distribution(random) + chunkZ * TERRAIN_SIZE;
 		const float y = getTerrainHeight(x, z);
 
-		Entity& entity = world.emplaceEntity();
+		Entity& entity = world.newEntity();
 
 		constructor.construct(entity);
 
 		entity.scale = scale;
-		entity.position.x = x;
-		entity.position.y = y + yOffset;
-		entity.position.z = z;
+		entity.moveTo(glm::vec3(x, y + yOffset, z));
 	}
 }
 
@@ -65,4 +63,7 @@ void TerrainGen::generate(World& world, ResourceMgr& resourceMgr, const EntityRe
 
 	addObjects(world, chunkX, chunkZ, 1, 10, 10, entityRegistry.getConstructor("cube"));
 	addObjects(world, chunkX, chunkZ, 1, 10, 2, entityRegistry.getConstructor("barrel"));
+	unsigned int lanterns = world.countEntitiesByID(7);
+	if (lanterns < 3)
+		addObjects(world, chunkX, chunkZ, 1, 0, 8, entityRegistry.getConstructor("lantern"));
 }

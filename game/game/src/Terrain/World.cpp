@@ -8,7 +8,7 @@ World::World(ResourceMgr& resourceMgr)
 	: entities(), terrains(), 
 	person(nullptr)
 {
-	person = &emplaceEntity();
+	person = &newEntity();
 	person->setMaterialModel(resourceMgr.model("player"));
 	person->moveTo(glm::vec3(0, 100, 0));
 	person->addComponent(new MotionComponent);
@@ -126,7 +126,7 @@ float World::getExactTerrainHeight(float x, float z) const
 }
 
 template<typename... ConstructorArgs>
-Entity& World::emplaceEntity(ConstructorArgs&&... args)
+Entity& World::newEntity(ConstructorArgs&&... args)
 {
 	entities.emplace_back(args...);
 	return entities.back();

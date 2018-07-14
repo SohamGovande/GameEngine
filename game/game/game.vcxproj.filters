@@ -331,5 +331,6 @@
     <None Include="res\shader\shaders\gaussianBlur\vertex.glsl" />
     <None Include="res\shader\shaders\terrain\fragment.glsl" />
     <None Include="res\shader\shaders\terrain\vertex.glsl" />
+    <None Include="res\shader\include\multiple_light_sources.glsl" />
   </ItemGroup>
 </Project>
