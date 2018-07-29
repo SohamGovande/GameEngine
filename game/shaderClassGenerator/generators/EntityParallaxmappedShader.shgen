@@ -1,0 +1,15 @@
+-Preprocessor
+
+-ClassName
+ParallaxMappedEntityShader
+
+-VertexShader
+entity_parallax_mapped/vertex.glsl
+
+-FragmentShader
+entity_parallax_mapped/fragment.glsl
+
+-VertexShaderPreprocessors
+{ { "MAX_LIGHTS", MAX_LIGHTS_STR } }
+-FragmentShaderPreprocessors
+{ { "MAX_LIGHTS", MAX_LIGHTS_STR } }

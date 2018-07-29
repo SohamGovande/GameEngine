@@ -27,9 +27,6 @@
     <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\PPE\TestEffect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Renderer\Renderers\EntityRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,9 +34,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Renderers\TerrainRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Shader\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Camera.cpp">
@@ -141,6 +135,9 @@
     <ClCompile Include="src\OBJModelLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Shader\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\CollisionCommons.h">
@@ -164,9 +161,6 @@
     <ClInclude Include="src\Renderer\PPE\Renderbuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\PPE\TestEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Renderer\Renderers\EntityRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -174,12 +168,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Renderers\TerrainRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Shader\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Camera.h">
@@ -308,6 +296,39 @@
     <ClInclude Include="src\Renderer\GlStateManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\TerrainShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\Uniform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\Uniform.t.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\NormalEntityShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\NormalMappedEntityShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\ParallaxMappedEntityShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Renderers\EntityRenderer.t.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\PPE\BlurAxis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\GaussianAxisShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\registries\models.json" />
@@ -327,10 +348,10 @@
     <None Include="res\shader\shaders\entity_normal_mapped\vertex.glsl" />
     <None Include="res\shader\shaders\entity_parallax_mapped\fragment.glsl" />
     <None Include="res\shader\shaders\entity_parallax_mapped\vertex.glsl" />
-    <None Include="res\shader\shaders\gaussianBlur\fragment.glsl" />
-    <None Include="res\shader\shaders\gaussianBlur\vertex.glsl" />
     <None Include="res\shader\shaders\terrain\fragment.glsl" />
     <None Include="res\shader\shaders\terrain\vertex.glsl" />
     <None Include="res\shader\include\multiple_light_sources.glsl" />
+    <None Include="res\shader\shaders\gaussian_blur\fragment.glsl" />
+    <None Include="res\shader\shaders\gaussian_blur\vertex.glsl" />
   </ItemGroup>
 </Project>

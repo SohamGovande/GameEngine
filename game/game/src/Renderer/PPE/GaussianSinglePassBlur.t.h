@@ -2,17 +2,15 @@
 #include "GaussianSinglePassBlur.h"
 #include "Renderer/GlMacros.h"
 
-template<BlurType T>
-GaussianSinglePassBlur<T>::GaussianSinglePassBlur(unsigned int width, unsigned int height)
-	: shader("gaussianBlur/vertex.glsl","gaussianBlur/fragment.glsl"),
+template<BlurAxis A>
+GaussianAxisBlur<A>::GaussianAxisBlur(unsigned int width, unsigned int height)
+	: shader(),
 	fbo(), depthStencilRbo(),
 	colorBuffer(width, height, true)
 {
-	shader.addVertexPreprocessorElement("BLUR_DIRECTION", T == HORIZONTAL ? "HORIZONTAL" : "VERTICAL");
-	shader.create();
 	shader.bind();
-	shader.setInt("u_ScreenSampler", 0);
-	shader.setFloat("u_PixelDensity", 1.0f / (T == HORIZONTAL ? width : height));
+	shader.u_ScreenSampler.setAndUpdate(0);
+	shader.u_PixelDensity.setAndUpdate(1.0f / (A == BlurAxis::HORIZONTAL ? width : height));
 
 	fbo.bind();
 	colorBuffer.unbind();
@@ -29,16 +27,16 @@ GaussianSinglePassBlur<T>::GaussianSinglePassBlur(unsigned int width, unsigned i
 	fbo.unbind();
 }
 
-template<BlurType T>
-GaussianSinglePassBlur<T>::~GaussianSinglePassBlur()
+template<BlurAxis T>
+GaussianAxisBlur<T>::~GaussianAxisBlur()
 {
 	fbo.cleanUp();
 	depthStencilRbo.cleanUp();
 	colorBuffer.cleanUp();
 }
 
-template<BlurType T>
-void GaussianSinglePassBlur<T>::start()
+template<BlurAxis T>
+void GaussianAxisBlur<T>::start()
 {
 	fbo.bind();
 	GlCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
@@ -46,14 +44,14 @@ void GaussianSinglePassBlur<T>::start()
 	GlCall(glEnable(GL_DEPTH_TEST));
 }
 
-template<BlurType T>
-void GaussianSinglePassBlur<T>::stop()
+template<BlurAxis T>
+void GaussianAxisBlur<T>::stop()
 {
 	fbo.unbind();
 }
 
-template<BlurType T>
-void GaussianSinglePassBlur<T>::renderQuad(const VertexArray& quadVao)
+template<BlurAxis T>
+void GaussianAxisBlur<T>::renderQuad(const VertexArray& quadVao)
 {
 	GlCall(glClearColor(1.f, 0.f, 1.f, 1.f));
 	GlCall(glClear(GL_COLOR_BUFFER_BIT));
@@ -61,6 +59,6 @@ void GaussianSinglePassBlur<T>::renderQuad(const VertexArray& quadVao)
 	shader.bind();
 	quadVao.bind();
 	GlCall(glDisable(GL_DEPTH_TEST));
-	colorBuffer.bind();
+	colorBuffer.bind(0);
 	GlCall(glDrawArrays(GL_TRIANGLES, 0, 6));
 }

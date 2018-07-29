@@ -5,7 +5,7 @@
 #include "Terrain/Terrain.h"
 
 #include "Renderer/GlStateManager.h"
-#include "EntityRenderer.h"
+#include "EntityRenderer.t.h"
 #include "TerrainRenderer.h"
 
 #include "MathUtils.h"

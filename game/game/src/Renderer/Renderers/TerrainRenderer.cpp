@@ -5,16 +5,11 @@
 
 TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr)
 	: lights(lights),
-	shader("terrain/vertex.glsl", "terrain/fragment.glsl", {
-		{ "MAX_LIGHTS", maxLightsStr }
-	}, {
-		{ "MAX_LIGHTS", maxLightsStr },
-		{ "MAX_TERRAIN_TEXTURES", "4" }
-	}),
+	terrainShader(),
 	masterRenderer(masterRenderer)
 {
-	shader.bind();
-	shader.setMat4("u_ProjectionMatrix", projectionMatrix);
+	terrainShader.bind();
+	terrainShader.u_ProjectionMatrix.setAndUpdate(projectionMatrix);
 }
 
 TerrainRenderer::~TerrainRenderer()
@@ -23,23 +18,19 @@ TerrainRenderer::~TerrainRenderer()
 
 void TerrainRenderer::render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains)
 {
-	shader.bind();
-
-	shader.setFloat("u_Reflectivity", 0);
-	shader.setVec3("u_SkyColor", 176 / 255.f, 231 / 255.f, 232 / 255.f);
-
-	shader.setInt("u_LightsUsed", lights.size());
+	terrainShader.bind();
+	terrainShader.u_SkyColor.update();
+	terrainShader.u_LightsUsed.setAndUpdate(lights.size());
 
 	for (unsigned int i = 0; i < lights.size(); i++)
 	{
-		std::string iString = std::to_string(i);
-		shader.setVec3("u_LightPos[" + iString + "]", lights[i].getPos().x, lights[i].getPos().y, lights[i].getPos().z);
-		shader.setVec3("u_LightColor[" + iString + "]", lights[i].getColor().r, lights[i].getColor().g, lights[i].getColor().b);
-		shader.setVec3("u_LightAttenuation[" + iString + "]", lights[i].getAttenuation());
+		terrainShader.u_LightPos[i].setAndUpdate(lights[i].getPos());
+		terrainShader.u_LightColor[i].setAndUpdate(lights[i].getColor());
+		terrainShader.u_LightAttenuation[i].setAndUpdate(lights[i].getAttenuation());
 	}
 
-	shader.setMat4("u_TransformationMatrix", glm::mat4(1.0f));
-	shader.setMat4("u_ViewMatrix", Math::createViewMatrix(camera));
+	terrainShader.u_TransformationMatrix.setAndUpdate(glm::mat4(1.0));
+	terrainShader.u_ViewMatrix.setAndUpdate(Math::createViewMatrix(camera));
 
 	for (const Terrain* terrain : terrains)
 	{
@@ -57,7 +48,7 @@ void TerrainRenderer::prepareForRendering(const Terrain& terrain)
 	unsigned int lastBoundTexture = 0;
 
 	for (unsigned int i = 0; i < terrain.getTextures().size(); i++) {
-		shader.setInt("u_Textures[" + std::to_string(i) + "]", lastBoundTexture);
+		terrainShader.u_Textures[i].setAndUpdate(lastBoundTexture);
 		terrain.getTextures()[i].texture.promisedFetch().bind(lastBoundTexture++);
 	}
 
@@ -66,20 +57,21 @@ void TerrainRenderer::prepareForRendering(const Terrain& terrain)
 		const std::string iString = std::to_string(i);
 
 		if (textureInfo.hasSpecularMap()) {
-			shader.setInt("u_SpecularMap[" + iString + "]", lastBoundTexture);
+			terrainShader.u_SpecularMap[i].setAndUpdate(lastBoundTexture);
 			textureInfo.specularMap->promisedFetch().bind(lastBoundTexture++);
 		}
-		shader.setInt("u_HasSpecularMap[" + iString + "]", textureInfo.hasSpecularMap());
-		shader.setFloat("u_Reflectivity", textureInfo.reflectivity);
-		shader.setFloat("u_ShineDistanceDamper", textureInfo.shineDistanceDamper);
+
+		terrainShader.u_HasSpecularMap[i].setAndUpdate(textureInfo.hasSpecularMap());
+		terrainShader.u_Reflectivity[i].setAndUpdate(textureInfo.reflectivity);
+		terrainShader.u_ShineDistanceDamper[i].setAndUpdate(textureInfo.shineDistanceDamper);
 	}
 
 	for (unsigned int i = 0; i < terrain.getBlendMaps().size(); i++) {
-		shader.setInt("u_BlendMap[" + std::to_string(i) + "]", lastBoundTexture);
+		terrainShader.u_BlendMap[i].setAndUpdate(lastBoundTexture);
 		terrain.getBlendMaps()[i].bind(lastBoundTexture++);
 	}
-
-	shader.setInt("u_TexturesUsed", terrain.getTextures().size());
+	
+	terrainShader.u_TexturesUsed.setAndUpdate(terrain.getTextures().size());
 }
 
 void TerrainRenderer::renderInstance(float partialTicks, const Terrain& object, const Camera& camera)

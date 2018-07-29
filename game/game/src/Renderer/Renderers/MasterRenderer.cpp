@@ -1,5 +1,6 @@
 #include "../GlMacros.h"
 #include "MasterRenderer.h"
+#include "../Shader/Uniform.t.h"
 
 MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, ResourceMgr& mgr)
 	: projectionMatrix(Math::createProjectionMatrix(nearPlane, farPlane, fov)),

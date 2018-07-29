@@ -1,27 +1,25 @@
 #pragma once
-#include "Renderer/Shader/Shader.h"
+
+#include "Renderer/PPE/BlurAxis.h"
+#include "Renderer/Shader/GaussianAxisShader.h"
 #include "Renderer/Texture.h"
 #include "Renderer/VertexArray.h"
 #include "Framebuffer.h"
 #include "Renderbuffer.h"
 
-enum BlurType
-{
-	HORIZONTAL, VERTICAL
-};
 
-template<BlurType T>
-class GaussianSinglePassBlur
+template<BlurAxis A>
+class GaussianAxisBlur
 {
 private:
-	Shader shader;
+	GaussianAxisShader<A> shader;
 	Framebuffer fbo;
 	Renderbuffer depthStencilRbo;
 	Texture colorBuffer;
 
 public:
-	GaussianSinglePassBlur(unsigned int width, unsigned int height);
-	~GaussianSinglePassBlur();
+	GaussianAxisBlur(unsigned int width, unsigned int height);
+	~GaussianAxisBlur();
 
 	void start();
 	void stop();

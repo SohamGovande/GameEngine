@@ -2,6 +2,7 @@
 #include <chrono>
 #include <thread>
 
+#include "Renderer/PPE/GaussianSinglePassBlur.t.h"
 #include "Game.h"
 
 static void RunGame(sf::Window& window)
@@ -15,6 +16,10 @@ static void RunGame(sf::Window& window)
 	constexpr double ticksPerSecond = 20;
 
 	bool running = true;
+
+	GaussianAxisBlur<BlurAxis::HORIZONTAL> horizPass(900, 400);
+	GaussianAxisBlur<BlurAxis::VERTICAL> vertPass(900, 400);
+	QuadVBO quadVbo;
 
 	while (running)
 	{
@@ -52,6 +57,7 @@ static void RunGame(sf::Window& window)
 		lastTime = now;
 
 		game.render((float)delta);
+
 		window.display();
 	}
 	

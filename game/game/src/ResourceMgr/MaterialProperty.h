@@ -17,7 +17,7 @@ public:
 	{
 	}
 
-	inline void set(MaterialModelProperties& properties, const void* data) const
+	inline void update(MaterialModelProperties& properties, const void* data) const
 	{
 		memcpy(reinterpret_cast<void*>(reinterpret_cast<unsigned char*>(&properties) + offset),
 			data, size);

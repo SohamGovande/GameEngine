@@ -1,0 +1,15 @@
+-Preprocessor
+
+-ClassName
+NormalEntityShader
+
+-VertexShader
+entity/vertex.glsl
+
+-FragmentShader
+entity/fragment.glsl
+
+-VertexShaderPreprocessors
+{ { "MAX_LIGHTS", MAX_LIGHTS_STR } }
+-FragmentShaderPreprocessors
+{ { "MAX_LIGHTS", MAX_LIGHTS_STR } }

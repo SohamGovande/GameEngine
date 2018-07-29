@@ -154,8 +154,8 @@
     <ClCompile Include="src\Entity\Components\Component.cpp" />
     <ClCompile Include="src\Entity\Components\MotionComponent.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
-    <ClCompile Include="src\Renderer\PPE\TestEffect.cpp" />
     <ClCompile Include="src\Renderer\QuadVBO.cpp" />
+    <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
     <ClCompile Include="src\Terrain\Heightmap.cpp" />
     <ClCompile Include="src\Toolkit.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
@@ -170,7 +170,6 @@
     <ClCompile Include="src\Renderer\Renderers\EntityRenderer.cpp" />
     <ClCompile Include="src\Renderer\Renderers\MasterRenderer.cpp" />
     <ClCompile Include="src\Renderer\Renderers\TerrainRenderer.cpp" />
-    <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
     <ClCompile Include="src\Renderer\Texture.cpp" />
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Renderer\VertexBuffer.cpp" />
@@ -193,6 +192,7 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\IOHelper.h" />
     <ClInclude Include="src\Renderer\GlStateManager.h" />
+    <ClInclude Include="src\Renderer\PPE\BlurAxis.h" />
     <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.h" />
     <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.t.h" />
     <ClInclude Include="src\Renderer\PPE\Renderbuffer.h" />
@@ -200,9 +200,17 @@
     <ClInclude Include="src\Entity\Components\ComponentIDs.h" />
     <ClInclude Include="src\Entity\Components\MotionComponent.h" />
     <ClInclude Include="src\Entity\Entity.h" />
-    <ClInclude Include="src\Renderer\PPE\TestEffect.h" />
     <ClInclude Include="src\Renderer\QuadVBO.h" />
+    <ClInclude Include="src\Renderer\Renderers\EntityRenderer.t.h" />
+    <ClInclude Include="src\Renderer\Shader\GaussianAxisShader.h" />
+    <ClInclude Include="src\Renderer\Shader\NormalEntityShader.h" />
+    <ClInclude Include="src\Renderer\Shader\NormalMappedEntityShader.h" />
+    <ClInclude Include="src\Renderer\Shader\ParallaxMappedEntityShader.h" />
+    <ClInclude Include="src\Renderer\Shader\Shader.h" />
     <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h" />
+    <ClInclude Include="src\Renderer\Shader\TerrainShader.h" />
+    <ClInclude Include="src\Renderer\Shader\Uniform.h" />
+    <ClInclude Include="src\Renderer\Shader\Uniform.t.h" />
     <ClInclude Include="src\ResourceMgr\MaterialProperty.h" />
     <ClInclude Include="src\ResourceMgr\MaterialPropertyTypes.h" />
     <ClInclude Include="src\ResourceMgr\PropertyRegisterHelper.h" />
@@ -224,7 +232,6 @@
     <ClInclude Include="src\Renderer\Renderers\EntityRenderer.h" />
     <ClInclude Include="src\Renderer\Renderers\MasterRenderer.h" />
     <ClInclude Include="src\Renderer\Renderers\TerrainRenderer.h" />
-    <ClInclude Include="src\Renderer\Shader\Shader.h" />
     <ClInclude Include="src\Renderer\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\Renderer\VertexBuffer.h" />
@@ -275,8 +282,8 @@
     <None Include="res\registries\textures.json" />
     <None Include="res\shader\shaders\entity\fragment.glsl" />
     <None Include="res\shader\shaders\entity\vertex.glsl" />
-    <None Include="res\shader\shaders\gaussianBlur\fragment.glsl" />
-    <None Include="res\shader\shaders\gaussianBlur\vertex.glsl" />
+    <None Include="res\shader\shaders\gaussian_blur\fragment.glsl" />
+    <None Include="res\shader\shaders\gaussian_blur\vertex.glsl" />
     <None Include="res\shader\shaders\terrain\fragment.glsl" />
     <None Include="res\shader\shaders\terrain\vertex.glsl" />
   </ItemGroup>

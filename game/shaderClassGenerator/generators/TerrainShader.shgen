@@ -1,0 +1,16 @@
+-Preprocessor
+#include "Terrain/TerrainConstants.h"
+
+-ClassName
+TerrainShader
+
+-VertexShader
+terrain/vertex.glsl
+
+-FragmentShader
+terrain/fragment.glsl
+
+-VertexShaderPreprocessors
+{ { "MAX_LIGHTS", MAX_LIGHTS_STR } }
+-FragmentShaderPreprocessors
+{ { "MAX_LIGHTS", MAX_LIGHTS_STR }, { "MAX_TERRAIN_TEXTURES", MAX_TERRAIN_TEXTURES_STR } }

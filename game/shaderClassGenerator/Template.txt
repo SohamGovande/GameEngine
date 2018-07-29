@@ -1,0 +1,30 @@
+#include <array>
+#include "Shader.h"
+#include "Uniform.t.h"
+#include "../Light.h"
+${Preprocessor}
+
+class ${ClassName}
+	: public Shader
+{
+${Structs}
+public:
+${Uniforms}
+
+public:
+	inline ${ClassName}()
+		: Shader(
+			"${VertexShader}", "${FragmentShader}",
+			${VertexShaderPreprocessors},
+			${FragmentShaderPreprocessors}
+		)
+	{
+		loadUniformLocations();
+	}
+
+private:
+	inline void loadUniformLocations()
+	{
+${LoadUniformLocations}
+	}
+};

@@ -102,46 +102,6 @@ int Shader::getUniformLocation(const std::string& name)
 	return location;
 }
 
-void Shader::setVec4(const std::string& name, float v0, float v1, float v2, float v3)
-{
-	GlCall(glUniform4f(getUniformLocation(name), v0, v1, v2, v3));
-}
-
-void Shader::setVec4(const std::string & name, const glm::vec4 & vec)
-{
-	GlCall(glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w));
-}
-
-void Shader::setFloat(const std::string& name, float v)
-{
-	GlCall(glUniform1f(getUniformLocation(name), v));
-}
-
-void Shader::setInt(const std::string& name, int v)
-{
-	GlCall(glUniform1i(getUniformLocation(name), v));
-}
-
-void Shader::setBool(const std::string& name, bool v)
-{
-	GlCall(glUniform1i(getUniformLocation(name), v ? 1 : 0));
-}
-
-void Shader::setVec3(const std::string& name, float v0, float v1, float v2)
-{
-	GlCall(glUniform3f(getUniformLocation(name), v0, v1, v2));
-}
-
-void Shader::setVec3(const std::string& name, const glm::vec3& vec)
-{
-	GlCall(glUniform3f(getUniformLocation(name), vec.x, vec.y, vec.z));
-}
-
-void Shader::setMat4(const std::string& name, const glm::mat4& matrix)
-{
-	GlCall(glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix)));
-}
-
 unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader)
 {
 	GlCall(GLuint program = glCreateProgram());

@@ -26,7 +26,7 @@ public:
 	
 	inline void apply(RenderableMaterialModel& model) const
 	{
-		target.set(model.properties, reinterpret_cast<const void*>(&value));
+		target.update(model.properties, reinterpret_cast<const void*>(&value));
 	}
 
 	inline const PropertySetterValue& getValue() const { return value; }

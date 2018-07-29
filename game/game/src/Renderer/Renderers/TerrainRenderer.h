@@ -4,6 +4,7 @@
 
 #include "Terrain/Terrain.h"
 #include "Renderer/Camera.h"
+#include "Renderer/Shader/TerrainShader.h"
 #include "Renderer/Shader/Shader.h"
 #include "Renderer/MaterialModel.h"
 #include "Renderer/Light.h"
@@ -15,8 +16,8 @@ class TerrainRenderer
 private:
 	MasterRenderer& masterRenderer;
 	const std::vector<Light>& lights;
-	Shader shader;
-	
+	TerrainShader terrainShader;
+
 private:
 	void prepareForRendering(const Terrain& material);
 	void renderInstance(float partialTicks, const Terrain& object, const Camera& camera);

@@ -9,7 +9,7 @@ QuadVBO::QuadVBO()
 		-1.0f,  1.0f,  0.0f, 1.0f,
 		1.0f, -1.0f,  1.0f, 0.0f,
 		1.0f,  1.0f,  1.0f, 1.0f
-		}),
+	}),
 	vbo(&quadVertices[0], sizeof(float) * quadVertices.size()),
 	vao(),
 	layout()

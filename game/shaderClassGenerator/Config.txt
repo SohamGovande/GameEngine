@@ -1,0 +1,48 @@
+-OutputParentDir
+X:/dev/cpp/game/game/game/src/Renderer/Shader/
+
+-GetShaderProgramIDFunction
+rendererID
+
+-SpecificShaderInfo
+VertexShader Vertex Vs
+FragmentShader Fragment Fs
+GeometryShader Geometry Gs
+TessEvalShader TessellationEvaluation Tes
+TessCtlShader TessellationControl Tcs
+ComputeShader Compute Cs
+
+-FileExtension
+h
+
+-GlslDataTypes
+vec4 glm::vec4
+vec3 glm::vec3
+vec2 glm::vec2
+ivec4 glm::ivec4
+ivec3 glm::ivec3
+ivec2 glm::ivec2
+uvec4 glm::uvec4
+uvec3 glm::uvec3
+uvec2 glm::uvec2
+bvec4 glm::bvec4
+bvec3 glm::bvec3
+bvec2 glm::bvec2
+dvec4 glm::dvec4
+dvec3 glm::dvec3
+dvec2 glm::dvec2
+mat4 glm::mat4
+mat3 glm::mat3
+mat2 glm::mat2
+bool bool
+int int
+uint unsigned int
+float float
+double double
+sampler1D int
+sampler2D int
+sampler3D int
+samplerCube int
+sampler1DShadow int
+sampler2DShadow int
+samplerCubeShadow int

@@ -7,17 +7,43 @@
 #include "Renderer/Light.h"
 #include "Renderer/GlStateManager.h"
 
+#include "Renderer/Shader/NormalEntityShader.h"
+#include "Renderer/Shader/NormalMappedEntityShader.h"
+#include "Renderer/Shader/ParallaxMappedEntityShader.h"
+
 class EntityRenderer
 {
 private:
 	const std::vector<Light>& lights;
-	Shader shader, normalMappedShader, parallaxMappedShader;
+
+	NormalEntityShader nShader;
+	NormalMappedEntityShader nmShader;
+	ParallaxMappedEntityShader pmShader;
+
 	glm::mat4 projectionMatrix;
 
 private:
-	void prepareForRendering(GlStateManager& gl, Shader& shader, const RenderableMaterialModel& material);
-	void renderInstance(float partialTicks, Shader& shader, const Entity& object, const Camera& camera);
+	template<typename ShaderType>
+	void prepareGenericShaderForRendering(GlStateManager& gl, ShaderType& shader, const RenderableMaterialModel& material, unsigned int& nextTextureID);
+	
+	template<typename ShaderType>
+	void prepareShaderForRendering(GlStateManager& gl, ShaderType& shader, const RenderableMaterialModel& material);
 
+	template<typename ShaderType>
+	void renderInstance(float partialTicks, ShaderType& shader, const Entity& object, const Camera& camera);
+	
+	template<typename ShaderType>
+	void prepareShader(ShaderType& shader);
+
+	template<typename ShaderType>
+	void renderBatch(
+		float partialTicks,
+		GlStateManager& gl,
+		ShaderType& shader,
+		const RenderableMaterialModel& model,
+		const std::list<Entity*>& batch,
+		const Camera& camera
+	);
 public:
 	EntityRenderer(const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr);
 	~EntityRenderer();

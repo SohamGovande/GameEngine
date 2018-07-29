@@ -18,7 +18,6 @@ uniform float u_Reflectivity[MAX_TERRAIN_TEXTURES];
 uniform sampler2D u_BlendMap[MAX_TERRAIN_TEXTURES/4 + ((MAX_TERRAIN_TEXTURES % 4 == 0) ? 1 : 0)];
 
 uniform vec3 u_SkyColor;
-
 uniform vec3 u_LightColor[MAX_LIGHTS];
 uniform vec3 u_LightAttenuation[MAX_LIGHTS];
 uniform int u_LightsUsed;

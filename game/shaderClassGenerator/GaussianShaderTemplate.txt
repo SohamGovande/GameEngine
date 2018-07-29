@@ -1,0 +1,31 @@
+#include <array>
+#include "Shader.h"
+#include "Uniform.t.h"
+#include "Renderer/PPE/BlurAxis.h"
+${Preprocessor}
+
+template<BlurAxis A>
+class ${ClassName}
+	: public Shader
+{
+${Structs}
+public:
+${Uniforms}
+
+public:
+	inline ${ClassName}()
+		: Shader(
+			"${VertexShader}", "${FragmentShader}",
+			${VertexShaderPreprocessors},
+			${FragmentShaderPreprocessors}
+		)
+	{
+		loadUniformLocations();
+	}
+
+private:
+	inline void loadUniformLocations()
+	{
+${LoadUniformLocations}
+	}
+};

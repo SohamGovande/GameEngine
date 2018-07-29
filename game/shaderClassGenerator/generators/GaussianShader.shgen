@@ -1,0 +1,15 @@
+-Preprocessor
+
+-ClassName
+GaussianAxisShader
+
+-VertexShader
+gaussian_blur/vertex.glsl
+
+-FragmentShader
+gaussian_blur/fragment.glsl
+
+-VertexShaderPreprocessors
+{ { "BLUR_DIRECTION", A == BlurAxis::HORIZONTAL ? "HORIZONTAL" : "VERTICAL" } }
+-FragmentShaderPreprocessors
+{ }
