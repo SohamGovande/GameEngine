@@ -41,10 +41,13 @@
   },
   "cube": {
     "model": "cube",
-    "texture": "wallDiffuseMap",
+    "texture": "stone_beach_diffuse",
     "properties": {
-      "normal_map": "wallNormalMap",
-      "parallax_map": "wallDisplacementMap",
+	  "reflectivity": 1.0,
+	  "shine_distance_damper": 8,
+	  "specular_map": "stone_beach_specular",
+      "normal_map": "stone_beach_normal",
+      "parallax_map": "stone_beach_displacement",
       "parallax_map_amplitude": 0.05
     }
   },

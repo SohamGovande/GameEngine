@@ -7,13 +7,10 @@ class Uniform
 {
 private:
 	unsigned int location;
-	T lastValue;
-	bool changed;
 
 public:
 
 	inline Uniform()
-		: changed(false)
 	{
 	}
 
@@ -27,21 +24,18 @@ public:
 		location = glGetUniformLocation(programID, name);
 	}
 
-	inline void set(const T& value) 
+	inline void uncheckedSet(const T& value) const
 	{
-		changed = (lastValue != value);
-		if (changed)
-			lastValue = value;
+		update(value);
 	}
 
-	inline void setAndUpdate(const T& value)
+	inline void operator=(const T& value) const
 	{
-		set(value);
-		update();
+		uncheckedSet(value);
 	}
 
 	//Use template specializations
-	void update()
+	void update(const T& value) const
 	{
 		static_assert(false, "No template specialization for this Uniform type! Please create one in Uniform.cpp for Uniform#update().");
 	}

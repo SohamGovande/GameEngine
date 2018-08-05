@@ -273,7 +273,7 @@ static Mesh packDataToMesh(const std::vector<PositionedVData>& vdata, const std:
 			mesh.indices[nextIndex] = sizeCounter[index.posIndex] + index.extraIndex;
 			mesh.indices[nextIndex] -= vertexOffsets[mesh.indices[nextIndex]];
 			nextIndex++;
-		}
+		} else  __debugbreak();
 	return mesh;
 }
 

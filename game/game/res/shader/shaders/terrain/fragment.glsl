@@ -8,6 +8,12 @@ in vec3 v_ToLightSource[MAX_LIGHTS];
 in vec3 v_ToCamera;
 in float v_Visibility;
 
+struct PointLight
+{
+	vec3 color;
+	vec3 attenuation;
+};
+
 uniform sampler2D u_Textures[MAX_TERRAIN_TEXTURES];
 uniform int u_TexturesUsed;
 
@@ -18,8 +24,8 @@ uniform float u_Reflectivity[MAX_TERRAIN_TEXTURES];
 uniform sampler2D u_BlendMap[MAX_TERRAIN_TEXTURES/4 + ((MAX_TERRAIN_TEXTURES % 4 == 0) ? 1 : 0)];
 
 uniform vec3 u_SkyColor;
-uniform vec3 u_LightColor[MAX_LIGHTS];
-uniform vec3 u_LightAttenuation[MAX_LIGHTS];
+
+uniform PointLight u_PointLights[MAX_LIGHTS];
 uniform int u_LightsUsed;
 
 #define PI 3.1416

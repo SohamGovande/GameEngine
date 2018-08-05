@@ -7,6 +7,14 @@
 class TerrainShader
 	: public Shader
 {
+//Fragment uniform structs
+public:
+	struct FsPointLight
+	{
+		Uniform<glm::vec3> color;
+		Uniform<glm::vec3> attenuation;
+	};
+
 
 public:
 	//Vertex shader uniforms
@@ -24,8 +32,7 @@ public:
 	std::array<Uniform<float>, MAX_TERRAIN_TEXTURES> u_Reflectivity;
 	std::array<Uniform<int>, MAX_TERRAIN_TEXTURES/4 + ((MAX_TERRAIN_TEXTURES % 4 == 0) ? 1 : 0)> u_BlendMap;
 	Uniform<glm::vec3> u_SkyColor;
-	std::array<Uniform<glm::vec3>, MAX_LIGHTS> u_LightColor;
-	std::array<Uniform<glm::vec3>, MAX_LIGHTS> u_LightAttenuation;
+	std::array<FsPointLight, MAX_LIGHTS> u_PointLights;
 	Uniform<int> u_LightsUsed;
 
 
@@ -70,9 +77,10 @@ private:
 			u_BlendMap[i].loadLocation("u_BlendMap[" + std::to_string(i) + "]", programID);
 		u_SkyColor.loadLocation("u_SkyColor", programID);
 		for(unsigned int i = 0; i < (MAX_LIGHTS); i++)
-			u_LightColor[i].loadLocation("u_LightColor[" + std::to_string(i) + "]", programID);
-		for(unsigned int i = 0; i < (MAX_LIGHTS); i++)
-			u_LightAttenuation[i].loadLocation("u_LightAttenuation[" + std::to_string(i) + "]", programID);
+		{
+			u_PointLights[i].color.loadLocation("u_PointLights[" + std::to_string(i) + "].color", programID);
+			u_PointLights[i].attenuation.loadLocation("u_PointLights[" + std::to_string(i) + "].attenuation", programID);
+		}
 		u_LightsUsed.loadLocation("u_LightsUsed", programID);
 
 

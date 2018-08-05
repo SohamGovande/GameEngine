@@ -8,6 +8,11 @@ in vec3 v_TangentToLightSource[MAX_LIGHTS];
 in vec3 v_TangentToCamera;
 in float v_Visibility;
 
+struct PointLight
+{
+	vec3 color;
+	vec3 attenuation;
+};
 
 uniform sampler2D u_Texture;
 
@@ -24,8 +29,7 @@ uniform sampler2D u_ParallaxMap;
 
 uniform vec3 u_SkyColor;
 
-uniform vec3 u_LightColor[MAX_LIGHTS];
-uniform vec3 u_LightAttenuation[MAX_LIGHTS];
+uniform PointLight u_PointLights[MAX_LIGHTS];
 uniform int u_LightsUsed;
 
 #define PI 3.1416
@@ -65,8 +69,8 @@ vec2 calculateParallaxTextureCoords()
 	float height = texture(u_ParallaxMap, v_TexCoord).r;
 	vec3 viewDir = normalize(v_TangentToCamera);
 
-	const float minLayers = 8.0;
-	const float maxLayers = 32.0;
+	const float minLayers = 64.0;
+	const float maxLayers = 128.0;
 	float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));  
     // calculate the size of each layer
     float layerDepth = 1.0 / numLayers;

@@ -2,17 +2,16 @@
 #include "MasterRenderer.h"
 #include "../Shader/Uniform.t.h"
 
-MasterRenderer::MasterRenderer(float fov, float nearPlane, float farPlane, ResourceMgr& mgr)
-	: projectionMatrix(Math::createProjectionMatrix(nearPlane, farPlane, fov)),
-	lights(),
+MasterRenderer::MasterRenderer(ResourceMgr& mgr)
+	: lights(),
 	
-	entityRenderer(lights, projectionMatrix, MAX_LIGHTS_STR),
-	terrainRenderer(*this, lights, projectionMatrix, MAX_LIGHTS_STR),
+	entityRenderer(lights),
+	terrainRenderer(*this, lights),
 
 	entities(),
 	terrains(),
 	wireframe(false),
-	needsToUpdateWireframe(false),
+	needsToUpdateWireframe(true),
 	timePassed(0)
 {
 	lights.push_back(Light(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), glm::vec3(1, 0, 0)));

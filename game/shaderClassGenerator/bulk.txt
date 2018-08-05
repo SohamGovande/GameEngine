@@ -1,0 +1,4 @@
+generators/EntityShader.shgen
+generators/EntityNormalmappedShader.shgen
+generators/EntityParallaxmappedShader.shgen
+generators/TerrainShader.shgen

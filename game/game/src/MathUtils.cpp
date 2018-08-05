@@ -4,14 +4,14 @@ namespace Math
 {
 	glm::mat4 createProjectionMatrix(float nearPlane, float farPlane, float fov)
 	{
-		glm::vec2 size = Toolkit::getSize();
+		glm::uvec2 size = Toolkit::getSize();
 
 		float aspectRatio = (float)size.x / (float)size.y;
 		float yScale = (float)(1.0f / tan(DEG2RAD * fov / 2.0f));
 		float xScale = yScale / aspectRatio;
 		float frustumLength = farPlane - nearPlane;
 
-		glm::mat4 projectionMatrix = glm::mat4(1.0f);
+		glm::mat4 projectionMatrix(1.0f);
 		projectionMatrix[0][0] = xScale;
 		projectionMatrix[1][1] = yScale;
 		projectionMatrix[2][2] = -((farPlane + nearPlane) / frustumLength);
@@ -40,7 +40,7 @@ namespace Math
 	glm::mat4 createViewMatrix(const Camera& camera)
 	{
 		glm::mat4 matrix(1.0);
-		matrix = glm::rotate(matrix, glm::radians(camera.pitch),		glm::vec3(1, 0, 0));
+		matrix = glm::rotate(matrix, glm::radians(camera.pitch),	glm::vec3(1, 0, 0));
 		matrix = glm::rotate(matrix, glm::radians(camera.yaw),		glm::vec3(0, 1, 0));
 		matrix = glm::rotate(matrix, glm::radians(camera.roll),		glm::vec3(0, 0, 1));
 		matrix = glm::translate(matrix, -camera.position);

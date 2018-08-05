@@ -1,24 +1,47 @@
 #include <iostream>
 #include "Entity/Components/MotionComponent.h"
+#include "Renderers/MasterRenderer.h"
 #include "Terrain/World.h"
 #include "MathUtils.h"
 #include "Camera.h"
 
-Camera::Camera()
-	: controlledEntity(nullptr),
+Camera::Camera(MasterRenderer& renderer, float nearPlane, float farPlane, float fov)
+	: nearPlane(nearPlane), farPlane(farPlane), fov(fov),
+	
+	controlledEntity(nullptr),
 	lastCursorDistance(),
 	entityAngle(0, 0),
 	prevEntityAngle(0, 0),
 	entityDistance(30),
 
 	pitch(0), yaw(0), roll(0),
-	position(0, 0, 0)
-{
+	position(0, 0, 0),
 
+	projectionMatrix({
+		decltype(projectionMatrix)::PairType {renderer.getEntityRenderer().getRegularShader(), renderer.getEntityRenderer().getRegularShader().u_ProjectionMatrix},
+		decltype(projectionMatrix)::PairType {renderer.getEntityRenderer().getNormalMappedShader(), renderer.getEntityRenderer().getNormalMappedShader().u_ProjectionMatrix},
+		decltype(projectionMatrix)::PairType {renderer.getEntityRenderer().getParallaxMappedShader(), renderer.getEntityRenderer().getParallaxMappedShader().u_ProjectionMatrix},
+		decltype(projectionMatrix)::PairType {renderer.getTerrainRenderer().getShader(), renderer.getTerrainRenderer().getShader().u_ProjectionMatrix} 
+	}),
+	viewMatrix({
+		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getRegularShader(), renderer.getEntityRenderer().getRegularShader().u_ViewMatrix},
+		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getNormalMappedShader(), renderer.getEntityRenderer().getNormalMappedShader().u_ViewMatrix},
+		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getParallaxMappedShader(), renderer.getEntityRenderer().getParallaxMappedShader().u_ViewMatrix},
+		decltype(viewMatrix)::PairType {renderer.getTerrainRenderer().getShader(), renderer.getTerrainRenderer().getShader().u_ViewMatrix} 
+	})
+{
+	loadProjectionMatrix();
+	loadViewMatrix();
 }
 
-Camera::~Camera()
+void Camera::loadProjectionMatrix()
 {
+	projectionMatrix = Math::createProjectionMatrix(nearPlane, farPlane, fov);
+}
+
+void Camera::loadViewMatrix()
+{
+	viewMatrix = Math::createViewMatrix(*this);
 }
 
 void Camera::tick(World& world)
@@ -118,4 +141,5 @@ void Camera::performRotations(float partialTicks)
 	yaw = -smoothFacingEntityRot.y;
 	pitch = smoothFacingEntityRot.x;
 	roll = 0;
+	loadViewMatrix();
 }

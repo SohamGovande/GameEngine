@@ -5,14 +5,17 @@ template<typename ShaderType>
 void EntityRenderer::prepareShader(ShaderType& shader)
 {
 	shader.bind();
-	shader.u_SkyColor.setAndUpdate(glm::vec3(176 / 255.f, 231 / 255.f, 232 / 255.f));
+	shader.u_SkyColor.uncheckedSet(glm::vec3(176 / 255.f, 231 / 255.f, 232 / 255.f));
 
-	shader.u_LightsUsed.setAndUpdate(lights.size());
+	shader.u_LightsUsed.uncheckedSet(lights.size());
+
 	for (unsigned int i = 0; i < lights.size(); i++)
 	{
-		shader.u_LightPos[i].setAndUpdate(lights[i].getPos());
-		shader.u_LightColor[i].setAndUpdate(lights[i].getColor());
-		shader.u_LightAttenuation[i].setAndUpdate(lights[i].getAttenuation());
+		ShaderType::FsPointLight& light = shader.u_PointLights[i];
+
+		shader.u_LightPos[i].uncheckedSet(lights[i].getPos());
+		light.color.uncheckedSet(lights[i].getColor());
+		light.attenuation.uncheckedSet(lights[i].getAttenuation());
 	}
 }
 
@@ -48,8 +51,8 @@ inline void EntityRenderer::renderInstance(float partialTicks, ShaderType& shade
 	glm::vec3 pos = object.interpolatePosition(partialTicks);
 	glm::vec3 rot = object.interpolateRotation(partialTicks);
 
-	shader.u_TransformationMatrix.setAndUpdate(Math::createTransformationMatrix(pos, rot, object.scale));
-	shader.u_ViewMatrix.setAndUpdate(Math::createViewMatrix(camera));
+	shader.u_TransformationMatrix.uncheckedSet(Math::createTransformationMatrix(pos, rot, object.scale));
+	shader.u_ViewMatrix.uncheckedSet(Math::createViewMatrix(camera));
 
 	GlCall(glDrawElements(GL_TRIANGLES, object.getMaterialModel()->getGlModel().ibo.getCount(), GL_UNSIGNED_INT, 0));
 }
@@ -65,18 +68,18 @@ inline void EntityRenderer::prepareGenericShaderForRendering(GlStateManager& gl,
 	material.getGlModel().vao.bind();
 	material.getTexture().promisedFetch().bind(nextTextureID++);
 
-	shader.u_Reflectivity.setAndUpdate(material.properties.reflectivity);
-	shader.u_ShineDistanceDamper.setAndUpdate(material.properties.shineDistanceDamper);
+	shader.u_Reflectivity.uncheckedSet(material.properties.reflectivity);
+	shader.u_ShineDistanceDamper.uncheckedSet(material.properties.shineDistanceDamper);
 
 	if (material.properties.hasSpecularMap())
 	{
-		shader.u_HasSpecularMap.setAndUpdate(true);
-		shader.u_SpecularMap.setAndUpdate(nextTextureID);
+		shader.u_HasSpecularMap.uncheckedSet(true);
+		shader.u_SpecularMap.uncheckedSet(nextTextureID);
 
 		material.properties.specularMap->promisedFetch().bind(nextTextureID++);
 	}
 	else
-		shader.u_HasSpecularMap.setAndUpdate(false);
+		shader.u_HasSpecularMap.uncheckedSet(false);
 }
 
 template<typename ShaderType>
@@ -97,7 +100,7 @@ inline void EntityRenderer::prepareShaderForRendering<NormalMappedEntityShader>(
 	prepareGenericShaderForRendering(gl, shader, material, nextTextureID);
 
 	//Normal map
-	shader.u_NormalMap.setAndUpdate(nextTextureID);
+	shader.u_NormalMap.uncheckedSet(nextTextureID);
 	material.properties.normalMap->promisedFetch().bind(nextTextureID++);
 }
 
@@ -112,12 +115,12 @@ inline void EntityRenderer::prepareShaderForRendering<ParallaxMappedEntityShader
 	prepareGenericShaderForRendering(gl, shader, material, nextTextureID);
 
 	//Normal map
-	shader.u_NormalMap.setAndUpdate(nextTextureID);
+	shader.u_NormalMap.uncheckedSet(nextTextureID);
 	material.properties.normalMap->promisedFetch().bind(nextTextureID++);
 
 	//Parallax map
-	shader.u_ParallaxMap.setAndUpdate(nextTextureID);
-	shader.u_ParallaxMapAmplitude.setAndUpdate(material.properties.parallaxMapAmplitude);
+	shader.u_ParallaxMap.uncheckedSet(nextTextureID);
+	shader.u_ParallaxMapAmplitude.uncheckedSet(material.properties.parallaxMapAmplitude);
 
 	material.properties.parallaxMap->promisedFetch().bind(nextTextureID++);
 }

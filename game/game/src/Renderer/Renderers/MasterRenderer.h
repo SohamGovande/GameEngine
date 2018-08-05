@@ -5,7 +5,7 @@
 #include "Terrain/Terrain.h"
 
 #include "Renderer/GlStateManager.h"
-#include "EntityRenderer.t.h"
+#include "EntityRenderer.h"
 #include "TerrainRenderer.h"
 
 #include "MathUtils.h"
@@ -16,7 +16,6 @@ class ResourceMgr;
 class MasterRenderer
 {
 private:
-	glm::mat4 projectionMatrix;
 	std::vector<Light> lights;
 	EntityRenderer entityRenderer;
 	TerrainRenderer terrainRenderer;
@@ -30,7 +29,7 @@ private:
 
 	GlStateManager gl;
 public:
-	MasterRenderer(float fov, float nearPlane, float farPlane, ResourceMgr& mgr);
+	MasterRenderer(ResourceMgr& mgr);
 	~MasterRenderer();
 
 	void markEntityForRendering(Entity& entity);
@@ -46,4 +45,10 @@ public:
 
 	inline GlStateManager& getGl() { return gl; }
 	inline const GlStateManager& getGl() const { return gl; }
+
+	inline EntityRenderer& getEntityRenderer() { return entityRenderer; }
+	inline const EntityRenderer& getEntityRenderer() const { return entityRenderer; }
+
+	inline TerrainRenderer& getTerrainRenderer() { return terrainRenderer; }
+	inline const TerrainRenderer& getTerrainRenderer() const { return terrainRenderer; }
 };

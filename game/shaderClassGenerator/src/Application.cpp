@@ -411,25 +411,20 @@ int main(int argc, char* argv[])
 	options.add_options()
 		("c,config", "Config file", cxxopts::value<std::string>()->default_value("Config.txt"), "(Optional - override the configuration file Config.txt)")
 		("t,template", "Template class file", cxxopts::value<std::string>()->default_value("Template.txt"), "(Optional - override the template class file Template.txt)")
-		("i,input", "Input files (usage: \"-i file1 -i file2...\")", cxxopts::value<std::vector<std::string>>(), "(Required - the files to process and generate headers from)");
+		("i,input", "Input files (usage: \"-i file1 -i file2...\")", cxxopts::value<std::vector<std::string>>(), "(Required - the files to process and generate headers from)")
+		("b,bulk", "Use a file that holds bulk filenames to process?", cxxopts::value<std::vector<std::string>>(), "See wiki page \"bulk files\"");
 
 	cxxopts::ParseResult result = options.parse(argc, argv);
 
 	const cxxopts::OptionValue& configFileOption = result["config"];
 	const cxxopts::OptionValue& templateFileOption = result["template"];
 	const cxxopts::OptionValue& inputFilesOption = result["input"];
-
-	if (inputFilesOption.count() == 0)
-	{
-		std::cout << options.help() << std::endl;
-		if (TEST_ENVIRONMENT)
-			std::cin.get();
-		return 1;
-	}
+	const cxxopts::OptionValue& bulkFilesOption = result["bulk"];
 
 	std::string configFile = configFileOption.as<std::string>();
 	std::string templateFile = templateFileOption.as<std::string>();
-	std::vector<std::string> files = inputFilesOption.as<std::vector<std::string>>();
+	std::vector<std::string> files = inputFilesOption.count() == 0 ? std::vector<std::string>() : inputFilesOption.as<std::vector<std::string>>();
+	std::vector<std::string> bulkFiles = bulkFilesOption.count() == 0 ? std::vector<std::string>() : bulkFilesOption.as<std::vector<std::string>>();
 
 	ElementMap config = ProcessFile(configFile);
 	
@@ -437,6 +432,23 @@ int main(int argc, char* argv[])
 	std::vector<std::string> glslDataTypes;
 	std::unordered_map<std::string, std::string> glslCppMap;
 	LoadGlslTypeInformation(config, glslDataTypes, glslCppMap);
+
+	for (const std::string& bulkFilename : bulkFiles)
+	{
+		std::ifstream bulkfstream(bulkFilename);
+		if (!bulkfstream.is_open())
+		{
+			std::cout << "Unable to load bulkfile " << bulkFilename << std::endl;
+			continue;
+		}
+		std::string line;
+		std::cout << "Scanning bulkfile " << bulkFilename << std::endl;
+		while (getline(bulkfstream, line))
+		{
+			std::cout << "  -" << line << std::endl;
+			files.push_back(std::move(line));
+		}
+	}
 
 	//Load shader type information
 	std::vector<ShaderType> shaderTypes;
@@ -464,7 +476,7 @@ int main(int argc, char* argv[])
 			fs.write(evaluated.c_str(), evaluated.size());
 			fs.close();
 
-			std::cout << "Generated " << filepath << " from " << shgenFile << std::endl;
+			std::cout << "[OUTPUT] " << shgenFile << " ==> " << filepath << std::endl;
 		}
 		
 	}

@@ -43,6 +43,15 @@ static void RunGame(sf::Window& window)
 			{
 				game.onFocusLost(event);
 			}
+			else if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::Key::Escape)
+					Toolkit::showCursor();
+			}
+			else if (event.type == sf::Event::MouseButtonPressed)
+			{
+				Toolkit::hideCursor();
+			}
 		}
 		
 		long long int now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -73,7 +82,7 @@ int main()
 	settings.majorVersion = 3;
 	settings.minorVersion = 3;
 
-	sf::Window window(sf::VideoMode(933, 700), "C++ OpenGL Game Devlog #3", sf::Style::Default, settings);
+	sf::Window window(sf::VideoMode(933, 700), "C++ OpenGL Game Test", sf::Style::Default, settings);
 
 	window.setVerticalSyncEnabled(true);
 	window.setActive(true);

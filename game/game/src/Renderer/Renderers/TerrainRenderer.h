@@ -23,8 +23,10 @@ private:
 	void renderInstance(float partialTicks, const Terrain& object, const Camera& camera);
 
 public:
-	TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr);
-	~TerrainRenderer();
+	TerrainRenderer(MasterRenderer& masterRenderer, const std::vector<Light>& lights);
 
 	void render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains);
+
+	inline const TerrainShader& getShader() const { return terrainShader; }
+	inline TerrainShader& getShader() { return terrainShader; }
 };

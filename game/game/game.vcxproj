@@ -92,7 +92,8 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)dependencies\rapidjson\include;$(SolutionDir)binaryIO\src;$(SolutionDir)dependencies\glew\include\;$(SolutionDir)dependencies\glm\include\;$(SolutionDir)dependencies\sfml\include\;$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>PROGRAM_DEBUG_MODE;SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;PROGRAM_DEBUG_MODE;SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)dependencies\sfml\lib\;$(SolutionDir)dependencies\glew\;</AdditionalLibraryDirectories>
@@ -156,6 +157,7 @@
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Renderer\QuadVBO.cpp" />
     <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
+    <ClCompile Include="src\Renderer\Shader\SyncWithUniform.cpp" />
     <ClCompile Include="src\Terrain\Heightmap.cpp" />
     <ClCompile Include="src\Toolkit.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
@@ -208,6 +210,8 @@
     <ClInclude Include="src\Renderer\Shader\ParallaxMappedEntityShader.h" />
     <ClInclude Include="src\Renderer\Shader\Shader.h" />
     <ClInclude Include="src\Renderer\Shader\ShaderPreprocessorElement.h" />
+    <ClInclude Include="src\Renderer\Shader\SyncWithUniform.h" />
+    <ClInclude Include="src\Renderer\Shader\SyncWithUniform.t.h" />
     <ClInclude Include="src\Renderer\Shader\TerrainShader.h" />
     <ClInclude Include="src\Renderer\Shader\Uniform.h" />
     <ClInclude Include="src\Renderer\Shader\Uniform.t.h" />

@@ -9,7 +9,7 @@
 
 Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, int chunkZ)
 	: generator(generator), chunkX(chunkX), chunkZ(chunkZ), model(nullptr),
-	heightmap(TERRAIN_VERTEX_COUNT, TERRAIN_INTERVAL)
+	heightmap((unsigned int)TERRAIN_VERTEX_COUNT, (unsigned int)TERRAIN_INTERVAL)
 {
 	textures.emplace_back(resourceMgr.texture("grass_tile"));
 	textures.emplace_back(resourceMgr.texture("gravel_tile"));
@@ -30,13 +30,13 @@ Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, in
 	for (unsigned int i = 0; i < texSize / 4; i++)
 	{
 		constexpr float scale = 0.05f;
-		float xCoord = chunkX * 128 + scale * (i % 128);
-		float yCoord = chunkZ * 128 + scale * (i / 128);
+		float xCoord = chunkX * 128.0f + scale * (float)(i % 128);
+		float yCoord = chunkZ * 128.0f + scale * (float)(i / 128);
 
-		float noiseVal = interpolate(noise.noise(xCoord, yCoord, 0.4));
+		float noiseVal = interpolate((float)noise.noise(xCoord, yCoord, 0.4));
 		
-		data[i*4 + 0] = (unsigned char) (noiseVal * 255.0f);
-		data[i*4 + 1] = (unsigned char) ((1.0f - noiseVal) * 255.0f);
+		data[i*4 + 0] = (unsigned char)(noiseVal * 255.0f);
+		data[i*4 + 1] = (unsigned char)((1.0f - noiseVal) * 255.0f);
 	}
 
 	GlCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));

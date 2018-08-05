@@ -49,6 +49,12 @@ namespace Toolkit
 
 	void showCursor()
 	{
+		if (!cursorGrabbed)
+			return;
+		sf::Vector2u windowSize = window->getSize();
+		sf::Vector2i relativeCenterPos((int)windowSize.x/2, (int)windowSize.y/2);
+		sf::Mouse::setPosition(relativeCenterPos, *window);
+
 		window->setMouseCursorVisible(true);
 		window->setMouseCursorGrabbed(false);
 		cursorGrabbed = false;
@@ -62,8 +68,7 @@ namespace Toolkit
 	glm::ivec2 getCursorPos()
 	{
 		sf::Vector2i pos = sf::Mouse::getPosition();
-		glm::ivec2* ptr = reinterpret_cast<glm::ivec2*>(&pos);
-		return *ptr;
+		return *reinterpret_cast<glm::ivec2*>(&pos);
 	}
 
 	void setCursorPos(const glm::ivec2& pos)

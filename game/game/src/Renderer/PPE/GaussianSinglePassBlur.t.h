@@ -9,8 +9,8 @@ GaussianAxisBlur<A>::GaussianAxisBlur(unsigned int width, unsigned int height)
 	colorBuffer(width, height, true)
 {
 	shader.bind();
-	shader.u_ScreenSampler.setAndUpdate(0);
-	shader.u_PixelDensity.setAndUpdate(1.0f / (A == BlurAxis::HORIZONTAL ? width : height));
+	shader.u_ScreenSampler.uncheckedSet(0);
+	shader.u_PixelDensity.uncheckedSet(1.0f / (A == BlurAxis::HORIZONTAL ? width : height));
 
 	fbo.bind();
 	colorBuffer.unbind();

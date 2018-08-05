@@ -11,6 +11,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "binaryIO", "binaryIO\binary
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shaderClassGenerator", "shaderClassGenerator\shaderClassGenerator.vcxproj", "{C94DED7E-2A5B-4A00-95A5-96AEB87C761D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "modelManipulation", "modelManipulation\modelManipulation.vcxproj", "{E1747500-2306-488C-8F27-0247F15DA9F2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F93548F4-15E9-483F-8961-740E95F8DBB1} = {F93548F4-15E9-483F-8961-740E95F8DBB1}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +56,14 @@ Global
 		{C94DED7E-2A5B-4A00-95A5-96AEB87C761D}.Release|x64.Build.0 = Debug|x64
 		{C94DED7E-2A5B-4A00-95A5-96AEB87C761D}.Release|x86.ActiveCfg = Debug|x64
 		{C94DED7E-2A5B-4A00-95A5-96AEB87C761D}.Release|x86.Build.0 = Debug|x64
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Debug|x64.ActiveCfg = Debug|x64
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Debug|x64.Build.0 = Debug|x64
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Debug|x86.ActiveCfg = Debug|Win32
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Debug|x86.Build.0 = Debug|Win32
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Release|x64.ActiveCfg = Release|x64
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Release|x64.Build.0 = Release|x64
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Release|x86.ActiveCfg = Release|Win32
+		{E1747500-2306-488C-8F27-0247F15DA9F2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

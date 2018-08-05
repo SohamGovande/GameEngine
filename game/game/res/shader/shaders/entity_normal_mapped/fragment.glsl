@@ -8,6 +8,11 @@ in vec3 v_TangentToLightSource[MAX_LIGHTS];
 in vec3 v_TangentToCamera;
 in float v_Visibility;
 
+struct PointLight
+{
+	vec3 color;
+	vec3 attenuation;
+};
 
 uniform sampler2D u_Texture;
 
@@ -20,8 +25,7 @@ uniform sampler2D u_NormalMap;
 
 uniform vec3 u_SkyColor;
 
-uniform vec3 u_LightColor[MAX_LIGHTS];
-uniform vec3 u_LightAttenuation[MAX_LIGHTS];
+uniform PointLight u_PointLights[MAX_LIGHTS];
 uniform int u_LightsUsed;
 
 #define PI 3.1416

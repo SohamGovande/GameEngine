@@ -11,14 +11,15 @@ void calculateLighting(in vec3 unitVecToCamera, in vec3 unitSurfaceNorm, in vec2
 		float lightDistance = length(UNIFORM_toLightSource[i]);
 		vec3 unitLightVec = UNIFORM_toLightSource[i] / lightDistance;
 
-		float attenuation = 1.0 / (lightDistance * lightDistance * u_LightAttenuation[i].z + lightDistance * u_LightAttenuation[i].y + u_LightAttenuation[i].x);
+		PointLight light = u_PointLights[i];
+		float attenuation = 1.0 / (lightDistance * lightDistance * light.attenuation.z + lightDistance * light.attenuation.y + light.attenuation.x);
 
-		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * u_LightColor[i];
+		diffuse += calculateDiffuse(unitSurfaceNorm, unitLightVec) * attenuation * light.color;
 		if (PHONG_LIGHTING_reflectivity != 0)
 			specular += calculateSpecular(unitSurfaceNorm, unitLightVec, texCoord, unitVecToCamera
 #ifdef PHONG_LIGHTING_USE_SPECULAR_ARRAYS
 , i
 #endif
-				) * attenuation * u_LightColor[i];
+				) * attenuation * light.color;
 	}
 }

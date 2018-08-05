@@ -6,22 +6,11 @@
 #include <cmath>
 
 #include "EntityRenderer.t.h"
+#include "Renderer/Shader/SyncWithUniform.t.h"
 #include "MathUtils.h"
 
-EntityRenderer::EntityRenderer(const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr)
+EntityRenderer::EntityRenderer(const std::vector<Light>& lights)
 	: lights(lights)
-{
-	nShader.bind();
-	nShader.u_ProjectionMatrix.setAndUpdate(projectionMatrix);
-
-	nmShader.bind();
-	nmShader.u_ProjectionMatrix.setAndUpdate(projectionMatrix);
-
-	pmShader.bind();
-	pmShader.u_ProjectionMatrix.setAndUpdate(projectionMatrix);
-}
-
-EntityRenderer::~EntityRenderer()
 {
 }
 

@@ -13,8 +13,8 @@ private:
 	ComponentRegistry componentRegistry;
 	EntityRegistry entityRegistry;
 
-	Camera camera;
 	MasterRenderer renderer;
+	Camera camera;
 	World world;
 
 	TerrainGen terrainGen;

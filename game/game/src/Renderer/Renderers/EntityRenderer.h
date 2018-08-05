@@ -20,8 +20,6 @@ private:
 	NormalMappedEntityShader nmShader;
 	ParallaxMappedEntityShader pmShader;
 
-	glm::mat4 projectionMatrix;
-
 private:
 	template<typename ShaderType>
 	void prepareGenericShaderForRendering(GlStateManager& gl, ShaderType& shader, const RenderableMaterialModel& material, unsigned int& nextTextureID);
@@ -45,10 +43,16 @@ private:
 		const Camera& camera
 	);
 public:
-	EntityRenderer(const std::vector<Light>& lights, const glm::mat4& projectionMatrix, const std::string& maxLightsStr);
-	~EntityRenderer();
+	EntityRenderer(const std::vector<Light>& lights);
 
 	void render(GlStateManager& gl, float partialTicks, const Camera& camera, const std::unordered_map<MaterialModel, std::list<Entity*>>& entities);
 
-	inline void loadProjectionMatrix(const glm::mat4& mat) { projectionMatrix = mat; }
+	inline const NormalMappedEntityShader& getNormalMappedShader() const { return nmShader; }
+	inline NormalMappedEntityShader& getNormalMappedShader() { return nmShader; }
+
+	inline const ParallaxMappedEntityShader& getParallaxMappedShader() const { return pmShader; }
+	inline ParallaxMappedEntityShader& getParallaxMappedShader() { return pmShader; }
+
+	inline const NormalEntityShader& getRegularShader() const { return nShader; }
+	inline NormalEntityShader& getRegularShader() { return nShader; }
 };

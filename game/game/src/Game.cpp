@@ -7,8 +7,8 @@ Game::Game()
 	componentRegistry(),
 	entityRegistry(componentRegistry, resourceMgr),
 
-	camera(),
-	renderer(60, 0.1f, 1000, resourceMgr),
+	renderer(resourceMgr),
+	camera(renderer, 0.1f, 1000, 60.f),
 	world(resourceMgr),
 
 	terrainGen(29)
@@ -36,6 +36,7 @@ void Game::onFocusLost(const sf::Event& event)
 void Game::onWindowResized(const sf::Event& event)
 {
 	GlCall(glViewport(0, 0, event.size.width, event.size.height));
+	camera.loadProjectionMatrix();
 }
 
 void Game::init()
@@ -52,7 +53,7 @@ void Game::init()
 	world.sendEntities(renderer);
 	world.sendTerrain(renderer);
 
-	for (const Entity& entity : world.getEntities())
+	for (Entity& entity : world.getEntities())
 	{
 		if (entity.hasEntityID(7)) //Lantern
 		{

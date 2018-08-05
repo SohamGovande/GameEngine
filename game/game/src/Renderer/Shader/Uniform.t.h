@@ -7,42 +7,42 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Uniform.h"
 
-void Uniform<float>::update()
+void Uniform<float>::update(const float& lastValue) const
 {
-	if (changed) { glUniform1f(location, lastValue); changed = false; }
+	glUniform1f(location, lastValue);
 }
 
-void Uniform<glm::vec2>::update()
+void Uniform<glm::vec2>::update(const glm::vec2& lastValue) const
 {
-	if (changed) { glUniform2f(location, lastValue.x, lastValue.y); changed = false; }
+	glUniform2f(location, lastValue.x, lastValue.y);
 }
 
-void Uniform<glm::vec3>::update()
+void Uniform<glm::vec3>::update(const glm::vec3& lastValue) const
 {
-	if (changed) { glUniform3f(location, lastValue.x, lastValue.y, lastValue.z); changed = false; }
+	glUniform3f(location, lastValue.x, lastValue.y, lastValue.z);
 }
 
-void Uniform<glm::vec4>::update()
+void Uniform<glm::vec4>::update(const glm::vec4& lastValue) const
 {
-	if (changed) { glUniform4f(location, lastValue.x, lastValue.y, lastValue.z, lastValue.w); changed = false; }
+	glUniform4f(location, lastValue.x, lastValue.y, lastValue.z, lastValue.w);
 }
 
-void Uniform<glm::mat3>::update()
+void Uniform<glm::mat3>::update(const glm::mat3& lastValue) const
 {
-	if (changed) { glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(lastValue)); changed = false; }
+	glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(lastValue));
 }
 
-void Uniform<glm::mat4>::update()
+void Uniform<glm::mat4>::update(const glm::mat4& lastValue) const
 {
-	if (changed) { glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(lastValue)); changed = false; }
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(lastValue));
 }
 
-void Uniform<bool>::update()
+void Uniform<bool>::update(const bool& lastValue) const
 {
-	if (changed) { glUniform1i(location, lastValue ? 1 : 0); changed = false; }
+	glUniform1i(location, lastValue ? 1 : 0);
 }
 
-void Uniform<int>::update()
+void Uniform<int>::update(const int& lastValue) const
 {
-	if (changed) { glUniform1i(location, lastValue); changed = false; }
+	glUniform1i(location, lastValue);
 }
