@@ -31,7 +31,7 @@ public:
 	void onWindowResized(const sf::Event& event);
 
 	void tick();
-	void render(const float partialTicks);
+	void render(float partialTicks, float frameDelta);
 
 	void init();
 };

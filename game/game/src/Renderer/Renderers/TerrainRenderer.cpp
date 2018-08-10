@@ -13,7 +13,7 @@ TerrainRenderer::TerrainRenderer(MasterRenderer& masterRenderer, const std::vect
 void TerrainRenderer::render(float partialTicks, const Camera& camera, const std::vector<Terrain*>& terrains)
 {
 	terrainShader.bind();
-	terrainShader.u_SkyColor.uncheckedSet(glm::vec3(176 / 255.f, 231 / 255.f, 232 / 255.f));
+	terrainShader.u_SkyColor.uncheckedSet(glm::vec3(159/255.f, 191/255.f, 244/255.f));
 	terrainShader.u_LightsUsed.uncheckedSet(lights.size());
 
 	for (unsigned int i = 0; i < lights.size(); i++)

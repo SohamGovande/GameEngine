@@ -4,6 +4,7 @@
 
 #include "Renderer/PPE/GaussianSinglePassBlur.t.h"
 #include "Game.h"
+#include "Comparator.h"
 
 static void RunGame(sf::Window& window)
 {
@@ -14,11 +15,11 @@ static void RunGame(sf::Window& window)
 	long long int startTime = lastTime;
 	double delta = 0;
 	constexpr double ticksPerSecond = 20;
-
+	constexpr double ticksPerNanosecond = ticksPerSecond / 1000000000.0;
 	bool running = true;
 
-	GaussianAxisBlur<BlurAxis::HORIZONTAL> horizPass(900, 400);
-	GaussianAxisBlur<BlurAxis::VERTICAL> vertPass(900, 400);
+	GaussianAxisBlur<BlurAxis::HORIZONTAL> horizPass(933, 700);
+	GaussianAxisBlur<BlurAxis::VERTICAL> vertPass(933, 700);
 	QuadVBO quadVbo;
 
 	while (running)
@@ -55,8 +56,9 @@ static void RunGame(sf::Window& window)
 		}
 		
 		long long int now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+		float frameDelta = (now - lastTime) * ticksPerNanosecond;
 
-		delta += (now - lastTime) / 1000000000.0 * ticksPerSecond;
+		delta += (now - lastTime) * ticksPerNanosecond;
 
 		while (delta >= 1)
 		{
@@ -65,14 +67,23 @@ static void RunGame(sf::Window& window)
 		}
 		lastTime = now;
 
-		game.render((float)delta);
+		horizPass.start();
+		game.render((float)delta, frameDelta);
+		horizPass.stop();
+
+		vertPass.start();
+		horizPass.renderQuad(quadVbo.getVao());
+		vertPass.stop();
+
+		vertPass.renderQuad(quadVbo.getVao());
 
 		window.display();
 	}
 	
 }
 
-int main()
+
+static void RunApplication()
 {
 	sf::ContextSettings settings;
 	settings.attributeFlags = settings.Default;
@@ -95,5 +106,10 @@ int main()
 	}
 
 	RunGame(window);
+}
+
+int main()
+{
+	RunApplication();
 	return 0;
 }

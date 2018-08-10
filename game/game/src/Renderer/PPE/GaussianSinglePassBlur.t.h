@@ -32,7 +32,6 @@ GaussianAxisBlur<T>::~GaussianAxisBlur()
 {
 	fbo.cleanUp();
 	depthStencilRbo.cleanUp();
-	colorBuffer.cleanUp();
 }
 
 template<BlurAxis T>

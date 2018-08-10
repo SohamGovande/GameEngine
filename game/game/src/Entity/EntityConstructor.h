@@ -17,6 +17,7 @@ private:
 public:
 	EntityConstructor(const rapidjson::Document& doc, const ComponentRegistry& registry, ResourceMgr& resourceMgr);
 	EntityConstructor(EntityConstructor&& other);
+	EntityConstructor(const EntityConstructor&& other);
 
 	void construct(Entity& owner) const;
 };

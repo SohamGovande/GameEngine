@@ -16,5 +16,6 @@ std::string IOHelper::readFile(const std::string& path)
 	std::string line;
 	while (getline(input, line))
 		ss << line << '\n';
+	input.close();
 	return ss.str();
 }

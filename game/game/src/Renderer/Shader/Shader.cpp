@@ -9,15 +9,16 @@
 #include "../GlMacros.h"
 #include "Shader.h"
 
+#define SHADERS_BASE_DIR "res/shader/shaders/"
+#define SHADERS_INCLUDE_DIR "res/shader/include/"
+
 Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile,
 	std::vector<ShaderPreprocessorElement>&& vPreprocessors,
 	std::vector<ShaderPreprocessorElement>&& fPreprocessors)
 
 	: rendererID(0), vs(0), fs(0),
-	vertexFile("res/shader/shaders/" + vertexFile), fragmentFile("res/shader/shaders/" + fragmentFile),
-	vPreprocessorElements(std::move(vPreprocessors)), fPreprocessorElements(std::move(fPreprocessors)),
-
-	vsLineOffset(vPreprocessorElements.size()), fsLineOffset(fPreprocessorElements.size())
+	vertexFile(SHADERS_BASE_DIR + vertexFile), fragmentFile(SHADERS_BASE_DIR + fragmentFile),
+	vPreprocessorElements(std::move(vPreprocessors)), fPreprocessorElements(std::move(fPreprocessors))
 {
 	rendererID = createShader(
 		readFile(this->vertexFile, vPreprocessorElements, GL_VERTEX_SHADER),
@@ -26,7 +27,7 @@ Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile,
 
 	//Find which directory the shader files are located in.
 	//NOTE: Should be the same for both vertex and fragment shaders.
-	unsigned int baseShadersDirLen = strlen("res/shader/shaders/");
+	unsigned int baseShadersDirLen = strlen(SHADERS_BASE_DIR);
 	unsigned int specificShaderDirIndex = this->vertexFile.find('/', baseShadersDirLen) + 1;
 	shaderDirectory = this->vertexFile.substr(baseShadersDirLen, specificShaderDirIndex - baseShadersDirLen);
 }
@@ -41,9 +42,7 @@ Shader::Shader(Shader&& other)
 	vertexFile(std::move(other.vertexFile)), fragmentFile(std::move(other.fragmentFile)),
 	shaderDirectory(std::move(other.shaderDirectory)),
 
-	includedFiles(std::move(other.includedFiles)),
-	vsLineOffset(other.vsLineOffset),
-	fsLineOffset(other.fsLineOffset)
+	includedFiles(std::move(other.includedFiles))
 {
 	other.rendererID = other.vs = other.fs = 0;
 }
@@ -73,9 +72,6 @@ Shader& Shader::operator=(Shader&& other)
 		shaderDirectory = std::move(other.shaderDirectory);
 		
 		includedFiles = std::move(other.includedFiles);
-
-		vsLineOffset = other.vsLineOffset;
-		fsLineOffset = other.fsLineOffset;
 	}
 	return *this;
 }
@@ -91,14 +87,15 @@ void Shader::release()
 
 int Shader::getUniformLocation(const std::string& name)
 {
-	if (uniformLocationCache.find(name) != uniformLocationCache.end())
-		return uniformLocationCache[name];
+	auto it = uniformLocationCache.find(name);
+	if (it != uniformLocationCache.end())
+		return it->second;
 
 	GlCall(int location = glGetUniformLocation(rendererID, name.c_str()));
 	if (location == -1)
 		std::cout << "Warning: Uniform " << name << " doesn't exist." << std::endl;
 
-	uniformLocationCache[name] = location;
+	uniformLocationCache.emplace(name, location);
 	return location;
 }
 
@@ -140,9 +137,6 @@ unsigned int Shader::compileShader(const std::string& source, unsigned int type)
 		std::cout << (vertexShader ? "VERTEX" : "FRAGMENT") <<
 			" shader compilation error: " <<
 			(vertexShader ? vertexFile : fragmentFile) << std::endl;
-		std::cout << "Subtract " << 
-			(vertexShader ? vsLineOffset : fsLineOffset) <<
-			" from line numbers.\n" << std::endl;
 		std::cout << message << std::endl;
 
 		GlCall(glDeleteShader(0));
@@ -153,6 +147,7 @@ unsigned int Shader::compileShader(const std::string& source, unsigned int type)
 		std::cout << "Press ENTER to recompile! ";
 		std::cin.get();
 
+		includedFiles.clear();
 		std::string newSource = readFile(
 			vertexShader ? vertexFile : fragmentFile,
 			vertexShader ? vPreprocessorElements : fPreprocessorElements,
@@ -181,15 +176,13 @@ std::string Shader::readFile(const std::string& filename, const std::vector<Shad
 	{
 		if (line.find("#include") == 0)
 		{
-			(shaderType == GL_VERTEX_SHADER ? vsLineOffset : fsLineOffset)++;
-
 			const unsigned int includeDirectiveSize = strlen("#include ");
 			std::string afterInclude = line.substr(includeDirectiveSize, line.size() - includeDirectiveSize);
 			std::string includeDir;
 			if (line[includeDirectiveSize] == '<')
 			{
 				//Include the file from res/shaders/include/
-				includeDir = "res/shader/include/";
+				includeDir = SHADERS_INCLUDE_DIR;
 			}
 			else if (line[includeDirectiveSize] == '\"')
 			{
@@ -200,8 +193,6 @@ std::string Shader::readFile(const std::string& filename, const std::vector<Shad
 			if (positionInSet.second) { //The file has not already been included
 				const std::string& includeFilepath = *positionInSet.first;
 				std::string filedata = readFile(includeFilepath, preprocessor, shaderType);
-				(shaderType==GL_VERTEX_SHADER ? vsLineOffset : fsLineOffset) 
-					+= std::count(filedata.begin(), filedata.end(), '\n');
 				ss << filedata << '\n';
 			}
 		}

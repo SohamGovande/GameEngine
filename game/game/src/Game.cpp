@@ -7,9 +7,9 @@ Game::Game()
 	componentRegistry(),
 	entityRegistry(componentRegistry, resourceMgr),
 
-	renderer(resourceMgr),
-	camera(renderer, 0.1f, 1000, 60.f),
-	world(resourceMgr),
+	renderer(),
+	camera(renderer, 1.0f, 1000, 60.f),
+	world(entityRegistry),
 
 	terrainGen(29)
 {
@@ -59,8 +59,8 @@ void Game::init()
 		{
 			renderer.getLights().emplace_back(
 				entity.position + glm::vec3(0, 50, 0),
-				glm::vec3(255, 199, 0)/255.f,
-				glm::vec3(0.2, 0.0001, 0.0001)
+				glm::vec3(255.0f, 182.0f, 0.0f)/255.f,
+				glm::vec3(0.3f, 0.0001f, 0.0001f)
 			);
 		}
 	}
@@ -74,10 +74,10 @@ void Game::tick()
 	camera.tick(world);
 }
 
-void Game::render(const float partialTicks)
+void Game::render(float partialTicks, float frameDelta)
 {
 	world.getPerson().position.y = world.getInterpolatedTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
-	camera.performRotations(partialTicks);
+	camera.performRotations(partialTicks, frameDelta);
 
 	renderer.prepare();
 	renderer.render(partialTicks, camera);

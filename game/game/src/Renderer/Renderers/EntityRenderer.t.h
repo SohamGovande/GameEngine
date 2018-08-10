@@ -5,7 +5,7 @@ template<typename ShaderType>
 void EntityRenderer::prepareShader(ShaderType& shader)
 {
 	shader.bind();
-	shader.u_SkyColor.uncheckedSet(glm::vec3(176 / 255.f, 231 / 255.f, 232 / 255.f));
+	shader.u_SkyColor.uncheckedSet(glm::vec3(159/255.f, 191/255.f, 244/255.f));
 
 	shader.u_LightsUsed.uncheckedSet(lights.size());
 
@@ -25,7 +25,7 @@ inline void EntityRenderer::renderBatch(
 	GlStateManager& gl,
 	ShaderType& shader,
 	const RenderableMaterialModel& material, 
-	const std::list<Entity*>& batch,
+	const std::vector<Entity*>& batch,
 	const Camera& camera
 )
 {

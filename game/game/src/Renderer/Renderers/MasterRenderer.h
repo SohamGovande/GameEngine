@@ -2,6 +2,9 @@
 #include <glm/vec2.hpp>
 #include <glm/mat4x4.hpp>
 
+#include <vector>
+#include <list>
+
 #include "Terrain/Terrain.h"
 
 #include "Renderer/GlStateManager.h"
@@ -20,7 +23,7 @@ private:
 	EntityRenderer entityRenderer;
 	TerrainRenderer terrainRenderer;
 
-	std::unordered_map<MaterialModel, std::list<Entity*>> entities;
+	EntityRenderer::Batches batchedEntities;
 	std::vector<Terrain*> terrains;
 
 	bool wireframe, needsToUpdateWireframe;
@@ -29,10 +32,9 @@ private:
 
 	GlStateManager gl;
 public:
-	MasterRenderer(ResourceMgr& mgr);
-	~MasterRenderer();
+	MasterRenderer();
 
-	void markEntityForRendering(Entity& entity);
+	void addEntity(Entity& entity);
 	void processTerrain(Terrain& terrain);
 
 	void prepare() const;

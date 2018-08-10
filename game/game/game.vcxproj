@@ -187,6 +187,7 @@
     <ClCompile Include="src\TimedScope.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Comparator.h" />
     <ClInclude Include="src\Entity\ComponentConstructor.h" />
     <ClInclude Include="src\Entity\ComponentRegistry.h" />
     <ClInclude Include="src\Entity\EntityConstructor.h" />
@@ -259,6 +260,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\entities\anvil\metadata.json" />
     <None Include="res\shader\include\multiple_light_sources.glsl">
       <SubType>
       </SubType>

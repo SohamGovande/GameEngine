@@ -22,6 +22,8 @@ private:
 	SyncWithUniform<glm::mat4, 4> projectionMatrix;
 	SyncWithUniform<glm::mat4, 4> viewMatrix;
 
+	float lastPartialTicks;
+
 public:
 	float pitch, yaw, roll;
 	glm::vec3 position;
@@ -32,7 +34,7 @@ public:
 	void loadViewMatrix();
 
 	void tick(World& world);
-	void performRotations(float partialTicks);
+	void performRotations(float partialTicks, float frameDelta);
 	inline void controlEntity(Entity* entity) { controlledEntity = entity; }
 };
 

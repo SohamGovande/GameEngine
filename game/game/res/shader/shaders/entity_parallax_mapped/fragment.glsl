@@ -42,7 +42,7 @@ vec2 calculateParallaxTextureCoords();
 
 void main(void)
 {
-	vec2 mappedTexCoords = clamp(calculateParallaxTextureCoords(), 0.0, 1.0);
+	vec2 mappedTexCoords = calculateParallaxTextureCoords();
 
 	vec4 texColor = texture(u_Texture, mappedTexCoords);
 	if (texColor.a < 0.7)
@@ -66,28 +66,29 @@ void main(void)
 
 vec2 calculateParallaxTextureCoords()
 {
-	float height = texture(u_ParallaxMap, v_TexCoord).r;
-	vec3 viewDir = normalize(v_TangentToCamera);
+	vec3 unitVecToCamera = normalize(v_TangentToCamera);
 
-	const float minLayers = 64.0;
-	const float maxLayers = 128.0;
-	float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));  
-    // calculate the size of each layer
+	const float minLayers = 16.0;
+	const float maxLayers = 32.0;
+
+	//How similar the vector to the camera is to the surface normal
+	float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), unitVecToCamera)));  
+   	
     float layerDepth = 1.0 / numLayers;
-    // depth of current layer
     float currentLayerDepth = 0.0;
     // the amount to shift the texture coordinates per layer (from vector P)
-    vec2 P = viewDir.xy * u_ParallaxMapAmplitude; 
+    vec2 P = unitVecToCamera.xy * u_ParallaxMapAmplitude; 
     vec2 deltaTexCoords = P / numLayers;
 
     // get initial values
 	vec2  currentTexCoords = v_TexCoord;
-	float currentDepthMapValue = texture(u_ParallaxMap, currentTexCoords).r;
+	float currentDepthMapValue = 1.0 - texture(u_ParallaxMap, currentTexCoords).r;
 	  
 	while(currentLayerDepth < currentDepthMapValue)
 	{
 	    // shift texture coordinates along direction of P
-	    currentTexCoords -= deltaTexCoords;
+	    currentTexCoords.x += deltaTexCoords.x;
+	    currentTexCoords.y -= deltaTexCoords.y;
 	    // get depthmap value at current texture coordinates
 	    currentDepthMapValue = texture(u_ParallaxMap, currentTexCoords).r;  
 	    // get depth of next layer

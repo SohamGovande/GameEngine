@@ -4,20 +4,13 @@
 #include "ModelLoader.h"
 #include "MathUtils.h"
 
-World::World(ResourceMgr& resourceMgr)
+World::World(const EntityRegistry& entityRegistry)
 	: entities(), terrains(), 
 	person(nullptr)
 {
 	person = &newEntity();
-	person->setMaterialModel(resourceMgr.model("player"));
+	entityRegistry.construct("player", *person);
 	person->moveTo(glm::vec3(0, 100, 0));
-	person->addComponent(new MotionComponent);
-	person->scale = 1.0f;
-}
-
-World::~World()
-{
-	
 }
 
 void World::tick()
@@ -29,7 +22,7 @@ void World::tick()
 void World::sendEntities(MasterRenderer& renderer)
 {
 	for (Entity& object : entities)
-		renderer.markEntityForRendering(object);
+		renderer.addEntity(object);
 }
 
 void World::sendTerrain(MasterRenderer& renderer)

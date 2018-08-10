@@ -23,6 +23,7 @@ public:
 	void unbind() const;
 	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
+	inline unsigned int getVaoID() const { return rendererID; }
 private:
 	void release();
 };

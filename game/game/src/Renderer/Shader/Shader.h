@@ -23,23 +23,9 @@ private:
 
 	std::string vertexFile, fragmentFile, shaderDirectory;
 	std::unordered_set<std::string> includedFiles;
-	unsigned int vsLineOffset, fsLineOffset;
 
 protected:
 	unsigned int rendererID;
-
-	template<typename T>
-	inline void loadUniLocation(Uniform<T>& uniform, const std::string& name)
-	{
-		uniform.loadLocation(name, *this);
-	}
-	
-	template<typename T, unsigned int Size>
-	inline void loadUniArrayLocations(std::array<Uniform<T>, Size>& uniforms, const std::string& name)
-	{
-		for (unsigned int i = 0; i < Size; i++)
-			uniforms[i].loadLocation(name + "[" + std::to_string(i) + "]", *this);
-	}
 
 public:
 	Shader(const std::string& vertexFile, const std::string& fragmentFile,

@@ -53,17 +53,21 @@ void TerrainGen::generate(World& world, ResourceMgr& resourceMgr, const EntityRe
 
 	terrain.generateMesh(resourceMgr);
 	
-	addObjects(world, chunkX, chunkZ, 2, -5, 6, entityRegistry.getConstructor("evergreen_tree"));
-	addObjects(world, chunkX, chunkZ, 2, -5, 3, entityRegistry.getConstructor("green_tree"));
-	addObjects(world, chunkX, chunkZ, 25, 0, 3, entityRegistry.getConstructor("fern"));
-	addObjects(world, chunkX, chunkZ, 1, 1, 2, entityRegistry.getConstructor("axe"));
+	addObjects(world, chunkX, chunkZ, 2, -5, 1, entityRegistry.getConstructor("evergreen_tree"));
+	
+	unsigned int lanterns = world.countEntitiesByID(7);
+
+	if (lanterns < 3)
+		addObjects(world, chunkX, chunkZ, 1, 0, 1, entityRegistry.getConstructor("lantern"));
+
+	addObjects(world, chunkX, chunkZ, 2, -5, 1, entityRegistry.getConstructor("green_tree"));
+	addObjects(world, chunkX, chunkZ, 25, 0, 1, entityRegistry.getConstructor("fern"));
+	addObjects(world, chunkX, chunkZ, 1, 1, 1, entityRegistry.getConstructor("axe"));
 	for (Entity& entity : world.getEntities())
 		if (entity.hasEntityID(3))
 			entity.rotation.x = 90;
 
-	addObjects(world, chunkX, chunkZ, 1, 10, 10, entityRegistry.getConstructor("cube"));
-	addObjects(world, chunkX, chunkZ, 1, 10, 2, entityRegistry.getConstructor("barrel"));
-	unsigned int lanterns = world.countEntitiesByID(7);
-	if (lanterns < 3)
-		addObjects(world, chunkX, chunkZ, 1, 0, 8, entityRegistry.getConstructor("lantern"));
+	addObjects(world, chunkX, chunkZ, 1, 10.0f, 10.0f, entityRegistry.getConstructor("cube"));
+	addObjects(world, chunkX, chunkZ, 1, 0.0f, 2.0f, entityRegistry.getConstructor("anvil"));
+	addObjects(world, chunkX, chunkZ, 1, 10.0f, 1.0f, entityRegistry.getConstructor("barrel"));
 }

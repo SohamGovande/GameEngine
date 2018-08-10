@@ -338,6 +338,9 @@
     <ClInclude Include="src\Renderer\Shader\SyncWithUniform.t.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Comparator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\registries\models.json" />
@@ -362,5 +365,6 @@
     <None Include="res\shader\include\multiple_light_sources.glsl" />
     <None Include="res\shader\shaders\gaussian_blur\fragment.glsl" />
     <None Include="res\shader\shaders\gaussian_blur\vertex.glsl" />
+    <None Include="res\entities\anvil\metadata.json" />
   </ItemGroup>
 </Project>

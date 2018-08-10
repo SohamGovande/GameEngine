@@ -2,28 +2,24 @@
 #include "MasterRenderer.h"
 #include "../Shader/Uniform.t.h"
 
-MasterRenderer::MasterRenderer(ResourceMgr& mgr)
+MasterRenderer::MasterRenderer()
 	: lights(),
 	
 	entityRenderer(lights),
 	terrainRenderer(*this, lights),
 
-	entities(),
 	terrains(),
 	wireframe(false),
 	needsToUpdateWireframe(true),
 	timePassed(0)
 {
-	lights.push_back(Light(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), glm::vec3(1, 0, 0)));
+	lights.emplace_back(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), glm::vec3(1, 0, 0)); //Sun
 }
 
-MasterRenderer::~MasterRenderer()
-{
-}
 
 void MasterRenderer::prepare() const
 {
-	GlCall(glClearColor(176/255.f, 231/255.f, 232/255.f, 1));
+	GlCall(glClearColor(159/255.f, 191/255.f, 244/255.f, 1.0f));
 
 	GlCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
@@ -40,23 +36,46 @@ void MasterRenderer::prepare() const
 	}
 }
 
-void MasterRenderer::markEntityForRendering(Entity& entity)
+void MasterRenderer::addEntity(Entity& entity)
 {
-	MaterialModel& model = *entity.getMaterialModel();
-	model.getTexture().load();
-	if (model.properties.hasSpecularMap())
-		model.properties.specularMap->load();
-	if (model.properties.hasNormalMap())
-		model.properties.normalMap->load();
-	if (model.properties.hasParallaxMap())
-		model.properties.parallaxMap->load();
-	
-	auto it = entities.find(model);
+	entity.getMaterialModel()->loadAllTextures();
 
-	if (it != entities.end())
-		it->second.push_back(&entity);
-	else
-		entities.emplace(model, std::list<Entity*>{ &entity });
+	using BatchIterator = EntityRenderer::Batches::iterator;
+	bool shouldInsert = batchedEntities.empty();
+	BatchIterator insertionPoint = batchedEntities.begin();
+
+	for (BatchIterator it = batchedEntities.begin(); it != batchedEntities.end(); it++)
+	{
+		BatchIterator::value_type& batch = *it;
+		if (batch.size() == 0)
+			continue;
+		int comparison = batch.front()->getMaterialModel()->compareAgainstRenderable(*entity.getMaterialModel());
+		
+		if (comparison == 1)
+		{
+			insertionPoint = it;
+			insertionPoint++;
+			shouldInsert = true;
+			continue;
+		}
+
+		if (comparison == 0)
+		{
+			batch.push_back(&entity);
+			shouldInsert = false;
+			break;
+		}
+
+		if (comparison == -1)
+		{
+			insertionPoint = it;
+			shouldInsert = true;
+			break;
+		}
+	}
+
+	if (shouldInsert)
+		batchedEntities.insert(insertionPoint, BatchIterator::value_type { &entity });
 }
 
 void MasterRenderer::processTerrain(Terrain& terrain)
@@ -72,5 +91,5 @@ void MasterRenderer::processTerrain(Terrain& terrain)
 void MasterRenderer::render(float partialTicks, const Camera& camera)
 {
 	terrainRenderer.render(partialTicks, camera, terrains);
-	entityRenderer.render(gl, partialTicks, camera, entities);
+	entityRenderer.render(gl, partialTicks, camera, batchedEntities);
 }

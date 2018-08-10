@@ -7,7 +7,6 @@
 #include "Mesh.h"
 #include "TerrainGen.h"
 #include "Heightmap.h"
-#include "TerrainConstants.h"
 
 struct TerrainTextureInfo {
 	TextureResource& texture;
@@ -44,6 +43,9 @@ public:
 	Terrain(const Terrain& other) = delete;
 	Terrain(Terrain&& other) = delete;
 	~Terrain();
+
+	Terrain& operator=(const Terrain& other) = delete;
+	Terrain& operator=(Terrain&& other) = delete;
 
 	void setTerrainHeight(float x, float z, float y);
 	float getHeight(float x, float z) const;

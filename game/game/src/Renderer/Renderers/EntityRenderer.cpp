@@ -14,29 +14,26 @@ EntityRenderer::EntityRenderer(const std::vector<Light>& lights)
 {
 }
 
-void EntityRenderer::render(GlStateManager& gl, float partialTicks, const Camera& camera, const std::unordered_map<MaterialModel, std::list<Entity*>>& entities)
+void EntityRenderer::render(GlStateManager& gl, float partialTicks, const Camera& camera, const std::vector<std::vector<Entity*>>& batchedEntities)
 {	
 	prepareShader(nShader);
 	prepareShader(nmShader);
 	prepareShader(pmShader);
 
-	for (auto it = entities.begin(); it != entities.end(); it++)
+	for (const std::vector<Entity*>& batch : batchedEntities)
 	{
-		const MaterialModel& material = it->first;
-		const MaterialModelProperties& properties = material.properties;
-		const std::list<Entity*>& batch = it->second;
+		if (batch.size() == 0)
+			continue;
 
-		if (batch.size() > 0) 
-		{
-			const RenderableMaterialModel& renderableModel = *batch.front()->getMaterialModel();
+		const RenderableMaterialModel& materialModel = *batch.front()->getMaterialModel();
+		const MaterialModelProperties& properties = materialModel.properties;
 
-			if (properties.hasParallaxMap())
-				renderBatch(partialTicks, gl, pmShader, renderableModel, batch, camera);
-			else if (properties.hasNormalMap())
-				renderBatch(partialTicks, gl, nmShader, renderableModel, batch, camera);
-			else
-				renderBatch(partialTicks, gl, nShader, renderableModel, batch, camera);
-		}
+		if (properties.hasParallaxMap())
+			renderBatch(partialTicks, gl, pmShader, materialModel, batch, camera);
+		else if (properties.hasNormalMap())
+			renderBatch(partialTicks, gl, nmShader, materialModel, batch, camera);
+		else
+			renderBatch(partialTicks, gl, nShader, materialModel, batch, camera);
 	}
 }
 

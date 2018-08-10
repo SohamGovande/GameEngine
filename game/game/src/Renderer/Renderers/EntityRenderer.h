@@ -13,6 +13,10 @@
 
 class EntityRenderer
 {
+public:
+	using BatchType = std::vector<Entity*>;
+	using Batches = std::vector<BatchType>;
+
 private:
 	const std::vector<Light>& lights;
 
@@ -39,13 +43,13 @@ private:
 		GlStateManager& gl,
 		ShaderType& shader,
 		const RenderableMaterialModel& model,
-		const std::list<Entity*>& batch,
+		const std::vector<Entity*>& batch,
 		const Camera& camera
 	);
 public:
 	EntityRenderer(const std::vector<Light>& lights);
 
-	void render(GlStateManager& gl, float partialTicks, const Camera& camera, const std::unordered_map<MaterialModel, std::list<Entity*>>& entities);
+	void render(GlStateManager& gl, float partialTicks, const Camera& camera, const Batches& entities);
 
 	inline const NormalMappedEntityShader& getNormalMappedShader() const { return nmShader; }
 	inline NormalMappedEntityShader& getNormalMappedShader() { return nmShader; }

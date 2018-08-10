@@ -20,11 +20,11 @@ float* Heightmap::index(unsigned int x, unsigned int z) const
 	return data + (x * rowColumnCount + z);
 }
 
-float* Heightmap::operator[](glm::vec2 coord) const
+float* Heightmap::operator[](const glm::vec2& coord) const
 {
 	unsigned int x = (unsigned int)(coord.x / interval);
 	unsigned int z = (unsigned int)(coord.y / interval);
-	if (x == coord.x / interval && z == coord.y / interval)
+	if (x == (float)(coord.x / interval) && (float)(z == coord.y / interval))
 		return index(x, z);
 
 	return nullptr;

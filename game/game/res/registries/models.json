@@ -1,4 +1,13 @@
 {
+  "anvil": {
+    "model": "anvil",
+    "texture": "anvil_diffuse",
+    "properties": {
+      "normal_map": "anvil_normal_map",
+      "reflectivity": 1.0,
+      "shine_distance_damper": 8.0
+    }
+  },
   "player": {
     "model": "person",
     "texture": "player"
@@ -36,16 +45,16 @@
     "model": "barrel",
     "texture": "barrel",
     "properties": {
-      "normal_map": "barrelNormal"
+      "normal_map": "barrel_normal_map"
     }
   },
   "cube": {
     "model": "cube",
     "texture": "stone_beach_diffuse",
     "properties": {
-	  "reflectivity": 1.0,
-	  "shine_distance_damper": 8,
-	  "specular_map": "stone_beach_specular",
+      "reflectivity": 1.0,
+      "shine_distance_damper": 8,
+      "specular_map": "stone_beach_specular",
       "normal_map": "stone_beach_normal",
       "parallax_map": "stone_beach_displacement",
       "parallax_map_amplitude": 0.05

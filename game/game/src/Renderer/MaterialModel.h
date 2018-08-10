@@ -15,22 +15,12 @@ struct MaterialModelProperties
 	bool fullyRender;
 	float shineDistanceDamper, reflectivity, parallaxMapAmplitude;
 
-	MaterialModelProperties()
-		: specularMap(nullptr), normalMap(nullptr), parallaxMap(nullptr),
-		fullyRender(false), shineDistanceDamper(0), reflectivity(0), parallaxMapAmplitude(0)
-	{
-	}
+	MaterialModelProperties();
 
-	inline bool operator==(const MaterialModelProperties& other) const
-	{
-		return specularMap == other.specularMap 
-			&& fullyRender == other.fullyRender
-			&& shineDistanceDamper == other.shineDistanceDamper
-			&& reflectivity == other.reflectivity
-			&& normalMap == other.normalMap
-			&& parallaxMap == other.parallaxMap
-			&& parallaxMapAmplitude == other.parallaxMapAmplitude;
-	}
+	int compare(const MaterialModelProperties& other) const;
+	bool operator==(const MaterialModelProperties& other) const;
+
+	void loadAllTextures();
 
 	inline bool hasSpecularMap() const
 	{
@@ -53,26 +43,6 @@ struct MaterialModelProperties
 	}
 };
 
-template<>
-struct std::hash<MaterialModelProperties>
-{
-	size_t operator()(const MaterialModelProperties& obj)
-	{
-		size_t i = hash<bool>()(obj.fullyRender) ^
-			hash<float>()(obj.shineDistanceDamper) ^
-			hash<float>()(obj.reflectivity) ^
-			hash<float>()(obj.parallaxMapAmplitude);
-	
-		if (obj.hasSpecularMap())
-			i ^= hash<std::string>()(obj.specularMap->getFilepath());
-		if (obj.hasNormalMap())
-			i ^= hash<std::string>()(obj.normalMap->getFilepath());
-		if (obj.hasParallaxMap())
-			i ^= hash<std::string>()(obj.parallaxMap->getFilepath());
-		return i;
-	}
-};
-
 class MaterialModel
 {
 private:
@@ -85,16 +55,15 @@ public:
 public:
 	MaterialModel(TextureResource& texture, const std::string& name);
 
+	void loadAllTextures();
+	int compare(const MaterialModel& other) const;
+
 	inline TextureResource& getTexture() { return texture; }
 	inline const TextureResource& getTexture() const { return texture; }
 	inline const std::string& getObjName() const { return objName; }
 
-	inline bool operator==(const MaterialModel& model) const
-	{
-		return model.objName == objName &&
-			model.texture.getFilepath() == texture.getFilepath() &&
-			model.properties == properties;
-	}
+	bool operator==(const MaterialModel& model) const;
+	
 };
 
 class RenderableMaterialModel
@@ -106,18 +75,21 @@ private:
 public:
 	RenderableMaterialModel(GlModel&& model, TextureResource& texture, const std::string& name);
 	
+	int compareAgainstRenderable(const RenderableMaterialModel& other) const;
+
 	inline const GlModel& getGlModel() const { return model; }
 };
+
+
+template<>
+struct std::hash<MaterialModelProperties>
+{
+	size_t operator()(const MaterialModelProperties& obj) const;
+};
+
 
 template<>
 struct std::hash<MaterialModel>
 {
-	std::size_t operator()(const MaterialModel& model) const
-	{
-		std::size_t h = std::hash<std::string>()(model.getObjName()) ^
-			std::hash<std::string>()(model.getTexture().getFilepath()) ^
-			std::hash<MaterialModelProperties>()(model.properties);
-			
-		return h;
-	}
+	std::size_t operator()(const MaterialModel& model) const;
 };

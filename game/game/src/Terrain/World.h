@@ -4,8 +4,9 @@
 #include "Entity/Entity.h"
 #include "Terrain/Terrain.h"
 #include "ResourceMgr/ResourceMgr.h"
-#include "Renderer/Renderers/MasterRenderer.h"
 #include "MathUtils.h"
+
+class MasterRenderer;
 
 class World
 {
@@ -18,13 +19,11 @@ private:
 	float computeBarycentricHeight(int chunkX, int chunkZ, const glm::vec2& bl, const glm::vec2& tr, const glm::vec2& other, float x, float z) const;
 
 public:
-	World(ResourceMgr& resourceMgr);
-	~World();
+	World(const EntityRegistry& entityRegistry);
 
 	void tick();
 
 	void sendEntities(MasterRenderer& renderer);
-
 	void sendTerrain(MasterRenderer& renderer);
 
 	float getInterpolatedTerrainHeight(float x, float z) const;
@@ -39,7 +38,7 @@ public:
 	inline Entity& getPerson() { return *person; }
 	inline const Entity& getPerson() const { return *person; }
 
-	inline std::list<Entity>& getEntities() { return entities; };
+	inline std::list<Entity>& getEntities() { return entities; }
 	inline const std::list<Entity>& getEntities() const { return entities; }
 
 	inline std::vector<Entity*> getEntitiesByID(unsigned int id)

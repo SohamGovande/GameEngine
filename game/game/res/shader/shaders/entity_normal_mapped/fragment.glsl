@@ -40,8 +40,8 @@ void main(void)
 	if (texColor.a < 0.7)
 		discard;
 
-	vec3 unitSurfaceNorm = texture(u_NormalMap, v_TexCoord).rgb;
-	unitSurfaceNorm = normalize(unitSurfaceNorm * 2.0 - 1.0);
+	vec3 unitSurfaceNormTexture = texture(u_NormalMap, v_TexCoord).rgb;
+	vec3 unitSurfaceNorm = normalize(unitSurfaceNormTexture * 2.0 - 1.0);
 
 	vec3 unitVecToCamera = normalize(v_TangentToCamera);
 

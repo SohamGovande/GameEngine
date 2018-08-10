@@ -24,7 +24,7 @@ Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, in
 	PerlinNoise noise;
 
 	float(*interpolate)(float x) = [](float x) -> float {
-		return 1.0f / (1 + exp2(-20 * (x - 0.52f)));
+		return 1.0f / (1 + exp2(-20 * (x - 0.52f))); //Sigmoid
 	};
 
 	for (unsigned int i = 0; i < texSize / 4; i++)
@@ -40,6 +40,8 @@ Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, in
 	}
 
 	GlCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
+
+	delete[] data;
 }
 
 Terrain::~Terrain()

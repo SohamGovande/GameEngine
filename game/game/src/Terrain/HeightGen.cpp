@@ -11,14 +11,10 @@ HeightGen::HeightGen(int seed)
 		noise[i] = PerlinNoise(seed + i);
 }
 
-HeightGen::~HeightGen()
-{
-}
-
 float HeightGen::generateHeight(float x, float z)
 {
-	constexpr float octaveFactor = 0.3f;
-	constexpr float terrainSmoothness = 320;
+	constexpr float octaveFactor = 0.4f;
+	constexpr float terrainSmoothness = 320.0f;
 	float cOctaveFactor = 1;
 
 	float total = 0;
@@ -33,22 +29,3 @@ float HeightGen::generateHeight(float x, float z)
 	}
 	return total;
 }
-
-float HeightGen::getInterpolatedNoise(float x, float z)
-{
-	float intX = Math::roundDown(x, TERRAIN_INTERVAL);
-	float intZ = Math::roundDown(z, TERRAIN_INTERVAL);
-	float fracX = (x - intX) / TERRAIN_INTERVAL;
-	float fracZ = (z - intZ) / TERRAIN_INTERVAL;
-
-	float v1 = getSmoothNoise(intX, intZ);
-	float v2 = getSmoothNoise(intX + TERRAIN_INTERVAL, intZ);
-	float v3 = getSmoothNoise(intX, intZ + TERRAIN_INTERVAL);
-	float v4 = getSmoothNoise(intX + TERRAIN_INTERVAL, intZ + TERRAIN_INTERVAL);
-
-	float i1 = Math::cosineInterpolation(v1, v2, fracX);
-	float i2 = Math::cosineInterpolation(v3, v4, fracX);
-	return Math::cosineInterpolation(i1, i2, fracZ);
-}
-
-

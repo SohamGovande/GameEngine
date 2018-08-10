@@ -12,7 +12,7 @@ Camera::Camera(MasterRenderer& renderer, float nearPlane, float farPlane, float 
 	lastCursorDistance(),
 	entityAngle(0, 0),
 	prevEntityAngle(0, 0),
-	entityDistance(30),
+	entityDistance(20),
 
 	pitch(0), yaw(0), roll(0),
 	position(0, 0, 0),
@@ -28,7 +28,9 @@ Camera::Camera(MasterRenderer& renderer, float nearPlane, float farPlane, float 
 		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getNormalMappedShader(), renderer.getEntityRenderer().getNormalMappedShader().u_ViewMatrix},
 		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getParallaxMappedShader(), renderer.getEntityRenderer().getParallaxMappedShader().u_ViewMatrix},
 		decltype(viewMatrix)::PairType {renderer.getTerrainRenderer().getShader(), renderer.getTerrainRenderer().getShader().u_ViewMatrix} 
-	})
+	}),
+
+	lastPartialTicks(0)
 {
 	loadProjectionMatrix();
 	loadViewMatrix();
@@ -52,7 +54,7 @@ void Camera::tick(World& world)
 	using Keys = sf::Keyboard::Key;
 
 	{
-		constexpr float speed = 2;
+		constexpr float speed = 1.5f;
 
 		float forwardFactor = 0;
 		if (Toolkit::isKeyPressed(Keys::W) || Toolkit::isKeyPressed(Keys::Up))
@@ -98,12 +100,12 @@ void Camera::tick(World& world)
 		if (turnFactor != 0)
 		{
 			target.rotation.y += turnFactor;
-			entityAngle.y += turnFactor;
+//			entityAngle.y += turnFactor;
 		}
 	}
 }
 
-void Camera::performRotations(float partialTicks)
+void Camera::performRotations(float partialTicks, float frameDelta)
 {
 	if (!Toolkit::isCursorGrabbed())
 		return;
@@ -115,24 +117,24 @@ void Camera::performRotations(float partialTicks)
 	
 	Toolkit::setCursorPos(center);
 
-	float sensitivity = .3f;
+	constexpr float sensitivity = .25f;
 
-	entityAngle.y -= distance.x * partialTicks * sensitivity; //yaw
-	entityAngle.x -= distance.y * partialTicks * sensitivity; //pitch
+	entityAngle.y -= distance.x * frameDelta * sensitivity; //yaw
+	entityAngle.x -= distance.y * frameDelta * sensitivity; //pitch
 
-	Math::clamp(entityAngle.x, -45, 90);
+	Math::clamp(entityAngle.x, -90, 90);
 
 	lastCursorDistance = cursorPos;
 
 	glm::vec2 smoothFacingEntityRot = Math::interpolate(prevEntityAngle, entityAngle, partialTicks);
 	glm::vec3 smoothEntityPos = target.interpolatePosition(partialTicks);
-
+	
 	float horizDistance = entityDistance * cos(smoothFacingEntityRot.x * DEG2RAD);
 	float vertDistance = entityDistance * sin(smoothFacingEntityRot.x * DEG2RAD);
 	
 	glm::vec3 positionOffset(
 		sin(smoothFacingEntityRot.y * DEG2RAD) * horizDistance,
-		vertDistance + 15, //+head offset
+		vertDistance + 7.5f, //+head offset
 		cos(smoothFacingEntityRot.y * DEG2RAD) * horizDistance
 	);
 	
@@ -142,4 +144,6 @@ void Camera::performRotations(float partialTicks)
 	pitch = smoothFacingEntityRot.x;
 	roll = 0;
 	loadViewMatrix();
+
+	lastPartialTicks = partialTicks;
 }

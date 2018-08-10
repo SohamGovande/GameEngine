@@ -5,8 +5,8 @@
 
 EntityRegistry::EntityRegistry(const ComponentRegistry& componentRegistry, ResourceMgr& resourceMgr)
 {
-	namespace fs = std::experimental::filesystem::v1;
-	for (const fs::directory_entry& dirEntry : fs::directory_iterator("res/entities"))
+	
+	for (const std::filesystem::directory_entry& dirEntry : std::filesystem::directory_iterator("res/entities"))
 	{
 		std::string folder = dirEntry.path().string();
 

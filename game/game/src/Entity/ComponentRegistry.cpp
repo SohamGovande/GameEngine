@@ -9,6 +9,6 @@ ComponentRegistry::ComponentRegistry()
 template<ComponentID ID, typename T>
 void ComponentRegistry::registerComp(const std::string& name)
 {
-	componentNames[name] = ID;
-	constructorProvider[ID] = []() -> void* { return reinterpret_cast<void*>(new T); };
+	componentNames.emplace(name, ID);
+	constructorProvider.emplace(ID, []() -> void* { return reinterpret_cast<void*>(new T); });
 }
