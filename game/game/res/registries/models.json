@@ -4,7 +4,7 @@
     "texture": "anvil_diffuse",
     "properties": {
       "normal_map": "anvil_normal_map",
-      "reflectivity": 1.0,
+      "reflectivity": 0.75,
       "shine_distance_damper": 8.0
     }
   },
@@ -50,13 +50,10 @@
   },
   "cube": {
     "model": "cube",
-    "texture": "stone_beach_diffuse",
+    "texture": "wall_diffuse",
     "properties": {
-      "reflectivity": 1.0,
-      "shine_distance_damper": 8,
-      "specular_map": "stone_beach_specular",
-      "normal_map": "stone_beach_normal",
-      "parallax_map": "stone_beach_displacement",
+      "normal_map": "wall_normal_map",
+      "parallax_map": "wall_displacement_map",
       "parallax_map_amplitude": 0.05
     }
   },

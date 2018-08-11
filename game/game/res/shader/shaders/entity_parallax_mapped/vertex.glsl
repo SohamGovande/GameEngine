@@ -17,7 +17,7 @@ uniform mat4 u_ViewMatrix;
 
 uniform vec3 u_LightPos[MAX_LIGHTS];
 
-const float density = 0.002;
+const float density = 0.005;
 const float gradient = 2;
 
 void main(void)

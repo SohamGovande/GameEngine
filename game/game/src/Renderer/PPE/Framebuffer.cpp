@@ -6,6 +6,28 @@ Framebuffer::Framebuffer()
 	GlCall(glGenFramebuffers(1, &rendererID));
 }
 
+Framebuffer::Framebuffer(Framebuffer&& other)
+	: rendererID(other.rendererID)
+{
+	other.rendererID = 0;
+}
+
+Framebuffer::~Framebuffer()
+{
+	release();
+}
+
+Framebuffer& Framebuffer::operator=(Framebuffer&& other)
+{
+	if (this != &other)
+	{
+		release();
+		rendererID = other.rendererID;
+		other.rendererID = 0;
+	}
+	return *this;
+}
+
 void Framebuffer::addAttachment(unsigned int type, const Texture& tex) const
 {
 	GlCall(glFramebufferTexture2D(GL_FRAMEBUFFER, type, GL_TEXTURE_2D, tex.getTextureID(), 0));
@@ -16,7 +38,7 @@ void Framebuffer::addRenderbuffer(const Renderbuffer& rbo, unsigned int function
 	GlCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, function, GL_RENDERBUFFER, rbo.getRenderbufferID()));
 }
 
-void Framebuffer::cleanUp() const
+void Framebuffer::release() const
 {
 	GlCall(glDeleteFramebuffers(1, &rendererID));
 }

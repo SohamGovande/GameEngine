@@ -19,10 +19,12 @@ private:
 
 public:
 	GaussianAxisBlur(unsigned int width, unsigned int height);
-	~GaussianAxisBlur();
 
-	void start();
-	void stop();
-	void renderQuad(const VertexArray& quadVao);
+	void start() const;
+	void stop() const;
+	void renderQuad(const VertexArray& quadVao) const;
+
+	inline const Texture& getColorBuffer() const { return colorBuffer; }
+	inline Texture& getColorBuffer() { return colorBuffer; }
 };
 

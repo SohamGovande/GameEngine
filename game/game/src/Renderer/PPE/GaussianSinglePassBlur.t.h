@@ -28,14 +28,7 @@ GaussianAxisBlur<A>::GaussianAxisBlur(unsigned int width, unsigned int height)
 }
 
 template<BlurAxis T>
-GaussianAxisBlur<T>::~GaussianAxisBlur()
-{
-	fbo.cleanUp();
-	depthStencilRbo.cleanUp();
-}
-
-template<BlurAxis T>
-void GaussianAxisBlur<T>::start()
+void GaussianAxisBlur<T>::start() const
 {
 	fbo.bind();
 	GlCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
@@ -44,13 +37,13 @@ void GaussianAxisBlur<T>::start()
 }
 
 template<BlurAxis T>
-void GaussianAxisBlur<T>::stop()
+void GaussianAxisBlur<T>::stop() const
 {
 	fbo.unbind();
 }
 
 template<BlurAxis T>
-void GaussianAxisBlur<T>::renderQuad(const VertexArray& quadVao)
+void GaussianAxisBlur<T>::renderQuad(const VertexArray& quadVao) const
 {
 	GlCall(glClearColor(1.f, 0.f, 1.f, 1.f));
 	GlCall(glClear(GL_COLOR_BUFFER_BIT));

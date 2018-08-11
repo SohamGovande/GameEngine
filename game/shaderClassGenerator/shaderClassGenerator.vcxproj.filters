@@ -38,9 +38,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="generators\TerrainShader.shgen" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\ReplacableElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>

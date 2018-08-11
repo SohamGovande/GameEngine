@@ -8,7 +8,7 @@ Game::Game()
 	entityRegistry(componentRegistry, resourceMgr),
 
 	renderer(),
-	camera(renderer, 1.0f, 1000, 60.f),
+	camera(renderer, 1.0f, 1000.0f, 60.f),
 	world(entityRegistry),
 
 	terrainGen(29)

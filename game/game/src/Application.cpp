@@ -67,16 +67,8 @@ static void RunGame(sf::Window& window)
 		}
 		lastTime = now;
 
-		horizPass.start();
 		game.render((float)delta, frameDelta);
-		horizPass.stop();
-
-		vertPass.start();
-		horizPass.renderQuad(quadVbo.getVao());
-		vertPass.stop();
-
-		vertPass.renderQuad(quadVbo.getVao());
-
+		
 		window.display();
 	}
 	

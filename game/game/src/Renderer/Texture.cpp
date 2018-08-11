@@ -82,6 +82,11 @@ Texture& Texture::operator=(Texture&& other)
 	return *this;
 }
 
+void Texture::sendToGL(unsigned int internalFormat, unsigned int format, const void* pixels) const
+{
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
+}
+
 void Texture::setMagFilter(int filter) const
 {
 	setParami(GL_TEXTURE_MIN_FILTER, filter);

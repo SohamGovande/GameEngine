@@ -6,7 +6,29 @@ Renderbuffer::Renderbuffer()
 	GlCall(glGenRenderbuffers(1, &rendererID));
 }
 
-void Renderbuffer::cleanUp() const
+Renderbuffer::Renderbuffer(Renderbuffer&& other)
+	: rendererID(other.rendererID)
+{
+	other.rendererID = 0;
+}
+
+Renderbuffer::~Renderbuffer()
+{
+	release();
+}
+
+Renderbuffer& Renderbuffer::operator=(Renderbuffer&& other)
+{
+	if (this != &other)
+	{
+		release();
+		rendererID = other.rendererID;
+		other.rendererID = 0;
+	}
+	return *this;
+}
+
+void Renderbuffer::release() const
 {
 	GlCall(glDeleteRenderbuffers(1, &rendererID));
 }
