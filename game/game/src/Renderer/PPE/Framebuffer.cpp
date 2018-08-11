@@ -1,5 +1,6 @@
-#include "Framebuffer.h"
+#include <iostream>
 #include "Renderer/GlMacros.h"
+#include "Framebuffer.h"
 
 Framebuffer::Framebuffer()
 {
@@ -56,4 +57,15 @@ void Framebuffer::unbind() const
 unsigned int Framebuffer::getStatus() const
 {
 	return glCheckFramebufferStatus(GL_FRAMEBUFFER);
+}
+
+void Framebuffer::checkStatus() const
+{
+	unsigned int status = getStatus();
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		const char* msg = GlTranslateError(status);
+		std::cout << "[OpenGL error] Incomplete framebuffer: " << msg << std::endl;
+		__debugbreak();
+	}
 }

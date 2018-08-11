@@ -19,5 +19,26 @@
 
 #endif //PROGRAM_DEBUG_MODE
 
+class GlTranslatedError 
+{
+private:
+	const char* msg;
+	bool dynamicallyAllocated;
+
+public:
+	GlTranslatedError(const char* msg, bool createCopy);
+	GlTranslatedError(const char* msg);
+	GlTranslatedError(const GlTranslatedError& other);
+	GlTranslatedError(GlTranslatedError&& other);
+	~GlTranslatedError();
+
+	GlTranslatedError& operator=(const GlTranslatedError& other);
+	GlTranslatedError& operator=(GlTranslatedError&& other);
+
+	operator const char*();
+	inline const char* getMessage() const { return msg; }
+};
+
 void GlClearError();
 bool GlLogCall(const char* function, const char* file, int line);
+GlTranslatedError GlTranslateError(unsigned int error);

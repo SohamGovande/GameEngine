@@ -15,14 +15,13 @@ GaussianAxisBlur<A>::GaussianAxisBlur(unsigned int width, unsigned int height)
 	fbo.bind();
 	colorBuffer.unbind();
 	fbo.addAttachment(GL_COLOR_ATTACHMENT0, colorBuffer);
-
+	
 	depthStencilRbo.bind();
 	depthStencilRbo.setStorage(GL_DEPTH24_STENCIL8, width, height);
 	depthStencilRbo.unbind();
 
 	fbo.addRenderbuffer(depthStencilRbo, GL_DEPTH_STENCIL_ATTACHMENT);
-
-	ASSERT(fbo.getStatus() == GL_FRAMEBUFFER_COMPLETE);
+	fbo.checkStatus();
 
 	fbo.unbind();
 }

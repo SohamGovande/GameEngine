@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include "Renderer/Texture.h"
 #include "Renderbuffer.h"
 
@@ -26,6 +27,7 @@ public:
 	}
 
 	unsigned int getStatus() const;
+	void checkStatus() const;
 
 	void release() const;
 	void bind() const;
