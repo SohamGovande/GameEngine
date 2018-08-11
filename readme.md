@@ -1,6 +1,6 @@
 # OpenGL Game Engine
 
-For a while now, I've been integrating my passions for learning graphics programming with OpenGL, as well as the intricacies of C++ by coding this OpenGL game engine.
+This game engine uses C++ and OpenGL, making it rather simple to port between platforms.
 
 Features:
 
@@ -16,14 +16,15 @@ Features:
 - Mesh Simplification :D Soon, I'm going to implement support for level-of-detail mapping, allowing me to optimize rendering speeds
 - Framebuffer API (Currently, doesn't offer any post-processing-effects, but soon will.)
 - Fast & efficient resource manager
+- Parallax mapping
 
 Planned features:
 
+- Deferred renderer
 - Post processing effects
 - Custom allocators for the reosurce manager
 - Terrain normal mapping
 - More realistic terrain generation
 - Water
-- Parallax mapping
 
 Hope you enjoy toying with this game engine! The main file is at game/game/src/Application.cpp
