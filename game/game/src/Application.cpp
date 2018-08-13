@@ -20,6 +20,7 @@ static void RunGame(sf::Window& window)
 
 	GaussianAxisBlur<BlurAxis::HORIZONTAL> horizPass(933, 700);
 	GaussianAxisBlur<BlurAxis::VERTICAL> vertPass(933, 700);
+
 	QuadVBO quadVbo;
 
 	while (running)

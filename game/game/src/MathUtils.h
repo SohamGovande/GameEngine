@@ -44,7 +44,7 @@ namespace Math {
 	}
 
 	glm::mat4 createProjectionMatrix(float nearPlane, float farPlane, float fov);
-	glm::mat4 createTransformationMatrix(glm::vec3 pos, glm::vec3 rot, float scale);
+	glm::mat4 createTransformationMatrix(const glm::vec3& pos, const glm::vec3& rot, float scale);
 	glm::mat4 createViewMatrix(const Camera& camera);
 
 	glm::vec3 getBarycentricCoords(const glm::vec2& p, const glm::vec2& a, const glm::vec2& b, const glm::vec2& c);

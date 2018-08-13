@@ -5,6 +5,7 @@
 
 class World;
 class MasterRenderer;
+class GBuffer;
 
 class Camera
 {
@@ -19,8 +20,8 @@ private:
 	glm::vec2 prevEntityAngle;
 	float entityDistance;
 
-	SyncWithUniform<glm::mat4, 4> projectionMatrix;
-	SyncWithUniform<glm::mat4, 4> viewMatrix;
+	SyncWithUniform<glm::mat4, 5> projectionMatrix;
+	SyncWithUniform<glm::mat4, 5> viewMatrix;
 
 	float lastPartialTicks;
 
@@ -28,7 +29,7 @@ public:
 	float pitch, yaw, roll;
 	glm::vec3 position;
 	
-	Camera(MasterRenderer& renderer, float nearPlane, float farPlane, float fov);
+	Camera(MasterRenderer& renderer, GBuffer& gbuffer, float nearPlane, float farPlane, float fov);
 
 	void loadProjectionMatrix();
 	void loadViewMatrix();

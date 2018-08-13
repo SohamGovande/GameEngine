@@ -21,9 +21,9 @@ namespace Math
 		return projectionMatrix;
 	}
 
-	glm::mat4 createTransformationMatrix(glm::vec3 translate, glm::vec3 rotate, float scale)
+	glm::mat4 createTransformationMatrix(const glm::vec3& translate, const glm::vec3& rotate, float scale)
 	{
-		glm::mat4 matrix = glm::mat4(1.0);
+		glm::mat4 matrix(1.0);
 
 		matrix = glm::translate(matrix, translate);
 

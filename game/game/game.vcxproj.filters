@@ -141,6 +141,9 @@
     <ClCompile Include="src\Renderer\Shader\SyncWithUniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Deferred\GBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\CollisionCommons.h">
@@ -341,6 +344,12 @@
     <ClInclude Include="src\Comparator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Deferred\GBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\GBufferGeometryPassShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\registries\models.json" />
@@ -366,5 +375,12 @@
     <None Include="res\shader\shaders\gaussian_blur\fragment.glsl" />
     <None Include="res\shader\shaders\gaussian_blur\vertex.glsl" />
     <None Include="res\entities\anvil\metadata.json" />
+    <None Include="res\shader\shaders\gbuffer\vertex.glsl" />
+    <None Include="res\shader\shaders\identity\fragment.glsl" />
+    <None Include="res\shader\shaders\identity\vertex.glsl" />
+    <None Include="..\shaderClassGenerator\generators\IdentityShader.shgen" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\shader\shaders\gbuffer\fragment.glsl" />
   </ItemGroup>
 </Project>

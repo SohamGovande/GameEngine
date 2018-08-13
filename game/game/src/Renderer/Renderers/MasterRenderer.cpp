@@ -90,6 +90,6 @@ void MasterRenderer::processTerrain(Terrain& terrain)
 
 void MasterRenderer::render(float partialTicks, const Camera& camera)
 {
-	terrainRenderer.render(partialTicks, camera, terrains);
-	entityRenderer.render(gl, partialTicks, camera, batchedEntities);
+//	terrainRenderer.render(partialTicks, camera, terrains);
+//	entityRenderer.render(gl, partialTicks, camera, batchedEntities);
 }

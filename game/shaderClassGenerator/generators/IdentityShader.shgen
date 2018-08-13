@@ -1,0 +1,15 @@
+-Preprocessor
+
+-ClassName
+IdentityShader
+
+-VertexShader
+identity/vertex.glsl
+
+-FragmentShader
+identity/fragment.glsl
+
+-VertexShaderPreprocessors
+{ }
+-FragmentShaderPreprocessors
+{ }

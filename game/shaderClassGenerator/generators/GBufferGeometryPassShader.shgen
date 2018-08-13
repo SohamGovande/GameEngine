@@ -1,0 +1,15 @@
+-Preprocessor
+
+-ClassName
+GBufferGeometryPassShader
+
+-VertexShader
+gbuffer/vertex.glsl
+
+-FragmentShader
+gbuffer/fragment.glsl
+
+-VertexShaderPreprocessors
+{ }
+-FragmentShaderPreprocessors
+{ }

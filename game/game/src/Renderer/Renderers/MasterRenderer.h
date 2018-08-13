@@ -42,6 +42,9 @@ public:
 
 	void toggleWireframeView() { wireframe = !wireframe; needsToUpdateWireframe = true; }
 	
+	inline const EntityRenderer::Batches& getEntityBatches() const { return batchedEntities; }
+	inline EntityRenderer::Batches& getEntityBatches() { return batchedEntities; }
+
 	inline const std::vector<Light>& getLights() const { return lights; }
 	inline std::vector<Light>& getLights() { return lights; }
 

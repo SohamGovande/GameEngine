@@ -78,6 +78,7 @@ public:
 	int compareAgainstRenderable(const RenderableMaterialModel& other) const;
 
 	inline const GlModel& getGlModel() const { return model; }
+	inline GlModel& getGlModel() { return model; }
 };
 
 

@@ -8,7 +8,8 @@ Game::Game()
 	entityRegistry(componentRegistry, resourceMgr),
 
 	renderer(),
-	camera(renderer, 1.0f, 1000.0f, 60.f),
+	gbuffer(933, 700, entityRegistry),
+	camera(renderer, gbuffer, 1.0f, 1000.0f, 60.f),
 	world(entityRegistry),
 
 	terrainGen(29)
@@ -45,10 +46,10 @@ void Game::init()
 
 	{
 		TimedScope timer("generate terrain");
-		constexpr int size = 2;
-		for (int x = -size; x < size; x++)
-			for (int y = -size; y < size; y++)
-				terrainGen.generate(world, resourceMgr, entityRegistry, x, y);
+//		constexpr int size = 2;
+//		for (int x = -size; x < size; x++)
+//			for (int y = -size; y < size; y++)
+//				terrainGen.generate(world, resourceMgr, entityRegistry, x, y);
 	}
 	world.sendEntities(renderer);
 	world.sendTerrain(renderer);
@@ -79,6 +80,8 @@ void Game::render(float partialTicks, float frameDelta)
 	world.getPerson().position.y = world.getInterpolatedTerrainHeight(world.getPerson().position.x, world.getPerson().position.z) + .5f;
 	camera.performRotations(partialTicks, frameDelta);
 
-	renderer.prepare();
-	renderer.render(partialTicks, camera);
+	gbuffer.renderEntities(camera);
+
+//	renderer.prepare();
+//	renderer.render(partialTicks, camera);
 }

@@ -20,7 +20,7 @@ void EntityRenderer::render(GlStateManager& gl, float partialTicks, const Camera
 	prepareShader(nmShader);
 	prepareShader(pmShader);
 
-	for (const std::vector<Entity*>& batch : batchedEntities)
+	for (const BatchType& batch : batchedEntities)
 	{
 		if (batch.size() == 0)
 			continue;

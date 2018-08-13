@@ -1,11 +1,12 @@
 #include <iostream>
 #include "Entity/Components/MotionComponent.h"
+#include "Deferred/GBuffer.h"
 #include "Renderers/MasterRenderer.h"
 #include "Terrain/World.h"
 #include "MathUtils.h"
 #include "Camera.h"
 
-Camera::Camera(MasterRenderer& renderer, float nearPlane, float farPlane, float fov)
+Camera::Camera(MasterRenderer& renderer, GBuffer& gbuffer, float nearPlane, float farPlane, float fov)
 	: nearPlane(nearPlane), farPlane(farPlane), fov(fov),
 	
 	controlledEntity(nullptr),
@@ -21,13 +22,15 @@ Camera::Camera(MasterRenderer& renderer, float nearPlane, float farPlane, float 
 		decltype(projectionMatrix)::PairType {renderer.getEntityRenderer().getRegularShader(), renderer.getEntityRenderer().getRegularShader().u_ProjectionMatrix},
 		decltype(projectionMatrix)::PairType {renderer.getEntityRenderer().getNormalMappedShader(), renderer.getEntityRenderer().getNormalMappedShader().u_ProjectionMatrix},
 		decltype(projectionMatrix)::PairType {renderer.getEntityRenderer().getParallaxMappedShader(), renderer.getEntityRenderer().getParallaxMappedShader().u_ProjectionMatrix},
-		decltype(projectionMatrix)::PairType {renderer.getTerrainRenderer().getShader(), renderer.getTerrainRenderer().getShader().u_ProjectionMatrix} 
+		decltype(projectionMatrix)::PairType {renderer.getTerrainRenderer().getShader(), renderer.getTerrainRenderer().getShader().u_ProjectionMatrix},
+		decltype(projectionMatrix)::PairType {gbuffer.getGeomPassShader(), gbuffer.getGeomPassShader().u_ProjectionMatrix} 
 	}),
 	viewMatrix({
 		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getRegularShader(), renderer.getEntityRenderer().getRegularShader().u_ViewMatrix},
 		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getNormalMappedShader(), renderer.getEntityRenderer().getNormalMappedShader().u_ViewMatrix},
 		decltype(viewMatrix)::PairType {renderer.getEntityRenderer().getParallaxMappedShader(), renderer.getEntityRenderer().getParallaxMappedShader().u_ViewMatrix},
-		decltype(viewMatrix)::PairType {renderer.getTerrainRenderer().getShader(), renderer.getTerrainRenderer().getShader().u_ViewMatrix} 
+		decltype(viewMatrix)::PairType {renderer.getTerrainRenderer().getShader(), renderer.getTerrainRenderer().getShader().u_ViewMatrix},
+		decltype(viewMatrix)::PairType {gbuffer.getGeomPassShader(), gbuffer.getGeomPassShader().u_ProjectionMatrix} 
 	}),
 
 	lastPartialTicks(0)

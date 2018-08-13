@@ -37,6 +37,7 @@ Texture::Texture(const std::string& filepath)
 }
 
 Texture::Texture(unsigned int width, unsigned int height, bool useNullTexture)
+	: width(width), height(height)
 {
 	GlCall(glGenTextures(1, &rendererID));
 	bind();
@@ -82,9 +83,9 @@ Texture& Texture::operator=(Texture&& other)
 	return *this;
 }
 
-void Texture::sendToGL(unsigned int internalFormat, unsigned int format, const void* pixels) const
+void Texture::sendToGL(unsigned int internalFormat, unsigned int format, unsigned int dataType, const void* pixels) const
 {
-	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
+	GlCall(glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, dataType, pixels));
 }
 
 void Texture::setMagFilter(int filter) const

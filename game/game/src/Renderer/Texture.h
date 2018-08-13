@@ -19,7 +19,7 @@ public:
 	Texture& operator=(const Texture& right) = delete;
 	Texture& operator=(Texture&& other);
 
-	void sendToGL(unsigned int internalFormat, unsigned int format, const void* pixels) const;
+	void sendToGL(unsigned int internalFormat, unsigned int format, unsigned int dataType, const void* pixels) const;
 
 	void setMagFilter(int filter) const;
 	void setMinFilter(int filter) const;

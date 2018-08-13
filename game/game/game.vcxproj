@@ -149,6 +149,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\IOHelper.cpp" />
     <ClCompile Include="src\OBJModelLoader.cpp" />
+    <ClCompile Include="src\Renderer\Deferred\GBuffer.cpp" />
     <ClCompile Include="src\Renderer\GlStateManager.cpp" />
     <ClCompile Include="src\Renderer\PPE\Renderbuffer.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\Entity\EntityRegistry.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\IOHelper.h" />
+    <ClInclude Include="src\Renderer\Deferred\GBuffer.h" />
     <ClInclude Include="src\Renderer\GlStateManager.h" />
     <ClInclude Include="src\Renderer\PPE\BlurAxis.h" />
     <ClInclude Include="src\Renderer\PPE\GaussianSinglePassBlur.h" />
@@ -206,6 +208,7 @@
     <ClInclude Include="src\Renderer\QuadVBO.h" />
     <ClInclude Include="src\Renderer\Renderers\EntityRenderer.t.h" />
     <ClInclude Include="src\Renderer\Shader\GaussianAxisShader.h" />
+    <ClInclude Include="src\Renderer\Shader\GBufferGeometryPassShader.h" />
     <ClInclude Include="src\Renderer\Shader\NormalEntityShader.h" />
     <ClInclude Include="src\Renderer\Shader\NormalMappedEntityShader.h" />
     <ClInclude Include="src\Renderer\Shader\ParallaxMappedEntityShader.h" />
@@ -260,6 +263,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shaderClassGenerator\generators\IdentityShader.shgen" />
     <None Include="res\entities\anvil\metadata.json" />
     <None Include="res\shader\include\multiple_light_sources.glsl">
       <SubType>
@@ -290,8 +294,14 @@
     <None Include="res\shader\shaders\entity\vertex.glsl" />
     <None Include="res\shader\shaders\gaussian_blur\fragment.glsl" />
     <None Include="res\shader\shaders\gaussian_blur\vertex.glsl" />
+    <None Include="res\shader\shaders\gbuffer\vertex.glsl" />
+    <None Include="res\shader\shaders\identity\fragment.glsl" />
+    <None Include="res\shader\shaders\identity\vertex.glsl" />
     <None Include="res\shader\shaders\terrain\fragment.glsl" />
     <None Include="res\shader\shaders\terrain\vertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\shader\shaders\gbuffer\fragment.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
