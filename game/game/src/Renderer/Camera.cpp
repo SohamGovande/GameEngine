@@ -129,7 +129,7 @@ void Camera::performRotations(float partialTicks, float frameDelta)
 
 	lastCursorDistance = cursorPos;
 
-	glm::vec2 smoothFacingEntityRot = Math::interpolate(prevEntityAngle, entityAngle, partialTicks);
+	glm::vec2 smoothFacingEntityRot = Math::linearInterpolation(prevEntityAngle, entityAngle, partialTicks);
 	glm::vec3 smoothEntityPos = target.interpolatePosition(partialTicks);
 	
 	float horizDistance = entityDistance * cos(smoothFacingEntityRot.x * DEG2RAD);

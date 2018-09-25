@@ -10,7 +10,7 @@
 {\
 	constexpr unsigned int fieldNameLength = Length(#fieldName);\
 	const char* propertyName = &FormatName<fieldNameLength, CountUppercase(#fieldName, fieldNameLength)>(#fieldName)[0];\
-	using FieldType = decltype(reinterpret_cast<MaterialModel*>(0)->properties.fieldName);\
+	using FieldType = decltype(std::declval<MaterialModel>().properties.fieldName);\
 	materialProperties.emplace(propertyName, MaterialProperty(\
 		offsetof(MaterialModelProperties, fieldName),\
 		sizeof(FieldType),\

@@ -15,7 +15,6 @@ protected:
 
 public:
 	TextureResource(const std::string& filepath);
-	~TextureResource();
 
 	inline const std::string& getFilepath() const { return filepath; }
 };

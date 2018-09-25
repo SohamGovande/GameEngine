@@ -60,9 +60,6 @@
     <ClCompile Include="src\ResourceMgr\ModelResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ResourceMgr\Resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ResourceMgr\ResourceMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -142,6 +139,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Deferred\GBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\GlModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Terrain\TerrainTextureInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ResourceMgr\PropertySetter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ResourceMgr\MaterialProperty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -350,6 +362,12 @@
     <ClInclude Include="src\Renderer\Shader\GBufferGeometryPassShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\GlModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrain\TerrainTextureInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\registries\models.json" />
@@ -378,7 +396,6 @@
     <None Include="res\shader\shaders\gbuffer\vertex.glsl" />
     <None Include="res\shader\shaders\identity\fragment.glsl" />
     <None Include="res\shader\shaders\identity\vertex.glsl" />
-    <None Include="..\shaderClassGenerator\generators\IdentityShader.shgen" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\shader\shaders\gbuffer\fragment.glsl" />

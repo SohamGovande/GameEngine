@@ -15,7 +15,7 @@
 
 #define Assert(x) if (!(x)) __debugbreak();
 
-GlModel Loader::loadModelToGL(Mesh mesh, bool includeTangents)
+GlModel Loader::loadModelToGL(const Mesh& mesh, bool includeTangents)
 {
 	VertexArray vao;
 
@@ -35,8 +35,7 @@ GlModel Loader::loadModelToGL(Mesh mesh, bool includeTangents)
 		vao.addBuffer(vbos.back(), VertexBufferLayout::simple<float>(3));
 	}
 
-	IndexBuffer ibo(mesh.indices, mesh.iCount);
-	return GlModel(std::move(vao), std::move(ibo), std::move(vbos));
+	return GlModel(std::move(vao), IndexBuffer(mesh.indices, mesh.iCount), std::move(vbos));
 }
 
 template<typename T>

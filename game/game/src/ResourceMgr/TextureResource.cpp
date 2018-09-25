@@ -6,10 +6,6 @@ TextureResource::TextureResource(const std::string& filepath)
 {
 }
 
-TextureResource::~TextureResource()
-{
-}
-
 void TextureResource::generate()
 {
 	value = new Texture(filepath);

@@ -63,7 +63,7 @@ void GBuffer::renderEntities(const Camera& camera) const
 	
 	geomPassShader.u_ProjectionMatrix = Math::createProjectionMatrix(0.1f, 1000.0f, 60.0f);
 	geomPassShader.u_ViewMatrix = Math::createViewMatrix(camera);
-	geomPassShader.u_TransformationMatrix = Math::createTransformationMatrix(entity.position, entity.rotation, 2.0f);
+	geomPassShader.u_TransformationMatrix = Math::createModelMatrix(entity.position, entity.rotation, 2.0f);
 
 	GlCall(glDrawElements(GL_TRIANGLES, material.getGlModel().ibo.getCount(), GL_UNSIGNED_INT, 0));
 

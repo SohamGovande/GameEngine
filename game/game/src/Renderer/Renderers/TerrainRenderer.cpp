@@ -42,7 +42,7 @@ void TerrainRenderer::prepareForRendering(const Terrain& terrain)
 
 	for (unsigned int i = 0; i < terrain.getTextures().size(); i++) {
 		terrainShader.u_Textures[i].uncheckedSet(lastBoundTexture);
-		terrain.getTextures()[i].texture.promisedFetch().bind(lastBoundTexture++);
+		terrain.getTextures()[i].getTexture().promisedFetch().bind(lastBoundTexture++);
 	}
 
 	for (unsigned int i = 0; i < terrain.getTextures().size(); i++) {

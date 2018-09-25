@@ -4,14 +4,12 @@
 ModelResource::ModelResource(const std::string& modelFile, TextureResource& texture)
 	: modelFile(modelFile), texture(texture)
 {
-	freeFunc = &ModelResource::freeObject;
 }
 
 ModelResource::ModelResource(ModelResource&& other)
 	: modelFile(std::move(other.modelFile)), texture(other.texture),
 	propertySetters(std::move(other.propertySetters))
 {
-	freeFunc = other.freeFunc;
 }
 
 ModelResource::~ModelResource()
@@ -42,11 +40,7 @@ void ModelResource::generate()
 		propertySetter.apply(*value);
 }
 
-void ModelResource::freeObject(void* thisPtr)
+void ModelResource::releaseMemory()
 {
-	ModelResource* This = reinterpret_cast<ModelResource*>(thisPtr);
-	
-	This->mesh.free();
-	std::cout << "Freed a ModelResource: " << This->modelFile << std::endl;
-	delete This->value;
+	mesh.release();
 }

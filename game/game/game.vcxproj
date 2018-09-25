@@ -147,7 +147,9 @@
     <ClCompile Include="src\Entity\EntityConstructor.cpp" />
     <ClCompile Include="src\Entity\EntityRegistry.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Renderer\GlModel.cpp" />
     <ClCompile Include="src\IOHelper.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\OBJModelLoader.cpp" />
     <ClCompile Include="src\Renderer\Deferred\GBuffer.cpp" />
     <ClCompile Include="src\Renderer\GlStateManager.cpp" />
@@ -159,7 +161,10 @@
     <ClCompile Include="src\Renderer\QuadVBO.cpp" />
     <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
     <ClCompile Include="src\Renderer\Shader\SyncWithUniform.cpp" />
+    <ClCompile Include="src\ResourceMgr\MaterialProperty.cpp" />
+    <ClCompile Include="src\ResourceMgr\PropertySetter.cpp" />
     <ClCompile Include="src\Terrain\Heightmap.cpp" />
+    <ClCompile Include="src\Terrain\TerrainTextureInfo.cpp" />
     <ClCompile Include="src\Toolkit.cpp" />
     <ClCompile Include="src\MathUtils.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
@@ -177,7 +182,6 @@
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Renderer\VertexBuffer.cpp" />
     <ClCompile Include="src\ResourceMgr\ModelResource.cpp" />
-    <ClCompile Include="src\ResourceMgr\Resource.cpp" />
     <ClCompile Include="src\ResourceMgr\ResourceMgr.cpp" />
     <ClCompile Include="src\ResourceMgr\TextureResource.cpp" />
     <ClCompile Include="src\Terrain\HeightGen.cpp" />
@@ -194,6 +198,7 @@
     <ClInclude Include="src\Entity\EntityConstructor.h" />
     <ClInclude Include="src\Entity\EntityRegistry.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Renderer\GlModel.h" />
     <ClInclude Include="src\IOHelper.h" />
     <ClInclude Include="src\Renderer\Deferred\GBuffer.h" />
     <ClInclude Include="src\Renderer\GlStateManager.h" />
@@ -224,6 +229,7 @@
     <ClInclude Include="src\ResourceMgr\PropertyRegisterHelper.h" />
     <ClInclude Include="src\ResourceMgr\PropertySetter.h" />
     <ClInclude Include="src\Terrain\Heightmap.h" />
+    <ClInclude Include="src\Terrain\TerrainTextureInfo.h" />
     <ClInclude Include="src\Toolkit.h" />
     <ClInclude Include="src\MathUtils.h" />
     <ClInclude Include="src\Mesh.h" />
@@ -263,7 +269,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\shaderClassGenerator\generators\IdentityShader.shgen" />
     <None Include="res\entities\anvil\metadata.json" />
     <None Include="res\shader\include\multiple_light_sources.glsl">
       <SubType>

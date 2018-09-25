@@ -19,15 +19,9 @@ private:
 	const PropertySetterValue value;
 	
 public:
-	inline PropertySetter(const MaterialProperty& target, const PropertySetterValue& value)
-		: target(target), value(value)
-	{
-	}
+	PropertySetter(const MaterialProperty& target, const PropertySetterValue& value);
 	
-	inline void apply(RenderableMaterialModel& model) const
-	{
-		target.update(model.properties, reinterpret_cast<const void*>(&value));
-	}
+	void apply(RenderableMaterialModel& model) const;
 
 	inline const PropertySetterValue& getValue() const { return value; }
 	inline const MaterialProperty& getTargetProperty() const { return target; }

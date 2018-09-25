@@ -5,12 +5,56 @@
 Heightmap::Heightmap(unsigned int rowColumnCount, float interval)
 	:  rowColumnCount(rowColumnCount), interval(interval)
 {
-	data = new float[rowColumnCount * rowColumnCount];
+	data = new float[rowColumnCount*rowColumnCount];
+}
+
+Heightmap::Heightmap(const Heightmap& other)
+	: rowColumnCount(other.rowColumnCount), interval(other.interval)
+{
+	const unsigned int newSize = rowColumnCount*rowColumnCount;
+	data = new float[newSize];
+	memcpy(data, other.data, newSize);
+}
+
+Heightmap::Heightmap(Heightmap&& other)
+	: data(other.data), rowColumnCount(other.rowColumnCount), interval(other.interval)
+{
+	other.data = nullptr;
 }
 
 Heightmap::~Heightmap()
 {
-	delete[] data;
+	release();
+}
+
+Heightmap& Heightmap::operator=(const Heightmap& other)
+{
+	if (this != &other)
+	{
+		release();
+		rowColumnCount = other.rowColumnCount;
+		interval = other.interval;
+
+		const unsigned int newSize = rowColumnCount*rowColumnCount;
+		data = new float[newSize];
+		memcpy(data, other.data, newSize);
+	}
+	return *this;
+}
+
+Heightmap& Heightmap::operator=(Heightmap&& other)
+{
+	if (this != &other)
+	{
+		release();
+
+		data = other.data;
+		rowColumnCount = other.rowColumnCount;
+		interval = other.interval;
+
+		other.data = nullptr;
+	}
+	return *this;
 }
 
 float* Heightmap::index(unsigned int x, unsigned int z) const
@@ -28,4 +72,9 @@ float* Heightmap::operator[](const glm::vec2& coord) const
 		return index(x, z);
 
 	return nullptr;
+}
+
+void Heightmap::release()
+{
+	delete[] data;
 }

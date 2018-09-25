@@ -9,6 +9,10 @@ private:
 
 public:
 	TimedScope(const std::string& taskName);
+	TimedScope(const TimedScope& other) = delete;
+	TimedScope(TimedScope&& other) = delete;
 	~TimedScope();
+
+	TimedScope& operator=(const TimedScope& other) = delete;
 };
 

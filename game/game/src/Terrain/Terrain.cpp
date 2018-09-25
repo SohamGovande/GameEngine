@@ -15,8 +15,8 @@ Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, in
 	textures.emplace_back(resourceMgr.texture("gravel_tile"));
 		
 	blendMaps.emplace_back(128,  128, false);
-	const Texture& tex = blendMaps.back();
-	tex.bind(0);
+	const Texture& blendmapTexture = blendMaps.back();
+	blendmapTexture.bind(0);
 	constexpr int texSize = 128 * 128 * 4;
 	unsigned char* data = new unsigned char[texSize];
 	memset(data, 0, sizeof(unsigned char) * texSize);
@@ -46,8 +46,6 @@ Terrain::Terrain(ResourceMgr& resourceMgr, TerrainGen& generator, int chunkX, in
 
 Terrain::~Terrain()
 {
-	std::cout << "Freed a terrain mesh" << std::endl;
-	mesh.free();
 	delete model;
 }
 

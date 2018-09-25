@@ -51,7 +51,7 @@ inline void EntityRenderer::renderInstance(float partialTicks, ShaderType& shade
 	glm::vec3 pos = object.interpolatePosition(partialTicks);
 	glm::vec3 rot = object.interpolateRotation(partialTicks);
 
-	shader.u_TransformationMatrix = Math::createTransformationMatrix(pos, rot, object.scale);
+	shader.u_TransformationMatrix = Math::createModelMatrix(pos, rot, object.scale);
 	shader.u_ViewMatrix = Math::createViewMatrix(camera);
 
 	GlCall(glDrawElements(GL_TRIANGLES, object.getMaterialModel()->getGlModel().ibo.getCount(), GL_UNSIGNED_INT, 0));

@@ -3,28 +3,13 @@
 #include <glm/vec2.hpp>
 
 #include "Renderer/MaterialModel.h"
+#include "Renderer/GlModel.h"
 #include "ResourceMgr/ResourceMgr.h"
 #include "Mesh.h"
 #include "TerrainGen.h"
 #include "Heightmap.h"
+#include "TerrainTextureInfo.h"
 
-struct TerrainTextureInfo {
-	TextureResource& texture;
-	TextureResource* specularMap;
-	float reflectivity, shineDistanceDamper;
-
-	inline TerrainTextureInfo(TextureResource& tex)
-		: texture(tex), specularMap(nullptr), reflectivity(0), shineDistanceDamper(0)
-	{}
-
-	inline TerrainTextureInfo(TextureResource& tex,  TextureResource& specular)
-		: texture(tex), specularMap(&specular), reflectivity(0), shineDistanceDamper(0)
-	{}
-
-	inline bool hasSpecularMap() const { return specularMap != nullptr; }
-};
-
-//A chunk of terrain units
 class Terrain
 {
 private:

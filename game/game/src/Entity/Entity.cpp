@@ -46,12 +46,12 @@ bool Entity::hasEntityID(unsigned int id) const
 
 glm::vec3 Entity::interpolatePosition(float partialTicks) const
 {
-	return Math::interpolate(prevPosition, position, partialTicks);
+	return Math::linearInterpolation(prevPosition, position, partialTicks);
 }
 
 glm::vec3 Entity::interpolateRotation(float partialTicks) const
 {
-	return Math::interpolate(prevRotation, rotation, partialTicks);
+	return Math::linearInterpolation(prevRotation, rotation, partialTicks);
 }
 
 void Entity::addComponent(Component* component)

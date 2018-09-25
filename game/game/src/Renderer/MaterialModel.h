@@ -4,6 +4,7 @@
 #include <glm/vec3.hpp>
 
 #include "ResourceMgr/TextureResource.h"
+#include "Renderer/GlModel.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Mesh.h"

@@ -10,7 +10,7 @@
 
 namespace Loader
 {
-	GlModel loadModelToGL(Mesh mesh, bool includeTangents);
+	GlModel loadModelToGL(const Mesh& mesh, bool includeTangents);
 	Mesh loadBinaryMeshData(const std::string& filename);
 	Mesh loadObjMeshData(const std::string& filename, bool calculateTangents);
 }

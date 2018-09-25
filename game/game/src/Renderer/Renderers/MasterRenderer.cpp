@@ -81,7 +81,7 @@ void MasterRenderer::addEntity(Entity& entity)
 void MasterRenderer::processTerrain(Terrain& terrain)
 {
 	for (TerrainTextureInfo& info : terrain.getTextures()) {
-		info.texture.load();
+		info.getTexture().load();
 		if (info.hasSpecularMap())
 			info.specularMap->load();
 	}

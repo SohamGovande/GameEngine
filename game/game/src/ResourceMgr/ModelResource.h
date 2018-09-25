@@ -21,19 +21,16 @@ private:
 private:
 	bool hasNormalMap();
 
-protected:
-	void generate() override;
-
 public:
 	ModelResource(const std::string& modelFile, TextureResource& texture);
 	ModelResource(ModelResource&& other);
+	ModelResource(const ModelResource& other) = delete;
 	~ModelResource();
 
-	static void freeObject(void* thisPtr);
-
 	template<typename... ConstructorArgs>
-	inline void addPropertySetter(ConstructorArgs&&... args)
-	{
-		propertySetters.emplace_back(args...);
-	}
+	inline void addPropertySetter(ConstructorArgs&&... args) { propertySetters.emplace_back(args...); }
+
+protected:
+	void generate() override;
+	void releaseMemory() override;
 };

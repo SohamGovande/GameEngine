@@ -4,13 +4,13 @@
 
 template<typename T>
 Resource<T>::Resource()
-	: value(nullptr), present(false), freeFunc(nullptr)
+	: value(nullptr), present(false)
 {
 }
 
 template<typename T>
 Resource<T>::Resource(T* value)
-	: value(value), present(true), freeFunc(nullptr)
+	: value(value), present(true)
 {
 
 }
@@ -25,10 +25,8 @@ void Resource<T>::free()
 {
 	if (present)
 	{
-		if (freeFunc == nullptr)
-			delete value;
-		else
-			freeFunc(this);
+		releaseMemory();
+		delete value;
 		present = false;
 	}
 }
@@ -57,6 +55,22 @@ template<typename T>
 inline Resource<T>::operator const T&() const
 {
 	return promisedFetch();
+}
+
+template<typename T>
+inline const T& Resource<T>::promisedFetch() const
+{
+	if (value == nullptr)
+		__debugbreak();
+	return *value;
+}
+
+template<typename T>
+inline T& Resource<T>::promisedFetch()
+{
+	if (value == nullptr)
+		__debugbreak();
+	return *value;
 }
 
 template<typename T>
